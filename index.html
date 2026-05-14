@@ -1,154 +1,1325 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quento Accounting | Empowering Industries Through ICT</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <title>ΚΠΣ ΡΑΑΕΥ — Κλάδος Υδάτων</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f1f5f9; color: #1e293b; }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #f1f5f9; } ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+
+    /* Layout */
+    .app { display: flex; min-height: 100vh; }
+    .sidebar { width: 240px; background: #0f172a; color: #e2e8f0; display: flex; flex-direction: column; flex-shrink: 0; }
+    .sidebar-header { padding: 20px 16px 16px; border-bottom: 1px solid #1e293b; }
+    .sidebar-logo { font-size: 11px; font-weight: 700; color: #60a5fa; letter-spacing: 0.08em; text-transform: uppercase; }
+    .sidebar-title { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+    .sidebar-nav { flex: 1; padding: 12px 8px; overflow-y: auto; }
+    .nav-group-label { font-size: 10px; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.08em; padding: 12px 8px 4px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; color: #94a3b8; transition: all 0.15s; margin-bottom: 2px; }
+    .nav-item:hover { background: #1e293b; color: #e2e8f0; }
+    .nav-item.active { background: #1d4ed8; color: #fff; }
+    .nav-item .icon { width: 16px; text-align: center; flex-shrink: 0; }
+    .sidebar-footer { padding: 12px 16px; border-top: 1px solid #1e293b; }
+    .user-chip { display: flex; align-items: center; gap: 10px; }
+    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .user-name { font-size: 12px; font-weight: 600; color: #e2e8f0; }
+    .user-role { font-size: 11px; color: #64748b; }
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .topbar { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .topbar-title { font-size: 15px; font-weight: 600; color: #0f172a; }
+    .topbar-actions { display: flex; align-items: center; gap: 12px; }
+    .content { flex: 1; overflow-y: auto; padding: 24px; }
+
+    /* Login */
+    .login-page { min-height: 100vh; background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%); display: flex; align-items: center; justify-content: center; }
+    .login-card { background: #fff; border-radius: 16px; padding: 40px; width: 420px; box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
+    .login-logo { font-size: 13px; font-weight: 700; color: #1d4ed8; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .login-subtitle { font-size: 12px; color: #64748b; margin-bottom: 32px; }
+    .login-heading { font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 24px; }
+
+    /* Form elements */
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+    .form-input { width: 100%; padding: 9px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; color: #0f172a; outline: none; transition: border-color 0.15s; }
+    .form-input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+    .form-select { width: 100%; padding: 9px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; color: #0f172a; outline: none; background: #fff; cursor: pointer; }
+    .form-select:focus { border-color: #2563eb; }
+    .form-hint { font-size: 11px; color: #6b7280; margin-top: 4px; }
+    textarea.form-input { resize: vertical; min-height: 80px; }
+
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; }
+    .btn-primary { background: #1d4ed8; color: #fff; }
+    .btn-primary:hover { background: #1e40af; }
+    .btn-secondary { background: #f1f5f9; color: #374151; border: 1px solid #e2e8f0; }
+    .btn-secondary:hover { background: #e2e8f0; }
+    .btn-danger { background: #dc2626; color: #fff; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-success { background: #16a34a; color: #fff; }
+    .btn-success:hover { background: #15803d; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+    .btn-full { width: 100%; justify-content: center; padding: 11px; }
+
+    /* Cards */
+    .card { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; }
+    .card-header { padding: 16px 20px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; }
+    .card-title { font-size: 14px; font-weight: 600; color: #0f172a; }
+    .card-body { padding: 20px; }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 16px 20px; }
+    .stat-label { font-size: 12px; color: #64748b; font-weight: 500; margin-bottom: 6px; }
+    .stat-value { font-size: 26px; font-weight: 700; color: #0f172a; }
+    .stat-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+    .stat-icon { font-size: 20px; margin-bottom: 8px; }
+
+    /* Status badges */
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-draft { background: #f1f5f9; color: #475569; }
+    .badge-ready { background: #eff6ff; color: #1d4ed8; }
+    .badge-signed { background: #f0fdf4; color: #16a34a; }
+    .badge-submitted { background: #f0fdf4; color: #15803d; }
+    .badge-review { background: #fff7ed; color: #c2410c; }
+    .badge-returned { background: #fef2f2; color: #dc2626; }
+    .badge-accepted { background: #ecfdf5; color: #059669; }
+    .badge-final { background: #f0fdf4; color: #15803d; }
+    .badge-overdue { background: #fef2f2; color: #dc2626; }
+    .badge-ok { background: #f0fdf4; color: #16a34a; }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; }
+    td { padding: 11px 12px; border-bottom: 1px solid #f1f5f9; font-size: 13px; color: #374151; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafc; }
+
+    /* Progress bar */
+    .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 3px; background: #2563eb; transition: width 0.3s; }
+
+    /* KPI grid */
+    .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .kpi-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; }
+    .kpi-id { font-size: 10px; font-weight: 700; color: #2563eb; font-family: monospace; }
+    .kpi-name { font-size: 12px; color: #374151; margin: 4px 0 10px; line-height: 1.4; }
+    .kpi-value { font-size: 22px; font-weight: 700; color: #0f172a; }
+    .kpi-unit { font-size: 11px; color: #94a3b8; }
+    .kpi-bar-wrap { margin-top: 8px; }
+    .kpi-bar-track { height: 4px; background: #e2e8f0; border-radius: 2px; }
+    .kpi-bar-fill { height: 4px; border-radius: 2px; }
+
+    /* Workflow stepper */
+    .stepper { display: flex; align-items: flex-start; gap: 0; }
+    .step { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+    .step-line { position: absolute; top: 14px; left: 50%; width: 100%; height: 2px; z-index: 0; }
+    .step-line.done { background: #2563eb; }
+    .step-line.pending { background: #e2e8f0; }
+    .step:last-child .step-line { display: none; }
+    .step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; z-index: 1; border: 2px solid; }
+    .step-dot.done { background: #2563eb; border-color: #2563eb; color: #fff; }
+    .step-dot.current { background: #fff; border-color: #2563eb; color: #2563eb; }
+    .step-dot.pending { background: #fff; border-color: #e2e8f0; color: #94a3b8; }
+    .step-label { font-size: 10px; text-align: center; margin-top: 6px; color: #64748b; max-width: 70px; line-height: 1.3; }
+    .step-label.active { color: #0f172a; font-weight: 600; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 4px; border-bottom: 1px solid #e2e8f0; margin-bottom: 20px; }
+    .tab { padding: 10px 16px; font-size: 13px; font-weight: 500; color: #64748b; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+    .tab:hover { color: #0f172a; }
+    .tab.active { color: #1d4ed8; border-bottom-color: #1d4ed8; font-weight: 600; }
+
+    /* Form sections */
+    .form-section { margin-bottom: 28px; }
+    .form-section-title { font-size: 13px; font-weight: 700; color: #0f172a; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .section-code { font-family: monospace; font-size: 11px; background: #eff6ff; color: #1d4ed8; padding: 2px 6px; border-radius: 4px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .col-span-2 { grid-column: span 2; }
+
+    /* Alert */
+    .alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: flex; align-items: flex-start; gap: 10px; }
+    .alert-info { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .alert-warn { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+    .alert-success { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+
+    /* Role selector */
+    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .role-option { border: 2px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; cursor: pointer; transition: all 0.15s; }
+    .role-option:hover { border-color: #93c5fd; background: #eff6ff; }
+    .role-option.selected { border-color: #1d4ed8; background: #eff6ff; }
+    .role-option-title { font-size: 12px; font-weight: 700; color: #0f172a; }
+    .role-option-desc { font-size: 11px; color: #64748b; margin-top: 2px; }
+
+    /* Timeline */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .tl-item { display: flex; gap: 12px; padding-bottom: 20px; position: relative; }
+    .tl-item::before { content: ''; position: absolute; left: 15px; top: 28px; bottom: 0; width: 2px; background: #e2e8f0; }
+    .tl-item:last-child::before { display: none; }
+    .tl-dot { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; z-index: 1; }
+    .tl-body { flex: 1; padding-top: 4px; }
+    .tl-date { font-size: 11px; color: #94a3b8; }
+    .tl-title { font-size: 13px; font-weight: 600; color: #0f172a; margin: 2px 0; }
+    .tl-desc { font-size: 12px; color: #64748b; }
+
+    /* Charts */
+    .bar-chart { display: flex; flex-direction: column; gap: 8px; }
+    .bar-row { display: flex; align-items: center; gap: 10px; }
+    .bar-label { font-size: 12px; color: #374151; width: 160px; flex-shrink: 0; text-align: right; }
+    .bar-track { flex: 1; height: 20px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
+    .bar-fill-h { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; }
+    .bar-val { font-size: 11px; font-weight: 600; color: #fff; white-space: nowrap; }
+
+    /* Misc */
+    .divider { height: 1px; background: #f1f5f9; margin: 20px 0; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .text-sm { font-size: 12px; }
+    .text-xs { font-size: 11px; }
+    .text-muted { color: #64748b; }
+    .font-mono { font-family: monospace; }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-2 { gap: 8px; }
+    .gap-3 { gap: 12px; }
+    .mb-1 { margin-bottom: 4px; }
+    .mb-2 { margin-bottom: 8px; }
+    .mb-3 { margin-bottom: 12px; }
+    .mb-4 { margin-bottom: 16px; }
+    .mt-2 { margin-top: 8px; }
+    .mt-3 { margin-top: 12px; }
+    .mt-4 { margin-top: 16px; }
+    .p-3 { padding: 12px; }
+    .rounded { border-radius: 8px; }
+    .bg-light { background: #f8fafc; }
+  </style>
 </head>
 <body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useCallback } = React;
 
-  <!-- NAVBAR -->
-  <header class="navbar">
-    <a href="index.html" class="logo">Quento Accounting</a>
-    <nav>
-      <a href="#what-we-do">What We Do</a>
-      <a href="#solutions">Solutions</a>
-      <a href="#about">Who We Are</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
+// ── Mock Data ─────────────────────────────────────────────────────────────────
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-content">
-      <p class="hero-eyebrow">Every Innovation Tells a Story</p>
-      <h1>Empowering industries through impactful ICT solutions</h1>
-      <div class="hero-accountant">
-        <img src="accountant.jpeg" alt="Thomas" />
-        <p>Thomas is fully Agentic</p>
+const ROLES = [
+  { id: 'R-01', label: 'Καταχωρητής Παρόχου', org: 'ΔΕΥΑ Αθηναίων', initials: 'ΚΠ' },
+  { id: 'R-02', label: 'Εγκριτής Παρόχου', org: 'ΔΕΥΑ Αθηναίων', initials: 'ΕΠ' },
+  { id: 'R-05', label: 'Επιθεωρητής ΡΑΑΕΥ', org: 'ΡΑΑΕΥ', initials: 'ΕΡ' },
+  { id: 'R-06', label: 'Αναλυτής ΡΑΑΕΥ', org: 'ΡΑΑΕΥ', initials: 'ΑΡ' },
+];
+
+const SUBMISSIONS = [
+  { id: 'SUB-2025-0047', provider: 'ΔΕΥΑ Αθηναίων', period: '2024', type: 'Ύδρευση & Αποχέτευση', state: 'S-07', stateLabel: 'Αποδεκτό', deadline: '2025-03-31', submitted: '2025-02-14', inspector: 'Μ. Παπαδόπουλος' },
+  { id: 'SUB-2025-0048', provider: 'ΕΥΔΑΠ Α.Ε.', period: '2024', type: 'Ύδρευση & Αποχέτευση', state: 'S-05', stateLabel: 'Υπό επιθεώρηση', deadline: '2025-03-31', submitted: '2025-03-01', inspector: 'Α. Νικολάου' },
+  { id: 'SUB-2025-0049', provider: 'ΤΟΕΒ Θεσσαλίας', period: '2024', type: 'Άρδευση', state: 'S-06', stateLabel: 'Επιστράφηκε', deadline: '2025-03-31', submitted: '2025-02-28', inspector: 'Μ. Παπαδόπουλος' },
+  { id: 'SUB-2025-0050', provider: 'ΔΕΥΑ Θεσσαλονίκης', period: '2024', type: 'Ύδρευση & Αποχέτευση', state: 'S-04', stateLabel: 'Υποβεβλημένο', deadline: '2025-03-31', submitted: '2025-03-10', inspector: '—' },
+  { id: 'SUB-2025-0051', provider: 'ΔΕΥΑ Πατρέων', period: '2024', type: 'Ύδρευση & Αποχέτευση', state: 'S-02', stateLabel: 'Έτοιμο προς υπογραφή', deadline: '2025-03-31', submitted: '—', inspector: '—' },
+  { id: 'SUB-2025-0052', provider: 'ΤΟΕΒ Μακεδονίας', period: '2024', type: 'Άρδευση', state: 'S-01', stateLabel: 'Πρόχειρο', deadline: '2025-03-31', submitted: '—', inspector: '—' },
+  { id: 'SUB-2024-0190', provider: 'ΔΕΥΑ Αθηναίων', period: '2023', type: 'Ύδρευση & Αποχέτευση', state: 'S-08', stateLabel: 'Οριστικοποιημένο', deadline: '2024-03-31', submitted: '2024-02-10', inspector: 'Μ. Παπαδόπουλος' },
+];
+
+const KPIS = [
+  { id: 'KPI-ΑΑ.1', name: 'Ποσοστό συνολικών απωλειών εσωτερικού δικτύου ύδρευσης', value: 18.4, unit: '%', cat: 'Τεχνικοί', formula: '[1-(Β.2.9/Β.1.3)]×100', color: '#2563eb', max: 50 },
+  { id: 'KPI-ΑΑ.2', name: 'Ποσοστό συνολικών απωλειών εξωτερικού δικτύου', value: 4.2, unit: '%', cat: 'Τεχνικοί', formula: '(Β.1.4/Β.1.2)×100', color: '#2563eb', max: 20 },
+  { id: 'KPI-ΑΑ.3', name: 'Απώλειες εσωτερικού δικτύου ανά χιλιόμετρο', value: 1.83, unit: 'm³/km/h', cat: 'Τεχνικοί', formula: '(Β.1.3−Β.2.9)/Β.2.1', color: '#2563eb', max: 5 },
+  { id: 'KPI-ΑΑ.4', name: 'Πίεση λειτουργίας δικτύου', value: 3.8, unit: 'bar', cat: 'Τεχνικοί', formula: 'Β.2.20', color: '#0891b2', max: 8 },
+  { id: 'KPI-ΑΑ.5', name: 'Βλάβες δικτύου ανά χιλιόμετρο', value: 0.14, unit: 'βλάβες/km', cat: 'Τεχνικοί', formula: 'Β.2.10/Β.2.1', color: '#0891b2', max: 1 },
+  { id: 'KPI-ΑΔ.6', name: 'Infrastructure Leakage Index (ILI)', value: 2.1, unit: 'δείκτης', cat: 'Τεχνικοί', formula: 'UARL/CARL', color: '#7c3aed', max: 5 },
+  { id: 'KPI-ΑΒ.1', name: 'Μέσο κόστος αντικατάστασης παγίων ανά μετρητή', value: 312, unit: '€/μετρητή', cat: 'Οικονομικοί', formula: '(Η.1.3+Η.2.2)/Ζ.1.1.9', color: '#dc2626', max: 1000 },
+  { id: 'KPI-ΑΒ.2', name: 'Ετήσια επένδυση ανά μετρητή', value: 28.5, unit: '€/μετρητή/έτος', cat: 'Οικονομικοί', formula: 'CAPEX/Ζ.1.1.9', color: '#dc2626', max: 100 },
+  { id: 'KPI-ΑΓ.1', name: 'Μοναδιαία έσοδα από σύνολο υπηρεσιών', value: 1.24, unit: '€/m³', cat: 'Οικονομικοί', formula: '(Ζ.1.1.3.11+Ζ.1.3.3)/Β.2.9', color: '#dc2626', max: 3 },
+  { id: 'KPI-ΑΓ.3', name: 'Μοναδιαίο έσοδο Οικιακή χρήση', value: 1.47, unit: '€/m³', cat: 'Οικονομικοί', formula: 'Ζ.1.1.3.1/Ζ.1.1.17', color: '#dc2626', max: 3 },
+  { id: 'KPI-ΑΕ.1', name: 'Ποσοστό προσωπικού σε τεχνικές δραστηριότητες', value: 62.3, unit: '%', cat: 'Επιχειρησιακοί', formula: 'Ι.2.4/Ι.1.4×100', color: '#d97706', max: 100 },
+  { id: 'KPI-ΑΕ.2', name: 'Αριθμός καταγγελιών ανά 1000 μετρητές', value: 3.2, unit: 'αναφ./1000', cat: 'Επιχειρησιακοί', formula: 'Ι.6.1/Ζ.1.1.9×1000', color: '#d97706', max: 20 },
+  { id: 'KPI-ΑΖ.1', name: 'Ποσοστό μη-συμμόρφωσης χημικών παραμέτρων', value: 0.8, unit: '%', cat: 'Ποιοτικοί', formula: 'ΜΣΧ/ΣΕΧ×100', color: '#16a34a', max: 5 },
+  { id: 'KPI-ΑΖ.2', name: 'Ποσοστό μη-συμμόρφωσης μικροβιολογικών παρ.', value: 0.3, unit: '%', cat: 'Ποιοτικοί', formula: 'ΜΣΜ/ΣΕΜ×100', color: '#16a34a', max: 5 },
+  { id: 'KPI-ΑΘ.1', name: 'Ποσοστό επαναχρησιμοποίησης επεξεργ. ύδατος', value: 12.4, unit: '%', cat: 'Ποιοτικοί', formula: 'Γ.2.31/Γ.2.30×100', color: '#16a34a', max: 50 },
+];
+
+const PROVIDERS = [
+  { id: 'PRV-001', name: 'ΔΕΥΑ Αθηναίων', type: 'Υ&Α', region: 'Αττική', submitted: true, kpiCount: 92 },
+  { id: 'PRV-002', name: 'ΕΥΔΑΠ Α.Ε.', type: 'Υ&Α', region: 'Αττική', submitted: true, kpiCount: 92 },
+  { id: 'PRV-003', name: 'ΔΕΥΑ Θεσσαλονίκης', type: 'Υ&Α', region: 'Κ. Μακεδονία', submitted: true, kpiCount: 92 },
+  { id: 'PRV-004', name: 'ΤΟΕΒ Θεσσαλίας', type: 'Άρδευση', region: 'Θεσσαλία', submitted: true, kpiCount: 31 },
+  { id: 'PRV-005', name: 'ΔΕΥΑ Πατρέων', type: 'Υ&Α', region: 'Δ. Ελλάδα', submitted: false, kpiCount: 0 },
+  { id: 'PRV-006', name: 'ΤΟΕΒ Μακεδονίας', type: 'Άρδευση', region: 'Κ. Μακεδονία', submitted: false, kpiCount: 0 },
+];
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+const STATE_META = {
+  'S-01': { label: 'Πρόχειρο', cls: 'badge-draft' },
+  'S-02': { label: 'Έτοιμο προς υπογραφή', cls: 'badge-ready' },
+  'S-03': { label: 'Υπογεγραμμένο', cls: 'badge-signed' },
+  'S-04': { label: 'Υποβεβλημένο', cls: 'badge-submitted' },
+  'S-05': { label: 'Υπό επιθεώρηση', cls: 'badge-review' },
+  'S-06': { label: 'Επιστράφηκε', cls: 'badge-returned' },
+  'S-07': { label: 'Αποδεκτό', cls: 'badge-accepted' },
+  'S-08': { label: 'Οριστικοποιημένο', cls: 'badge-final' },
+};
+
+function StateBadge({ state }) {
+  const m = STATE_META[state] || { label: state, cls: 'badge-draft' };
+  return <span className={`badge ${m.cls}`}>{m.label}</span>;
+}
+
+// ── Login Screen ──────────────────────────────────────────────────────────────
+
+function LoginScreen({ onLogin }) {
+  const [selected, setSelected] = useState('R-01');
+
+  return (
+    <div className="login-page">
+      <div className="login-card">
+        <div className="login-logo">ΡΑΑΕΥ</div>
+        <div className="login-subtitle">Ρυθμιστική Αρχή Αποβλήτων, Ενέργειας και Υδάτων</div>
+        <div className="login-heading">ΚΠΣ — Κλάδος Υδάτων</div>
+
+        <div className="alert alert-info mb-4" style={{marginBottom:16}}>
+          <span>ℹ️</span>
+          <span>Πρότυπο / Demo. Επιλέξτε ρόλο για να συνδεθείτε.</span>
+        </div>
+
+        <div style={{marginBottom:12,fontSize:12,fontWeight:600,color:'#374151'}}>Επιλογή Ρόλου</div>
+        <div className="role-grid">
+          {ROLES.map(r => (
+            <div key={r.id} className={`role-option ${selected === r.id ? 'selected' : ''}`} onClick={() => setSelected(r.id)}>
+              <div className="role-option-title">{r.label}</div>
+              <div className="role-option-desc">{r.org} · {r.id}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Αναγνωριστικό Χρήστη</label>
+          <input className="form-input" defaultValue="user@raaey.gr" />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Κωδικός (eID / SSO)</label>
+          <input className="form-input" type="password" defaultValue="••••••••" />
+        </div>
+
+        <button className="btn btn-primary btn-full" onClick={() => onLogin(ROLES.find(r => r.id === selected))}>
+          Σύνδεση μέσω eID →
+        </button>
+
+        <div style={{marginTop:16,fontSize:11,color:'#94a3b8',textAlign:'center'}}>
+          OpenID Connect / SAML 2.0 · eIDAS QES · ISO/IEC 27001
+        </div>
       </div>
-      <a href="#what-we-do" class="btn">Discover What We Do</a>
     </div>
-  </section>
+  );
+}
 
-  <!-- WHAT WE DO -->
-  <section class="section" id="what-we-do">
-    <div class="container">
-      <h2>Purpose-built technology across industries</h2>
-      <p class="section-sub">Quento combines advanced technology with industry expertise to deliver tailored ICT solutions — simplifying complexity, driving innovation, and unlocking tangible results.</p>
-    </div>
-  </section>
+// ── Sidebar ───────────────────────────────────────────────────────────────────
 
-  <!-- SOLUTIONS -->
-  <section class="section bg-light" id="solutions">
-    <div class="container">
-      <h2>Our Solutions</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>Cloud &amp; Infrastructure</h3>
-          <p>Secure, scalable and intelligent cloud ecosystems for modern enterprises.</p>
-        </div>
-        <div class="card">
-          <h3>Digital Engineering</h3>
-          <p>Innovative, AI-powered software solutions for scalable digital transformation.</p>
-        </div>
-        <div class="card">
-          <h3>Cybersecurity</h3>
-          <p>Advanced, AI-driven threat intelligence to safeguard assets and ensure compliance.</p>
-        </div>
-        <div class="card">
-          <h3>Data &amp; Artificial Intelligence</h3>
-          <p>Robust data governance and human-centric AI for smarter decision-making.</p>
-        </div>
-        <div class="card">
-          <h3>Consulting &amp; Strategy</h3>
-          <p>Expert ICT consulting for sustainable growth and competitive advantage.</p>
-        </div>
-        <div class="card">
-          <h3>Managed Services</h3>
-          <p>Comprehensive IT management for seamless, reliable performance.</p>
-        </div>
-        <div class="card">
-          <h3>Digital Business</h3>
-          <p>Integrating ICT with business strategy to maximise value.</p>
-        </div>
-        <div class="card">
-          <h3>Smart Industry</h3>
-          <p>Decentralised AI and data fusion for real-time IoT insights.</p>
+function Sidebar({ role, page, onNav, onLogout }) {
+  const isProvider = role.id.startsWith('R-0') && ['R-01','R-02','R-03'].includes(role.id);
+  const isRAEU = ['R-05','R-06','R-07','R-08'].includes(role.id);
+
+  const providerItems = [
+    { id: 'dashboard', icon: '⊞', label: 'Πίνακας Ελέγχου' },
+    { id: 'submit', icon: '📋', label: 'Υποβολή Δεδομένων' },
+    { id: 'submissions', icon: '📁', label: 'Ιστορικό Υποβολών' },
+    { id: 'kpis', icon: '📊', label: 'Δείκτες KPI' },
+  ];
+
+  const raeuItems = [
+    { id: 'dashboard', icon: '⊞', label: 'Πίνακας Ελέγχου' },
+    { id: 'submissions', icon: '📁', label: 'Υποβολές Παρόχων' },
+    { id: 'kpis', icon: '📊', label: 'Ανάλυση KPI' },
+    { id: 'providers', icon: '🏢', label: 'Μητρώο Παρόχων' },
+    { id: 'public', icon: '🌐', label: 'Δημόσια Πύλη' },
+  ];
+
+  const items = isRAEU ? raeuItems : providerItems;
+
+  return (
+    <div className="sidebar">
+      <div className="sidebar-header">
+        <div className="sidebar-logo">ΡΑΑΕΥ · ΚΠΣ</div>
+        <div className="sidebar-title">Κλάδος Υδάτων v0.5</div>
+      </div>
+      <div className="sidebar-nav">
+        <div className="nav-group-label">Πλοήγηση</div>
+        {items.map(item => (
+          <div key={item.id} className={`nav-item ${page === item.id ? 'active' : ''}`} onClick={() => onNav(item.id)}>
+            <span className="icon">{item.icon}</span>
+            {item.label}
+          </div>
+        ))}
+        {isRAEU && (
+          <>
+            <div className="nav-group-label" style={{marginTop:8}}>Διαχείριση</div>
+            <div className={`nav-item ${page === 'schemas' ? 'active' : ''}`} onClick={() => onNav('schemas')}>
+              <span className="icon">⚙️</span> Σχήματα & Κανόνες
+            </div>
+          </>
+        )}
+      </div>
+      <div className="sidebar-footer">
+        <div className="user-chip">
+          <div className="user-avatar">{role.initials}</div>
+          <div style={{flex:1,minWidth:0}}>
+            <div className="user-name" style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{role.label}</div>
+            <div className="user-role">{role.org}</div>
+          </div>
+          <button onClick={onLogout} style={{background:'none',border:'none',color:'#475569',cursor:'pointer',fontSize:14}} title="Αποσύνδεση">⇠</button>
         </div>
       </div>
     </div>
-  </section>
+  );
+}
 
-  <!-- INDUSTRIES -->
-  <section class="section" id="industries">
-    <div class="container">
-      <h2>Industries We Serve</h2>
-      <div class="tags">
-        <span>Environment</span>
-        <span>Energy</span>
-        <span>Health</span>
-        <span>Agriculture</span>
-        <span>Financial Services</span>
-        <span>Justice &amp; Home Affairs</span>
-        <span>Governance &amp; Administration</span>
-        <span>Telecommunications</span>
+// ── Provider Dashboard ────────────────────────────────────────────────────────
+
+function ProviderDashboard() {
+  const mySubs = SUBMISSIONS.filter(s => s.provider === 'ΔΕΥΑ Αθηναίων');
+  const pending = mySubs.filter(s => ['S-01','S-02','S-03'].includes(s.state));
+  const current = mySubs[0];
+
+  return (
+    <div>
+      <div className="stats-grid">
+        <div className="stat-card">
+          <div className="stat-icon">📋</div>
+          <div className="stat-label">Τρέχουσα Περίοδος</div>
+          <div className="stat-value">2024</div>
+          <div className="stat-sub">Προθεσμία: 31/03/2025</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon">✅</div>
+          <div className="stat-label">Κατάσταση Υποβολής</div>
+          <div className="stat-value" style={{fontSize:18,marginTop:4}}><StateBadge state="S-07" /></div>
+          <div className="stat-sub">Αποδεκτό · 14/02/2025</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon">📊</div>
+          <div className="stat-label">KPIs Υπολογισμένα</div>
+          <div className="stat-value">92</div>
+          <div className="stat-sub">από 92 δείκτες Υ&Α</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon">🔔</div>
+          <div className="stat-label">Εκκρεμή</div>
+          <div className="stat-value">0</div>
+          <div className="stat-sub">ενέργειες</div>
+        </div>
+      </div>
+
+      <div className="grid-2">
+        <div className="card">
+          <div className="card-header">
+            <span className="card-title">Ροή Έγκρισης — Τρέχουσα Υποβολή</span>
+            <span className="text-xs text-muted">SUB-2025-0047</span>
+          </div>
+          <div className="card-body">
+            <div className="stepper" style={{marginBottom:24}}>
+              {[
+                {s:'S-01',l:'Πρόχειρο',done:true},
+                {s:'S-02',l:'Υπογραφή',done:true},
+                {s:'S-04',l:'Υποβολή',done:true},
+                {s:'S-05',l:'Επιθεώρηση',done:true},
+                {s:'S-07',l:'Αποδοχή',done:true,current:true},
+              ].map((step, i, arr) => (
+                <div className="step" key={step.s}>
+                  {i < arr.length - 1 && <div className={`step-line ${step.done ? 'done' : 'pending'}`} />}
+                  <div className={`step-dot ${step.current ? 'current' : step.done ? 'done' : 'pending'}`}>
+                    {step.done && !step.current ? '✓' : i + 1}
+                  </div>
+                  <div className={`step-label ${step.current || step.done ? 'active' : ''}`}>{step.l}</div>
+                </div>
+              ))}
+            </div>
+            <div className="timeline">
+              {[
+                { dot: '✅', bg: '#f0fdf4', title: 'Αποδεκτό από ΡΑΑΕΥ', date: '18/02/2025', desc: 'Επιθεωρητής: Μ. Παπαδόπουλος. Υπολογισμός 92 KPIs ολοκληρώθηκε.' },
+                { dot: '📤', bg: '#eff6ff', title: 'Υποβολή στη ΡΑΑΕΥ', date: '14/02/2025', desc: 'QES εφαρμόστηκε από Εγκριτή. Αριθμός αναφοράς: SUB-2025-0047.' },
+                { dot: '✍️', bg: '#f8fafc', title: 'Εφαρμογή Ηλεκτρονικής Υπογραφής', date: '13/02/2025', desc: 'QES (eIDAS) εφαρμόστηκε επιτυχώς.' },
+              ].map((t, i) => (
+                <div className="tl-item" key={i}>
+                  <div className="tl-dot" style={{background: t.bg}}>{t.dot}</div>
+                  <div className="tl-body">
+                    <div className="tl-date">{t.date}</div>
+                    <div className="tl-title">{t.title}</div>
+                    <div className="tl-desc">{t.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="card" style={{marginBottom:16}}>
+            <div className="card-header"><span className="card-title">Ημερολόγιο Υποχρεώσεων</span></div>
+            <div className="card-body">
+              {[
+                { label: 'Ετήσια Υποβολή Υ&Α 2024', deadline: '31 Μαρ 2025', status: 'done' },
+                { label: 'Ετήσια Υποβολή Υ&Α 2025', deadline: '31 Μαρ 2026', status: 'future' },
+                { label: 'Ποιοτικά Δεδομένα Q3 2025', deadline: '31 Οκτ 2025', status: 'future' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center justify-between" style={{padding:'8px 0',borderBottom: i < 2 ? '1px solid #f1f5f9' : 'none'}}>
+                  <div>
+                    <div className="text-sm" style={{fontWeight:500}}>{item.label}</div>
+                    <div className="text-xs text-muted">{item.deadline}</div>
+                  </div>
+                  <span className={`badge ${item.status === 'done' ? 'badge-accepted' : 'badge-draft'}`}>
+                    {item.status === 'done' ? 'Υποβλήθηκε' : 'Εκκρεμεί'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-header"><span className="card-title">Επισκόπηση Κορυφαίων KPIs</span></div>
+            <div className="card-body">
+              {KPIS.slice(0,4).map(k => (
+                <div key={k.id} style={{marginBottom:12}}>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-xs font-mono" style={{color:'#2563eb'}}>{k.id}</span>
+                    <span className="text-xs" style={{fontWeight:600}}>{k.value} {k.unit}</span>
+                  </div>
+                  <div className="progress-bar">
+                    <div className="progress-fill" style={{width: `${Math.min(100, (k.value/k.max)*100)}%`, background: k.color}} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
+  );
+}
 
-  <!-- ABOUT -->
-  <section class="section bg-light" id="about">
-    <div class="container two-col">
+// ── RAAEY Dashboard ───────────────────────────────────────────────────────────
+
+function RAEUDashboard() {
+  const byState = {};
+  SUBMISSIONS.forEach(s => { byState[s.state] = (byState[s.state] || 0) + 1; });
+
+  return (
+    <div>
+      <div className="stats-grid">
+        {[
+          { icon: '🏢', label: 'Σύνολο Παρόχων', value: '~700', sub: '>300 Υ&Α · >400 Άρδευση' },
+          { icon: '📤', label: 'Υποβολές 2024', value: '412', sub: 'από 700 παρόχους' },
+          { icon: '⏳', label: 'Υπό Επιθεώρηση', value: '38', sub: 'εκκρεμείς αξιολογήσεις' },
+          { icon: '📊', label: 'KPIs Υπολογισμένα', value: '33.2K', sub: 'για περίοδο 2024' },
+        ].map((s, i) => (
+          <div className="stat-card" key={i}>
+            <div className="stat-icon">{s.icon}</div>
+            <div className="stat-label">{s.label}</div>
+            <div className="stat-value">{s.value}</div>
+            <div className="stat-sub">{s.sub}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid-2">
+        <div className="card">
+          <div className="card-header"><span className="card-title">Κατανομή Υποβολών κατά Κατάσταση</span></div>
+          <div className="card-body">
+            <div className="bar-chart">
+              {[
+                { label: 'S-08 Οριστικοποιημένο', val: 248, color: '#15803d', max: 300 },
+                { label: 'S-07 Αποδεκτό', val: 89, color: '#059669', max: 300 },
+                { label: 'S-05 Υπό επιθεώρηση', val: 38, color: '#c2410c', max: 300 },
+                { label: 'S-04 Υποβεβλημένο', val: 22, color: '#1d4ed8', max: 300 },
+                { label: 'S-06 Επιστράφηκε', val: 15, color: '#dc2626', max: 300 },
+              ].map(b => (
+                <div className="bar-row" key={b.label}>
+                  <div className="bar-label">{b.label}</div>
+                  <div className="bar-track">
+                    <div className="bar-fill-h" style={{width:`${(b.val/b.max)*100}%`, background: b.color}}>
+                      <span className="bar-val">{b.val}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card-header"><span className="card-title">Εκκρεμείς Ενέργειες</span></div>
+          <div className="card-body">
+            <div className="table-wrap">
+              <table>
+                <thead><tr><th>Πάροχος</th><th>Κατάσταση</th><th>Ημερομηνία</th></tr></thead>
+                <tbody>
+                  {SUBMISSIONS.filter(s => ['S-04','S-05','S-06'].includes(s.state)).map(s => (
+                    <tr key={s.id}>
+                      <td style={{fontWeight:500}}>{s.provider}</td>
+                      <td><StateBadge state={s.state} /></td>
+                      <td className="text-xs text-muted">{s.submitted}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Data Entry Form ───────────────────────────────────────────────────────────
+
+function DataEntryForm({ role }) {
+  const [activeTab, setActiveTab] = useState('DS-00');
+  const [formData, setFormData] = useState({});
+  const [saved, setSaved] = useState(false);
+
+  const canSubmit = role.id === 'R-02';
+  const readOnly = role.id !== 'R-01' && role.id !== 'R-02';
+
+  const set = (k, v) => { setFormData(p => ({...p,[k]:v})); setSaved(false); };
+
+  const tabs = [
+    { id: 'DS-00', label: 'Στοιχεία Φορέα' },
+    { id: 'DS-01', label: 'Τεχνικά Δεδομένα' },
+    { id: 'DS-02', label: 'Ισοζύγιο Ύδατος' },
+    { id: 'DS-03', label: 'Οικονομικά' },
+    { id: 'DS-04', label: 'Επιχειρησιακά' },
+    { id: 'DS-05', label: 'Ποιοτικά' },
+  ];
+
+  return (
+    <div>
+      <div className="alert alert-info mb-3">
+        <span>📋</span>
+        <span>Περίοδος αναφοράς: <strong>2025</strong> · Πάροχος: <strong>ΔΕΥΑ Αθηναίων</strong> · Κατάσταση: <StateBadge state="S-01" /></span>
+      </div>
+
+      <div className="card">
+        <div className="card-header">
+          <span className="card-title">Υποβολή Δεδομένων — SUB-2025-XXXX</span>
+          <div className="flex gap-2">
+            <button className="btn btn-secondary btn-sm" onClick={() => setSaved(true)}>💾 Αποθήκευση Πρόχειρου</button>
+            {canSubmit && <button className="btn btn-primary btn-sm">✍️ Εφαρμογή QES & Υποβολή</button>}
+          </div>
+        </div>
+        {saved && <div className="alert alert-success" style={{margin:'8px 16px 0',marginBottom:0}}><span>✅</span><span>Πρόχειρο αποθηκεύτηκε.</span></div>}
+
+        <div className="card-body">
+          <div className="tabs">
+            {tabs.map(t => (
+              <div key={t.id} className={`tab ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>
+                {t.label}
+              </div>
+            ))}
+          </div>
+
+          {activeTab === 'DS-00' && (
+            <div>
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">1.1</span>Στοιχεία Φορέα</div>
+                <div className="form-grid">
+                  <div className="form-group"><label className="form-label">Επωνυμία Φορέα <span style={{color:'#dc2626'}}>*</span></label><input className="form-input" placeholder="π.χ. ΔΕΥΑ Αθηναίων" defaultValue="ΔΕΥΑ Αθηναίων" onChange={e=>set('1.1',e.target.value)} disabled={readOnly} /></div>
+                  <div className="form-group"><label className="form-label">ΑΦΜ <span style={{color:'#dc2626'}}>*</span></label><input className="form-input" placeholder="999999999" defaultValue="099123456" onChange={e=>set('2.6',e.target.value)} disabled={readOnly} /></div>
+                  <div className="form-group"><label className="form-label">Πόλη <span style={{color:'#dc2626'}}>*</span></label><input className="form-input" placeholder="Αθήνα" defaultValue="Αθήνα" onChange={e=>set('2.1',e.target.value)} disabled={readOnly} /></div>
+                  <div className="form-group"><label className="form-label">Περιφέρεια</label><input className="form-input" placeholder="Αττική" defaultValue="Αττική" disabled={readOnly} /></div>
+                  <div className="form-group"><label className="form-label">Ταχυδρομική Διεύθυνση</label><input className="form-input" placeholder="Λεωφ. Συγγρού 1, 117 45" disabled={readOnly} /></div>
+                  <div className="form-group"><label className="form-label">Ιστότοπος</label><input className="form-input" placeholder="https://www.deyaa.gr" disabled={readOnly} /></div>
+                </div>
+              </div>
+
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">3</span>Κατηγορία Φορέα</div>
+                <div className="form-grid">
+                  <div className="form-group"><label className="form-label">Τύπος</label>
+                    <select className="form-select" disabled={readOnly}>
+                      <option>ΝΠΙΔ Μη κερδοσκοπικό</option><option>Ανώνυμη Εταιρία</option><option>Υπηρεσία ΤΑ</option>
+                    </select>
+                  </div>
+                  <div className="form-group"><label className="form-label">Μετοχικό Κεφάλαιο (€)</label><input className="form-input" type="number" placeholder="0" disabled={readOnly} /></div>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Παρεχόμενες Υπηρεσίες</label>
+                  <div className="flex gap-3 mt-2">
+                    {['Ύδρευση','Αποχέτευση','Άρδευση'].map(s => (
+                      <label key={s} className="flex items-center gap-2 text-sm" style={{cursor:'pointer'}}>
+                        <input type="checkbox" defaultChecked={s !== 'Άρδευση'} disabled={readOnly} /> {s}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">8</span>Νόμιμη Εκπροσώπηση</div>
+                <div className="form-grid">
+                  <div className="form-group"><label className="form-label">Ονοματεπώνυμο Νόμιμου Εκπρόσωπου</label><input className="form-input" placeholder="Ιωάννης Παπαδόπουλος" disabled={readOnly} /></div>
+                  <div className="form-group"><label className="form-label">ΑΦΜ Νόμιμου Εκπρόσωπου</label><input className="form-input" placeholder="123456789" disabled={readOnly} /></div>
+                </div>
+              </div>
+
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">7</span>Σχέδια & Πιστοποιήσεις</div>
+                <div className="form-grid">
+                  {['Σχέδιο έκτακτης ανάγκης','Σχέδιο εξοικονόμησης ενέργειας','ISO 14001 (Περιβάλλον)','ISO 9001 (Ποιότητα)','ISO 45001 (Ασφάλεια)','ISO 50001 (Ενέργεια)'].map(item => (
+                    <label key={item} className="flex items-center gap-2 text-sm" style={{cursor:'pointer',padding:'6px 0'}}>
+                      <input type="checkbox" disabled={readOnly} /> {item}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'DS-01' && (
+            <div>
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">Α</span>Στοιχεία Προέλευσης Νερού</div>
+                <div className="form-grid-3">
+                  {[
+                    {k:'Α.1.1',l:'Συνολική Προμηθευθείσα ποσ. νερού (m³)',u:'m³'},
+                    {k:'Α.1.1.1',l:'από Γεωτρήσεις (m³)',u:'m³'},
+                    {k:'Α.1.1.2',l:'από Φράγματα (m³)',u:'m³'},
+                    {k:'Α.1.1.3',l:'από Ποτάμια (m³)',u:'m³'},
+                    {k:'Α.1.1.5',l:'από Αφαλάτωση (m³)',u:'m³'},
+                    {k:'Α1.2',l:'Αριθμός Γεωτρήσεων',u:'#'},
+                  ].map(f => (
+                    <div className="form-group" key={f.k}>
+                      <label className="form-label"><span className="font-mono" style={{color:'#2563eb',fontSize:10}}>{f.k}</span> {f.l}</label>
+                      <input className="form-input" type="number" placeholder="0" disabled={readOnly} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">Β</span>Στοιχεία Δικτύου</div>
+                <div className="form-grid-3">
+                  {[
+                    {k:'Β.1.1',l:'Συνολικό μήκος εξωτ. δικτύου (km)'},
+                    {k:'Β.1.2',l:'Αποληφθείσα ποσ. νερού στην πηγή (m³)'},
+                    {k:'Β.1.3',l:'Ποσ. νερού εισερχόμενη στο εσωτ. δίκτυο (m³)'},
+                    {k:'Β.2.1',l:'Μήκος εσωτερικού δικτύου (km)'},
+                    {k:'Β.2.2',l:'Αριθμός συνδέσεων'},
+                    {k:'Β.2.6',l:'Εξυπηρετούμενος πληθυσμός (χιλ.)'},
+                    {k:'Β.2.9',l:'Εξουσιοδοτημένη κατανάλωση (m³)'},
+                    {k:'Β.2.10',l:'Αριθμός βλαβών αγωγών'},
+                    {k:'Β.2.20',l:'Μέση Πίεση Λειτουργίας (bar)'},
+                  ].map(f => (
+                    <div className="form-group" key={f.k}>
+                      <label className="form-label"><span className="font-mono" style={{color:'#2563eb',fontSize:10}}>{f.k}</span> {f.l}</label>
+                      <input className="form-input" type="number" placeholder="0" disabled={readOnly} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">Κ</span>Ενέργεια</div>
+                <div className="form-grid">
+                  {[
+                    {k:'Κ.1',l:'Συνολική Κατανάλωση ηλεκτρικού ρεύματος (kWh)'},
+                    {k:'Κ.2',l:'Κατανάλωση ηλεκτρ. ρεύματος για ύδρευση (kWh)'},
+                    {k:'Κ.3',l:'Συνολική αυτοπαραγόμενη ενέργεια (kWh)'},
+                  ].map(f => (
+                    <div className="form-group" key={f.k}>
+                      <label className="form-label"><span className="font-mono" style={{color:'#2563eb',fontSize:10}}>{f.k}</span> {f.l}</label>
+                      <input className="form-input" type="number" placeholder="0" disabled={readOnly} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'DS-02' && (
+            <div>
+              <div className="alert alert-info mb-3">
+                <span>⚡</span>
+                <span>Τα πεδία αυτής της ενότητας υπολογίζονται <strong>αυτόματα</strong> από τα δεδομένα των άλλων ενοτήτων (DS-01). Δεν επιτρέπεται χειροκίνητη εισαγωγή.</span>
+              </div>
+              <div className="form-grid-3">
+                {[
+                  {k:'Α3',l:'Εισερχόμενο νερό στο σύστημα (m³)',v:'—'},
+                  {k:'Α8',l:'Τιμολογούμενη μετρούμενη κατανάλωση (m³)',v:'—'},
+                  {k:'Α9',l:'Τιμολογούμενη μη-μετρούμενη κατανάλωση (m³)',v:'—'},
+                  {k:'Α14',l:'Εξουσιοδοτημένη κατανάλωση (m³)',v:'—'},
+                  {k:'Α15',l:'Απώλειες νερού (m³)',v:'—'},
+                  {k:'Α16',l:'Μη-εξουσιοδοτημένη κατανάλωση (m³)',v:'—'},
+                  {k:'Α18',l:'Φαινόμενες απώλειες (m³)',v:'—'},
+                  {k:'Α19',l:'Πραγματικές απώλειες (m³)',v:'—'},
+                  {k:'Α21',l:'Μη ανταποδοτικό νερό (m³)',v:'—'},
+                ].map(f => (
+                  <div className="form-group" key={f.k}>
+                    <label className="form-label"><span className="font-mono" style={{color:'#7c3aed',fontSize:10}}>{f.k}</span> {f.l}</label>
+                    <input className="form-input" value={f.v} readOnly style={{background:'#f8fafc',color:'#94a3b8'}} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'DS-03' && (
+            <div>
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">ΣΤ</span>Λειτουργικά Κόστη</div>
+                <div className="form-grid">
+                  {[
+                    {k:'ΣΤ.1.1',l:'Αμοιβές προσωπικού — Σύνολο (€)'},
+                    {k:'ΣΤ.1.2',l:'Αμοιβές προσωπικού — Ύδρευση (€)'},
+                    {k:'ΣΤ.3.1.1',l:'Κόστος ηλεκτρ. ρεύματος παραγ. — Σύνολο (€)'},
+                    {k:'ΣΤ.3.1.2',l:'Κόστος ηλεκτρ. ρεύματος παραγ. — Ύδρευση (€)'},
+                    {k:'ΣΤ.4.1',l:'Επισκευές & συντηρήσεις — Σύνολο (€)'},
+                    {k:'ΣΤ.4.2',l:'Επισκευές & συντηρήσεις — Ύδρευση (€)'},
+                    {k:'ΣΤ.9.1',l:'Σύνολο λειτουργικών δαπανών (€)'},
+                    {k:'ΣΤ.9.2',l:'Λειτουργικά — Ειδικά για Ύδρευση (€)'},
+                  ].map(f => (
+                    <div className="form-group" key={f.k}>
+                      <label className="form-label"><span className="font-mono" style={{color:'#2563eb',fontSize:10}}>{f.k}</span> {f.l}</label>
+                      <input className="form-input" type="number" placeholder="0.00" disabled={readOnly} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">Χ</span>Δομή Τιμολογίου</div>
+                <div className="form-group">
+                  <label className="form-label">Περιγραφή τιμολογίου ύδρευσης</label>
+                  <textarea className="form-input" placeholder="Περιγράψτε τη δομή και τους μαθηματικούς τύπους του τιμολογίου ύδρευσης..." disabled={readOnly}></textarea>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Περιγραφή τιμολογίου αποχέτευσης</label>
+                  <textarea className="form-input" placeholder="Περιγράψτε τη δομή και τους μαθηματικούς τύπους του τιμολογίου αποχέτευσης..." disabled={readOnly}></textarea>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'DS-04' && (
+            <div>
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">Ι</span>Απασχολούμενο Προσωπικό</div>
+                <div className="form-grid-3">
+                  {[
+                    {k:'Ι.1.1',l:'Μόνιμο προσωπικό (σύνολο)'},
+                    {k:'Ι.1.2',l:'Συμβασιούχοι (σύνολο)'},
+                    {k:'Ι.1.4',l:'Σύνολο απασχολούμενου προσωπικού'},
+                    {k:'Ι.2.4',l:'Τεχνικές δραστηριότητες (σύνολο)'},
+                    {k:'Ι.3.4',l:'Διοικητικές δραστηριότητες (σύνολο)'},
+                    {k:'Ι.4.4',l:'Οικονομικές δραστηριότητες (σύνολο)'},
+                  ].map(f => (
+                    <div className="form-group" key={f.k}>
+                      <label className="form-label"><span className="font-mono" style={{color:'#2563eb',fontSize:10}}>{f.k}</span> {f.l}</label>
+                      <input className="form-input" type="number" placeholder="0" disabled={readOnly} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">Ι.6</span>Παράπονα / Καταγγελίες</div>
+                <div className="form-grid">
+                  {[
+                    {k:'Ι.6.1.1',l:'Καταγγελίες ύδρευσης (ανά έτος)'},
+                    {k:'Ι.6.1.2',l:'Καταγγελίες αποχέτευσης (ανά έτος)'},
+                    {k:'Ι.6.2.1',l:'Μη-συμμορφώσεις ύδρευσης (ανά έτος)'},
+                    {k:'Ι.6.3.1',l:'Πρόστιμα ύδρευσης (€/έτος)'},
+                  ].map(f => (
+                    <div className="form-group" key={f.k}>
+                      <label className="form-label"><span className="font-mono" style={{color:'#2563eb',fontSize:10}}>{f.k}</span> {f.l}</label>
+                      <input className="form-input" type="number" placeholder="0" disabled={readOnly} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">Ι.7</span>Εξυπηρέτηση Πελατών</div>
+                <div className="form-grid">
+                  <div className="form-group"><label className="form-label">Τηλεφωνική γραμμή 24/7</label>
+                    <select className="form-select" disabled={readOnly}><option>ΝΑΙ</option><option>ΌΧΙ</option></select></div>
+                  <div className="form-group"><label className="form-label">Ηλεκτρονική σελίδα ενημέρωσης</label>
+                    <select className="form-select" disabled={readOnly}><option>ΝΑΙ</option><option>ΌΧΙ</option></select></div>
+                  <div className="form-group"><label className="form-label">Πρόσβαση στην ποιότητα νερού</label>
+                    <select className="form-select" disabled={readOnly}><option>Ιστοσελίδα</option><option>Μέσα κοιν. δικτύωσης</option><option>Και τα δύο</option></select></div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'DS-05' && (
+            <div>
+              <div className="alert alert-info mb-3">
+                <span>💧</span>
+                <span>Ποιοτικά δεδομένα ανά <strong>Ζώνη Παροχής Νερού (ΖΠΝ)</strong>. Προσθέστε ζώνες και συμπληρώστε τις παραμέτρους ποιότητας ανά ΖΠΝ.</span>
+              </div>
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">Υ</span>Ζώνες Παροχής Νερού</div>
+                <div className="form-group"><label className="form-label">Αριθμός ΖΠΝ</label>
+                  <input className="form-input" type="number" defaultValue="3" style={{width:120}} disabled={readOnly} /></div>
+                <div style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:8,padding:16,marginTop:12}}>
+                  {['ΖΠΝ-1: Κεντρική Αθήνα','ΖΠΝ-2: Βόρεια Προάστια','ΖΠΝ-3: Πειραιάς'].map((z,i) => (
+                    <div key={i} style={{borderBottom: i<2?'1px solid #e2e8f0':'none',paddingBottom:12,marginBottom:12}}>
+                      <div style={{fontWeight:600,fontSize:13,marginBottom:8}}>{z}</div>
+                      <div className="form-grid-3">
+                        <div className="form-group"><label className="form-label">Μόνιμος πληθυσμός</label><input className="form-input" type="number" placeholder="0" disabled={readOnly} /></div>
+                        <div className="form-group"><label className="form-label">Παρεχόμενος όγκος (m³/ημέρα)</label><input className="form-input" type="number" placeholder="0" disabled={readOnly} /></div>
+                        <div className="form-group"><label className="form-label">NUTS(2)</label><input className="form-input" placeholder="EL300" disabled={readOnly} /></div>
+                      </div>
+                    </div>
+                  ))}
+                  <button className="btn btn-secondary btn-sm" disabled={readOnly}>+ Προσθήκη ΖΠΝ</button>
+                </div>
+              </div>
+              <div className="form-section">
+                <div className="form-section-title"><span className="section-code">Υ.9-10</span>Πηγές Προέλευσης Νερού</div>
+                <div className="form-grid">
+                  {[
+                    {k:'Υ.9.1',l:'Υπόγεια ύδατα — Αναλογούν όγκος (m³/ημέρα)'},
+                    {k:'Υ.9.2',l:'Υπόγεια ύδατα — Ποσοστό (%)'},
+                    {k:'Υ.10.1',l:'Εσωτερικά επιφαν. ύδατα — Όγκος (m³/ημέρα)'},
+                    {k:'Υ.10.2',l:'Εσωτερικά επιφαν. ύδατα — Ποσοστό (%)'},
+                  ].map(f => (
+                    <div className="form-group" key={f.k}>
+                      <label className="form-label"><span className="font-mono" style={{color:'#2563eb',fontSize:10}}>{f.k}</span> {f.l}</label>
+                      <input className="form-input" type="number" placeholder="0" disabled={readOnly} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Submissions List ──────────────────────────────────────────────────────────
+
+function SubmissionsList({ role }) {
+  const isRAEU = ['R-05','R-06'].includes(role.id);
+  const list = isRAEU ? SUBMISSIONS : SUBMISSIONS.filter(s => s.provider === 'ΔΕΥΑ Αθηναίων');
+  const [sel, setSel] = useState(null);
+
+  return (
+    <div className="grid-2">
+      <div className="card">
+        <div className="card-header">
+          <span className="card-title">{isRAEU ? 'Υποβολές Παρόχων' : 'Ιστορικό Υποβολών'}</span>
+          <span className="text-xs text-muted">{list.length} εγγραφές</span>
+        </div>
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                {isRAEU && <th>Πάροχος</th>}
+                <th>Περίοδος</th>
+                <th>Τύπος</th>
+                <th>Κατάσταση</th>
+                <th>Υποβολή</th>
+              </tr>
+            </thead>
+            <tbody>
+              {list.map(s => (
+                <tr key={s.id} onClick={() => setSel(s)} style={{cursor:'pointer', background: sel?.id === s.id ? '#eff6ff' : undefined}}>
+                  <td className="font-mono text-xs">{s.id}</td>
+                  {isRAEU && <td style={{fontWeight:500}}>{s.provider}</td>}
+                  <td>{s.period}</td>
+                  <td className="text-xs">{s.type}</td>
+                  <td><StateBadge state={s.state} /></td>
+                  <td className="text-xs text-muted">{s.submitted}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div>
-        <h2>Who We Are</h2>
-        <p>Quento is the ICT arm of Qualco Group, with a mission to lead technology innovation in building a smarter, more sustainable, and people-first digital future.</p>
-        <p>Our ethos is built on openness, fairness, and respect — driven by excellence, one shared team, and a passion for solving complex challenges.</p>
+        {sel ? (
+          <div className="card">
+            <div className="card-header">
+              <span className="card-title">Λεπτομέρειες Υποβολής</span>
+              <button className="btn btn-secondary btn-sm" onClick={() => setSel(null)}>✕</button>
+            </div>
+            <div className="card-body">
+              <div className="flex justify-between mb-3">
+                <span className="font-mono text-xs" style={{color:'#2563eb'}}>{sel.id}</span>
+                <StateBadge state={sel.state} />
+              </div>
+              {[
+                ['Πάροχος', sel.provider],
+                ['Τύπος', sel.type],
+                ['Περίοδος', sel.period],
+                ['Προθεσμία', sel.deadline],
+                ['Ημ. Υποβολής', sel.submitted],
+                ['Επιθεωρητής', sel.inspector],
+              ].map(([l, v]) => (
+                <div key={l} className="flex justify-between" style={{padding:'7px 0',borderBottom:'1px solid #f1f5f9'}}>
+                  <span className="text-xs text-muted">{l}</span>
+                  <span className="text-sm" style={{fontWeight:500}}>{v}</span>
+                </div>
+              ))}
+
+              <div style={{marginTop:16}}>
+                <div className="text-xs text-muted mb-2">Ροή Κατάστασης</div>
+                <div className="stepper">
+                  {['S-01','S-02','S-04','S-05',sel.state === 'S-06' ? 'S-06' : 'S-07'].map((s, i, arr) => {
+                    const states = ['S-01','S-02','S-03','S-04','S-05','S-06','S-07','S-08'];
+                    const curIdx = states.indexOf(sel.state);
+                    const stepIdx = states.indexOf(s);
+                    const done = stepIdx <= curIdx;
+                    const current = s === sel.state;
+                    return (
+                      <div className="step" key={s}>
+                        {i < arr.length - 1 && <div className={`step-line ${done ? 'done' : 'pending'}`} />}
+                        <div className={`step-dot ${current ? 'current' : done ? 'done' : 'pending'}`}>{done && !current ? '✓' : i+1}</div>
+                        <div className={`step-label ${done ? 'active' : ''}`}>{STATE_META[s]?.label || s}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {isRAEU && ['S-04','S-05'].includes(sel.state) && (
+                <div className="mt-4 flex gap-2">
+                  <button className="btn btn-success btn-sm">✅ Αποδοχή</button>
+                  <button className="btn btn-danger btn-sm">↩ Επιστροφή</button>
+                  <button className="btn btn-secondary btn-sm">💬 Διευκρίνιση</button>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="card" style={{padding:32,textAlign:'center',color:'#94a3b8'}}>
+            <div style={{fontSize:32,marginBottom:8}}>📄</div>
+            <div className="text-sm">Επιλέξτε υποβολή για λεπτομέρειες</div>
+          </div>
+        )}
       </div>
-      <div class="values">
-        <div class="value-item">
-          <strong>Excellence</strong>
-          <span>Fast-moving, fully committed teams with continuous improvement.</span>
+    </div>
+  );
+}
+
+// ── KPI Dashboard ─────────────────────────────────────────────────────────────
+
+function KPIDashboard() {
+  const [cat, setCat] = useState('Όλοι');
+  const [period, setPeriod] = useState('2024');
+  const cats = ['Όλοι', 'Τεχνικοί', 'Οικονομικοί', 'Επιχειρησιακοί', 'Ποιοτικοί'];
+  const filtered = cat === 'Όλοι' ? KPIS : KPIS.filter(k => k.cat === cat);
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-4">
+        <div className="tabs" style={{marginBottom:0,border:'none'}}>
+          {cats.map(c => (
+            <div key={c} className={`tab ${cat === c ? 'active' : ''}`} onClick={() => setCat(c)}>{c}</div>
+          ))}
         </div>
-        <div class="value-item">
-          <strong>One Team</strong>
-          <span>Trust, empowerment, and shared success.</span>
+        <div className="flex gap-2 items-center">
+          <span className="text-xs text-muted">Περίοδος:</span>
+          <select className="form-select" style={{width:'auto'}} value={period} onChange={e=>setPeriod(e.target.value)}>
+            <option>2024</option><option>2023</option><option>2022</option>
+          </select>
         </div>
-        <div class="value-item">
-          <strong>Passion</strong>
-          <span>Perseverance and a drive to tackle every challenge.</span>
+      </div>
+
+      <div className="stats-grid" style={{gridTemplateColumns:'repeat(4,1fr)'}}>
+        {[
+          {l:'Σύνολο KPIs Υ&Α', v:'92'},
+          {l:'Σύνολο KPIs Άρδευσης', v:'31'},
+          {l:'Παρόχοι με υπολ. KPIs', v:'412'},
+          {l:'Τιμές KPI {period}', v:'33.2K'},
+        ].map((s,i) => (
+          <div className="stat-card" key={i}>
+            <div className="stat-label">{s.l.replace('{period}', period)}</div>
+            <div className="stat-value">{s.v}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="kpi-grid">
+        {filtered.map(k => (
+          <div className="kpi-card" key={k.id}>
+            <div className="kpi-id">{k.id}</div>
+            <div className="kpi-name">{k.name}</div>
+            <div>
+              <span className="kpi-value">{k.value}</span>
+              <span className="kpi-unit"> {k.unit}</span>
+            </div>
+            <div className="kpi-bar-wrap">
+              <div className="kpi-bar-track">
+                <div className="kpi-bar-fill" style={{width:`${Math.min(100,(k.value/k.max)*100)}%`, background: k.color, height:4, borderRadius:2}} />
+              </div>
+            </div>
+            <div className="text-xs text-muted mt-2" style={{fontFamily:'monospace'}}>{k.formula}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="card mt-4">
+        <div className="card-header"><span className="card-title">Συγκριτική Ανάλυση — Κορυφαίοι Δείκτες ({period})</span></div>
+        <div className="card-body">
+          <div className="bar-chart">
+            {[
+              { label: 'ΔΕΥΑ Αθηναίων', val: 18.4, color: '#2563eb' },
+              { label: 'ΕΥΔΑΠ Α.Ε.', val: 22.1, color: '#7c3aed' },
+              { label: 'ΔΕΥΑ Θεσσαλονίκης', val: 31.8, color: '#0891b2' },
+              { label: 'ΔΕΥΑ Πατρέων', val: 28.5, color: '#d97706' },
+              { label: 'Μέσος όρος κλάδου', val: 24.2, color: '#94a3b8' },
+            ].map(b => (
+              <div className="bar-row" key={b.label}>
+                <div className="bar-label">{b.label}</div>
+                <div className="bar-track">
+                  <div className="bar-fill-h" style={{width:`${(b.val/50)*100}%`, background: b.color}}>
+                    <span className="bar-val">{b.val}%</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-xs text-muted mt-3">KPI-ΑΑ.1: Ποσοστό συνολικών απωλειών εσωτερικού δικτύου ύδρευσης</div>
         </div>
       </div>
     </div>
-  </section>
+  );
+}
 
-  <!-- CONTACT -->
-  <section class="section" id="contact">
-    <div class="container">
-      <h2>Get In Touch</h2>
-      <p class="section-sub">Ready to transform your business? We'd love to hear from you.</p>
-      <div class="contact-info">
-        <p>66 Kifisias Avenue, 15125 Maroussi, Athens, Greece</p>
-        <p><a href="tel:+302106198903">+30 210 6198903</a></p>
-        <p><a href="mailto:info@quento.eu">info@quento.eu</a></p>
+// ── Providers Registry ────────────────────────────────────────────────────────
+
+function ProvidersPage() {
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex gap-2">
+          <input className="form-input" placeholder="Αναζήτηση παρόχου..." style={{width:240}} />
+          <select className="form-select" style={{width:'auto'}}>
+            <option>Όλοι οι τύποι</option><option>Υ&Α</option><option>Άρδευση</option>
+          </select>
+        </div>
+        <button className="btn btn-primary btn-sm">+ Νέος Πάροχος</button>
+      </div>
+
+      <div className="card">
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Επωνυμία</th><th>Τύπος</th><th>Περιφέρεια</th><th>Υποβολή 2024</th><th>KPIs</th><th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {PROVIDERS.map(p => (
+                <tr key={p.id}>
+                  <td className="font-mono text-xs">{p.id}</td>
+                  <td style={{fontWeight:500}}>{p.name}</td>
+                  <td><span className={`badge ${p.type === 'Υ&Α' ? 'badge-ready' : 'badge-accepted'}`}>{p.type}</span></td>
+                  <td className="text-sm">{p.region}</td>
+                  <td><span className={`badge ${p.submitted ? 'badge-accepted' : 'badge-draft'}`}>{p.submitted ? '✓ Υποβλήθηκε' : '— Εκκρεμεί'}</span></td>
+                  <td>{p.kpiCount > 0 ? <span className="badge badge-accepted">{p.kpiCount}</span> : '—'}</td>
+                  <td><button className="btn btn-secondary btn-sm">Προβολή</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </section>
+  );
+}
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <span class="logo">Quento Accounting</span>
-      <nav>
-        <a href="#what-we-do">What We Do</a>
-        <a href="#solutions">Solutions</a>
-        <a href="#about">Who We Are</a>
-        <a href="#contact">Contact</a>
-      </nav>
-      <p>&copy; 2026 Quento Accounting. Part of Qualco Group.</p>
+// ── Public Portal ─────────────────────────────────────────────────────────────
+
+function PublicPortal() {
+  return (
+    <div>
+      <div className="alert alert-info mb-4">
+        <span>🌐</span>
+        <span>Αυτή η σελίδα αποδίδει το <strong>δημόσιο προβολής</strong> — η ΚΠΣ δημοσιεύει επιμελημένα δεδομένα. Δεν απαιτείται σύνδεση.</span>
+      </div>
+
+      <div style={{background:'linear-gradient(135deg,#1e3a5f,#1d4ed8)',borderRadius:12,padding:'32px 28px',marginBottom:24,color:'#fff'}}>
+        <div style={{fontSize:11,opacity:0.7,letterSpacing:'0.1em',marginBottom:4}}>ΡΑΑΕΥ · ΔΗΜΟΣΙΑ ΠΥΛΗ</div>
+        <div style={{fontSize:22,fontWeight:700,marginBottom:8}}>Δείκτες Απόδοσης Παρόχων Υδάτων</div>
+        <div style={{fontSize:13,opacity:0.8}}>Ετήσιοι δείκτες KPI για >700 παρόχους ύδρευσης, αποχέτευσης και άρδευσης</div>
+      </div>
+
+      <div className="stats-grid" style={{marginBottom:24}}>
+        {[
+          {l:'Πάροχοι Υ&Α', v:'>300'},
+          {l:'Πάροχοι Άρδευσης', v:'>400'},
+          {l:'Μετρητές Ύδρευσης', v:'7M+'},
+          {l:'Δημοσιευμένοι KPIs', v:'123'},
+        ].map((s,i) => (
+          <div className="stat-card" key={i} style={{textAlign:'center'}}>
+            <div className="stat-value">{s.v}</div>
+            <div className="stat-label">{s.l}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid-2">
+        <div className="card">
+          <div className="card-header"><span className="card-title">Μέσος Δείκτης Απωλειών Δικτύου 2024</span></div>
+          <div className="card-body">
+            <div className="bar-chart">
+              {[
+                {label:'Αττική',val:20,color:'#2563eb'},
+                {label:'Κ. Μακεδονία',val:28,color:'#7c3aed'},
+                {label:'Θεσσαλία',val:35,color:'#0891b2'},
+                {label:'Δ. Ελλάδα',val:31,color:'#d97706'},
+                {label:'Κρήτη',val:24,color:'#16a34a'},
+              ].map(b => (
+                <div className="bar-row" key={b.label}>
+                  <div className="bar-label">{b.label}</div>
+                  <div className="bar-track">
+                    <div className="bar-fill-h" style={{width:`${(b.val/50)*100}%`,background:b.color}}>
+                      <span className="bar-val">{b.val}%</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card-header"><span className="card-title">Ποιότητα Πόσιμου Νερού 2024</span></div>
+          <div className="card-body">
+            {[
+              {label:'Συμμόρφωση χημικών παρ.', pct:99.2},
+              {label:'Συμμόρφωση μικροβιολ. παρ.', pct:99.7},
+              {label:'Πάροχοι με 24/7 εξυπηρέτηση', pct:73},
+              {label:'Κάλυψη δικτύου ύδρευσης', pct:96.4},
+            ].map(r => (
+              <div key={r.label} style={{marginBottom:14}}>
+                <div className="flex justify-between mb-1">
+                  <span className="text-sm">{r.label}</span>
+                  <span className="text-sm" style={{fontWeight:700}}>{r.pct}%</span>
+                </div>
+                <div className="progress-bar" style={{height:8}}>
+                  <div className="progress-fill" style={{width:`${r.pct}%`,background: r.pct > 95 ? '#16a34a' : '#f59e0b'}} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
-  </footer>
+  );
+}
 
+// ── Schemas Admin ─────────────────────────────────────────────────────────────
+
+function SchemasPage() {
+  return (
+    <div>
+      <div className="grid-2">
+        <div className="card">
+          <div className="card-header"><span className="card-title">Ενεργά Σχήματα XSD</span><button className="btn btn-primary btn-sm">+ Νέα Έκδοση</button></div>
+          <div className="table-wrap">
+            <table>
+              <thead><tr><th>Όνομα</th><th>Έκδοση</th><th>Τύπος</th><th>Κατάσταση</th></tr></thead>
+              <tbody>
+                {[
+                  {n:'water-utility-wa-2025',v:'2025.1.0',t:'Υ&Α',s:'Ενεργό'},
+                  {n:'water-utility-irr-2025',v:'2025.1.0',t:'Άρδευση',s:'Ενεργό'},
+                  {n:'water-utility-wa-2024',v:'2024.3.1',t:'Υ&Α',s:'Αρχείο'},
+                ].map(r => (
+                  <tr key={r.n}>
+                    <td className="font-mono text-xs">{r.n}</td>
+                    <td>{r.v}</td>
+                    <td>{r.t}</td>
+                    <td><span className={`badge ${r.s === 'Ενεργό' ? 'badge-accepted' : 'badge-draft'}`}>{r.s}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="card">
+          <div className="card-header"><span className="card-title">Κανόνες Επικύρωσης</span></div>
+          <div className="card-body">
+            {[
+              {code:'VAL-001',desc:'Β.1.3 ≤ Β.1.2 (εσωτ. ≤ απόληψη)',sev:'Σφάλμα'},
+              {code:'VAL-002',desc:'Α.1.1 = Σ(Α.1.1.1..6)',sev:'Σφάλμα'},
+              {code:'VAL-003',desc:'ΣΤ.9.2 ≤ ΣΤ.9.1',sev:'Προειδοποίηση'},
+              {code:'VAL-004',desc:'Υ.7.1 = Σ(Υ.4.3i)',sev:'Σφάλμα'},
+              {code:'VAL-005',desc:'Γ.2.30 = Σ(Γ.2.6.i)',sev:'Σφάλμα'},
+            ].map(r => (
+              <div key={r.code} className="flex justify-between items-center" style={{padding:'8px 0',borderBottom:'1px solid #f1f5f9'}}>
+                <div>
+                  <span className="font-mono text-xs" style={{color:'#2563eb',marginRight:8}}>{r.code}</span>
+                  <span className="text-sm">{r.desc}</span>
+                </div>
+                <span className={`badge ${r.sev === 'Σφάλμα' ? 'badge-returned' : 'badge-review'}`}>{r.sev}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── App Shell ─────────────────────────────────────────────────────────────────
+
+const PAGE_TITLES = {
+  dashboard: 'Πίνακας Ελέγχου',
+  submit: 'Υποβολή Δεδομένων',
+  submissions: 'Υποβολές',
+  kpis: 'Δείκτες KPI',
+  providers: 'Μητρώο Παρόχων',
+  public: 'Δημόσια Πύλη',
+  schemas: 'Σχήματα & Κανόνες Επικύρωσης',
+};
+
+function App() {
+  const [role, setRole] = useState(null);
+  const [page, setPage] = useState('dashboard');
+
+  if (!role) return <LoginScreen onLogin={r => { setRole(r); setPage('dashboard'); }} />;
+
+  const isRAEU = ['R-05','R-06','R-07','R-08'].includes(role.id);
+
+  const renderPage = () => {
+    if (page === 'dashboard') return isRAEU ? <RAEUDashboard /> : <ProviderDashboard />;
+    if (page === 'submit') return <DataEntryForm role={role} />;
+    if (page === 'submissions') return <SubmissionsList role={role} />;
+    if (page === 'kpis') return <KPIDashboard />;
+    if (page === 'providers') return <ProvidersPage />;
+    if (page === 'public') return <PublicPortal />;
+    if (page === 'schemas') return <SchemasPage />;
+    return null;
+  };
+
+  return (
+    <div className="app">
+      <Sidebar role={role} page={page} onNav={setPage} onLogout={() => { setRole(null); setPage('dashboard'); }} />
+      <div className="main">
+        <div className="topbar">
+          <div className="topbar-title">{PAGE_TITLES[page]}</div>
+          <div className="topbar-actions">
+            <span className="badge badge-ready">{role.id}</span>
+            <span className="text-xs text-muted">{role.org}</span>
+          </div>
+        </div>
+        <div className="content">{renderPage()}</div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
 </body>
 </html>
