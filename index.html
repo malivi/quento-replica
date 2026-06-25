@@ -195,6 +195,14 @@
     .legend-sep { color: #CCC; margin: 0 6px; }
     .legend-hover-note { font-size: 9.5px; color: #888; font-style: italic; }
 
+    /* ── Sort ── */
+    .col-sort-label { cursor: pointer; user-select: none; }
+    .col-sort-label:hover { text-decoration: underline; }
+    .sort-icon { font-size: 8px; opacity: 0.5; margin-left: 2px; }
+    .sort-icon.asc::after  { content: '▲'; }
+    .sort-icon.desc::after { content: '▼'; }
+    .sort-icon.none::after { content: '▲▼'; }
+
     /* ── Floating tooltip ── */
     #float-tip {
       display:none;
@@ -242,22 +250,22 @@
           <td class="s2"><div class="col-header"><span class="col-label">Scope (Executive Description)</span><button class="col-toggle" onclick="toggleColumn(1)" title="Hide column">◀</button></div></td>
           <td class="s8"><div class="col-header"><span class="col-label">Κατηγορία</span><button class="col-toggle" onclick="toggleColumn(2)" title="Hide column">◀</button></div></td>
           <td class="s8"><div class="col-header"><span class="col-label">Ομάδες Επηρεάζει</span><button class="col-toggle" onclick="toggleColumn(3)" title="Hide column">◀</button></div></td>
-          <td class="s-cx sep-left"><div class="col-header"><span class="col-label">Tech. Complexity</span><button class="col-toggle" onclick="toggleColumn(4)" title="Hide column">◀</button></div></td>
-          <td class="s-cx"><div class="col-header"><span class="col-label">Data Readiness</span><button class="col-toggle" onclick="toggleColumn(5)" title="Hide column">◀</button></div></td>
-          <td class="s-cx"><div class="col-header"><span class="col-label">Integration</span><button class="col-toggle" onclick="toggleColumn(6)" title="Hide column">◀</button></div></td>
-          <td class="s-cx"><div class="col-header"><span class="col-label">Org. Change</span><button class="col-toggle" onclick="toggleColumn(7)" title="Hide column">◀</button></div></td>
-          <td class="s-cx"><div class="col-header"><span class="col-label">Time to Value</span><button class="col-toggle" onclick="toggleColumn(8)" title="Hide column">◀</button></div></td>
-          <td class="s-cx"><div class="col-header"><span class="col-label">Dep. Risk</span><button class="col-toggle" onclick="toggleColumn(9)" title="Hide column">◀</button></div></td>
-          <td class="s-bv sep-left"><div class="col-header"><span class="col-label">Cost Impact</span><button class="col-toggle" onclick="toggleColumn(10)" title="Hide column">◀</button></div></td>
-          <td class="s-bv"><div class="col-header"><span class="col-label">Strategic Impact</span><button class="col-toggle" onclick="toggleColumn(11)" title="Hide column">◀</button></div></td>
+          <td class="s-cx sep-left"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(4)" title="Sort by level">Tech. Complexity <span class="sort-icon none" data-col="4"></span></span><button class="col-toggle" onclick="toggleColumn(4)" title="Hide column">◀</button></div></td>
+          <td class="s-cx"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(5)" title="Sort by level">Data Readiness <span class="sort-icon none" data-col="5"></span></span><button class="col-toggle" onclick="toggleColumn(5)" title="Hide column">◀</button></div></td>
+          <td class="s-cx"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(6)" title="Sort by level">Integration <span class="sort-icon none" data-col="6"></span></span><button class="col-toggle" onclick="toggleColumn(6)" title="Hide column">◀</button></div></td>
+          <td class="s-cx"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(7)" title="Sort by level">Org. Change <span class="sort-icon none" data-col="7"></span></span><button class="col-toggle" onclick="toggleColumn(7)" title="Hide column">◀</button></div></td>
+          <td class="s-cx"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(8)" title="Sort by level">Time to Value <span class="sort-icon none" data-col="8"></span></span><button class="col-toggle" onclick="toggleColumn(8)" title="Hide column">◀</button></div></td>
+          <td class="s-cx"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(9)" title="Sort by level">Dep. Risk <span class="sort-icon none" data-col="9"></span></span><button class="col-toggle" onclick="toggleColumn(9)" title="Hide column">◀</button></div></td>
+          <td class="s-bv sep-left"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(10)" title="Sort by level">Cost Impact <span class="sort-icon none" data-col="10"></span></span><button class="col-toggle" onclick="toggleColumn(10)" title="Hide column">◀</button></div></td>
+          <td class="s-bv"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(11)" title="Sort by level">Strategic Impact <span class="sort-icon none" data-col="11"></span></span><button class="col-toggle" onclick="toggleColumn(11)" title="Hide column">◀</button></div></td>
         </tr>
 
         <!-- ── Row 2: Filters ── -->
         <tr class="filter-row">
-          <td><input class="col-filter" type="text" placeholder="🔍 Filter…" oninput="applyFilters(0,this.value)" /></td>
-          <td><input class="col-filter" type="text" placeholder="🔍 Filter…" oninput="applyFilters(1,this.value)" /></td>
+          <td></td>
+          <td></td>
           <td><input class="col-filter" type="text" placeholder="🔍 Filter…" oninput="applyFilters(2,this.value)" /></td>
-          <td><input class="col-filter" type="text" placeholder="🔍 Filter…" oninput="applyFilters(3,this.value)" /></td>
+          <td></td>
           <td class="sep-left"><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(4,this.value)" /></td>
           <td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(5,this.value)" /></td>
           <td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(6,this.value)" /></td>
@@ -683,6 +691,46 @@
           if (!cell.textContent.toLowerCase().includes(f)) { visible = false; break; }
         }
         row.style.display = visible ? '' : 'none';
+      });
+    }
+
+    /* ── Sort ── */
+    let sortState = { col: -1, dir: 'none' }; // dir: 'none' | 'asc' | 'desc'
+    let originalOrder = null;
+
+    function getCellLevel(cell) {
+      if (!cell) return 0;
+      const m = cell.className.match(/(?:cx|bv)-(\d)/);
+      return m ? parseInt(m[1]) : 0;
+    }
+
+    function sortColumn(colIdx) {
+      const tbody = document.querySelector('#main-table tbody');
+      const dataRows = Array.from(tbody.querySelectorAll('tr:not(.filter-row):not(#header-row)'));
+
+      if (!originalOrder) originalOrder = [...dataRows];
+
+      if (sortState.col === colIdx) {
+        sortState.dir = sortState.dir === 'asc' ? 'desc' : sortState.dir === 'desc' ? 'none' : 'asc';
+      } else {
+        sortState.col = colIdx;
+        sortState.dir = 'asc';
+      }
+
+      if (sortState.dir === 'none') {
+        originalOrder.forEach(r => tbody.appendChild(r));
+      } else {
+        const sorted = [...dataRows].sort((a, b) => {
+          const la = getCellLevel(a.cells[colIdx]);
+          const lb = getCellLevel(b.cells[colIdx]);
+          return sortState.dir === 'asc' ? la - lb : lb - la;
+        });
+        sorted.forEach(r => tbody.appendChild(r));
+      }
+
+      document.querySelectorAll('.sort-icon').forEach(el => {
+        const c = parseInt(el.dataset.col);
+        el.className = 'sort-icon ' + (c === sortState.col && sortState.dir !== 'none' ? sortState.dir : 'none');
       });
     }
 
