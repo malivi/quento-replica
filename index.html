@@ -5,223 +5,313 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Initiatives 2026</title>
   <style>
+    *, *::before, *::after { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
-      background: #ffffff;
-      padding: 32px 24px;
+      background: #F2F4F7;
+      padding: 32px 28px 48px;
       margin: 0;
+      color: #1A1A2E;
     }
+
     .sheet-title {
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 16px;
+      font-weight: 700;
       color: #0E2841;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
+      letter-spacing: 0.02em;
     }
-    .table-wrapper { overflow-x: auto; }
+
+    /* ── Table wrapper ── */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+      background: #fff;
+    }
 
     table {
       border-collapse: collapse;
       table-layout: fixed;
       width: 1772px;
+      background: #fff;
     }
 
-    col.col-a   { width: 235px; }
-    col.col-b   { width: 408px; }
-    col.col-c   { width: 180px; }
-    col.col-d   { width: 229px; }
-    col.col-dim { width: 90px;  }
+    col.col-a   { width: 220px; }
+    col.col-b   { width: 420px; }
+    col.col-c   { width: 160px; }
+    col.col-d   { width: 192px; }
+    col.col-dim { width: 97px;  }
 
-    td {
+    /* ── Base cell ── */
+    td, th {
       font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
-      font-size: 10.67px;
-      color: #242424;
+      font-size: 11px;
+      color: #1A1A2E;
       vertical-align: middle;
       word-wrap: break-word;
       overflow-wrap: break-word;
       hyphens: auto;
-      padding: 3px 6px;
+      padding: 6px 8px;
+      border-bottom: 1px solid #E8EAED;
     }
 
-    tr.h21 { height: 21px; }
-    tr.h57 { height: 57px; }
-    tr.h43 { height: 43px; }
-
-    .s1 { background:#F5F5F5; font-weight:700; text-align:center; border:2px solid #E6E6E6; }
-    .s2 { background:#F5F5F5; font-weight:700; text-align:left; border-right:2px solid #E6E6E6; border-top:2px solid #E6E6E6; border-bottom:2px solid #E6E6E6; }
-    .s3 { background:#FFFFFF; font-weight:700; font-style:italic; text-align:left; border-right:2px solid #E6E6E6; border-bottom:2px solid #E6E6E6; }
-    .s4 { background:#FFFFFF; font-weight:700; font-style:normal; text-align:left; border-right:2px solid #E6E6E6; border-bottom:2px solid #E6E6E6; }
-    .s7 { background:#4EA72E; font-weight:700; text-align:center; color:#242424; border:2px solid #E6E6E6; }
-    .s8 { background:#F5F5F5; font-weight:400; text-align:center; border-right:2px solid #E6E6E6; border-top:2px solid #E6E6E6; border-bottom:2px solid #E6E6E6; }
-    .s10 { background:#FFFFFF; font-weight:400; text-align:center; border-right:2px solid #E6E6E6; border-bottom:2px solid #E6E6E6; }
-
-    .cat { font-weight:400; text-align:center; border-right:2px solid #E6E6E6; border-bottom:2px solid #E6E6E6; }
-    .cat-finops     { background:#FAF9D7; }
-    .cat-governance { background:#D0D0D0; }
-    .cat-itops      { background:#60CBF3; }
-    .cat-knowledge  { background:#E49EDD; }
-    .cat-observ     { background:#84E291; }
-    .cat-security   { background:#F6C6AD; }
-
-    .bi { font-weight:700; font-style:italic; }
-    .b  { font-weight:700; font-style:normal; }
-    .n  { font-weight:400; font-style:normal; }
-
-    /* ── Column header toggle ── */
-    .col-header { display:flex; align-items:center; justify-content:space-between; gap:4px; }
-    .col-label  { flex:1; min-width:0; }
-    .col-toggle {
-      flex-shrink:0;
-      background:rgba(255,255,255,0.35);
-      border:1px solid rgba(0,0,0,0.18);
-      border-radius:3px;
-      cursor:pointer;
-      font-size:9px;
-      padding:1px 5px;
-      line-height:1.4;
-      color:#333;
+    /* ── Main header row ── */
+    thead th {
+      background: #0E2841;
+      color: #fff;
+      font-weight: 600;
+      font-size: 11px;
+      text-align: center;
+      padding: 8px 8px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 2px solid #1B3F6A;
     }
-    .col-toggle:hover { background:rgba(255,255,255,0.7); }
-
-    td.col-collapsed { overflow:hidden; padding:2px !important; vertical-align:middle; }
-    td.col-collapsed .col-label { display:none; }
-    td.col-collapsed .col-header { justify-content:center; }
-    td.col-collapsed .col-toggle { writing-mode:vertical-rl; text-orientation:mixed; padding:4px 2px; font-size:9px; }
+    thead th.s2 { text-align: left; }
 
     /* ── Filter row ── */
-    tr.filter-row td { background:#FAFAFA; border-right:2px solid #E6E6E6; border-bottom:2px solid #E6E6E6; padding:3px 4px; }
-    .col-filter {
-      width:100%; box-sizing:border-box;
-      font-size:10px; font-family:'Segoe UI',system-ui,sans-serif;
-      padding:3px 5px; border:1px solid #CCC; border-radius:3px; color:#242424; background:#fff;
+    thead tr.filter-row td {
+      background: #F8F9FA;
+      border-bottom: 2px solid #DDE1E7;
+      padding: 4px 6px;
+      position: sticky;
+      top: 38px;
+      z-index: 9;
     }
-    .col-filter:focus { outline:none; border-color:#0E2841; box-shadow:0 0 0 2px rgba(14,40,65,0.12); }
-    .col-filter::placeholder { color:#AAA; }
+    .col-filter {
+      width: 100%;
+      font-size: 10px;
+      font-family: inherit;
+      padding: 3px 6px;
+      border: 1px solid #CDD0D6;
+      border-radius: 4px;
+      color: #1A1A2E;
+      background: #fff;
+    }
+    .col-filter:focus { outline: none; border-color: #0E2841; box-shadow: 0 0 0 2px rgba(14,40,65,0.15); }
+    .col-filter::placeholder { color: #B0B4BB; }
 
-    /* ── Dimension column headers ── */
+    /* ── Data rows ── */
+    tbody tr:hover td { background: #EBF3FB !important; }
+    tbody tr:last-child td { border-bottom: none; }
+
+    /* ── Initiative name cells ── */
+    .s1 {
+      background: #F5F7FA;
+      font-weight: 700;
+      text-align: center;
+      font-size: 10.5px;
+      color: #0E2841;
+      border-right: 1px solid #E8EAED;
+    }
+    .s7 {
+      background: #4EA72E;
+      font-weight: 700;
+      text-align: center;
+      font-size: 10.5px;
+      color: #fff;
+      border-right: 1px solid #E8EAED;
+    }
+
+    /* ── Scope cell ── */
+    .s3 {
+      font-weight: 600;
+      font-style: italic;
+      text-align: left;
+      font-size: 10.5px;
+      color: #2C3E50;
+      border-right: 1px solid #E8EAED;
+    }
+    .s4 {
+      font-weight: 600;
+      font-style: normal;
+      text-align: left;
+      font-size: 10.5px;
+      color: #2C3E50;
+      border-right: 1px solid #E8EAED;
+    }
+
+    /* ── Category cell ── */
+    .cat {
+      font-weight: 600;
+      font-size: 10px;
+      text-align: center;
+      border-right: 1px solid #E8EAED;
+    }
+    .cat-finops     { background: #FEF9D4; color: #7A6200; }
+    .cat-governance { background: #EAECEE; color: #444; }
+    .cat-itops      { background: #D6F0FA; color: #0A5A7C; }
+    .cat-knowledge  { background: #F5E0F5; color: #7A1F7A; }
+    .cat-observ     { background: #D6F5DB; color: #1A6B2A; }
+    .cat-security   { background: #FDEADF; color: #8B3A12; }
+
+    /* ── Teams cell ── */
+    .s10 {
+      font-weight: 400;
+      font-size: 10px;
+      text-align: center;
+      color: #444;
+      border-right: 1px solid #E8EAED;
+    }
+
+    /* ── Rich-text helpers ── */
+    .bi { font-weight: 700; font-style: italic; }
+    .b  { font-weight: 700; font-style: normal; }
+    .n  { font-weight: 400; font-style: normal; }
+
+    /* ── Dimension column headers (thead) ── */
     .s-cx {
-      background:#EDE8F5; font-weight:700; font-size:9.5px;
-      text-align:center; vertical-align:middle; padding:2px 3px;
-      border-right:2px solid #E6E6E6; border-top:2px solid #E6E6E6; border-bottom:2px solid #E6E6E6;
+      background: #2D1B6E !important;
+      color: #E8E0FF !important;
+      font-size: 10px;
+      font-weight: 600;
+      text-align: center;
+      border-right: 1px solid #3D2B8A;
     }
     .s-bv {
-      background:#E8F5E8; font-weight:700; font-size:9.5px;
-      text-align:center; vertical-align:middle; padding:2px 3px;
-      border-right:2px solid #E6E6E6; border-top:2px solid #E6E6E6; border-bottom:2px solid #E6E6E6;
+      background: #1A4731 !important;
+      color: #C8F5DA !important;
+      font-size: 10px;
+      font-weight: 600;
+      text-align: center;
+      border-right: 1px solid #2A5741;
     }
 
     /* ── Dimension data cells ── */
     .dim-cell {
-      font-weight:600; font-style:normal; text-align:center;
-      border-right:2px solid #E6E6E6; border-bottom:2px solid #E6E6E6;
-      font-size:9px; cursor:help; vertical-align:middle;
-      padding:3px 4px; line-height:1.3;
+      font-weight: 700;
+      font-size: 9.5px;
+      text-align: center;
+      border-right: 1px solid #E8EAED;
+      cursor: help;
+      padding: 4px 4px;
+      line-height: 1.2;
     }
-    .tip-text { display:none; }
+    .tip-text { display: none; }
 
     /* Complexity: low=green → high=red */
-    .cx-1 { background:#C6EFCE; color:#276221; }
-    .cx-2 { background:#FFEB9C; color:#7D6608; }
-    .cx-3 { background:#FFCC99; color:#7E3400; }
-    .cx-4 { background:#FFC7CE; color:#9C0006; }
+    .cx-1 { background: #D4EDDA; color: #155724; }
+    .cx-2 { background: #FFF3CD; color: #856404; }
+    .cx-3 { background: #FFE0B2; color: #7E3400; }
+    .cx-4 { background: #FCCDD3; color: #7B1D2A; }
 
     /* Business value: low=gray → high=green */
-    .bv-1 { background:#F5F5F5; color:#666; }
-    .bv-2 { background:#D0E4F7; color:#1F4E79; }
-    .bv-3 { background:#84BCDA; color:#1A2E5A; }
-    .bv-4 { background:#4EA72E; color:#fff; }
+    .bv-1 { background: #F0F0F0; color: #555; }
+    .bv-2 { background: #CCE5FF; color: #004085; }
+    .bv-3 { background: #79B8E0; color: #0A2744; }
+    .bv-4 { background: #4EA72E; color: #fff; }
 
-    /* Group separator */
-    .sep-left { border-left:3px solid #999 !important; }
-
-    /* ── Legend ── */
-    .legend {
-      margin-top: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      max-width: 920px;
-    }
-    .legend-section {
-      border: 1px solid #E0E0E0;
-      border-radius: 6px;
-      padding: 14px 16px;
-      background: #FAFAFA;
-    }
-    .legend-title {
-      font-size: 11px;
-      font-weight: 700;
-      color: #0E2841;
-      margin-bottom: 10px;
-    }
-    .legend-subtitle {
-      font-weight: 400;
-      color: #666;
-      font-size: 10px;
-    }
-    .legend-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px 24px;
-    }
-    .legend-dim { display: flex; flex-direction: column; gap: 4px; }
-    .legend-dim-name {
-      font-size: 10px;
-      font-weight: 700;
-      color: #333;
-    }
-    .legend-levels {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 3px;
-    }
-    .legend-chip {
-      font-size: 9px;
-      font-weight: 600;
-      padding: 2px 7px;
-      border-radius: 3px;
-      white-space: nowrap;
-    }
-    .legend-arrow { font-size: 9px; color: #999; }
-    .legend-dim-desc { font-size: 9.5px; color: #666; line-height: 1.4; }
-    .legend-color-row {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-bottom: 8px;
-    }
-    .legend-color-label { font-size: 10px; font-weight: 700; color: #333; margin-right: 2px; }
-    .legend-sep { color: #CCC; margin: 0 6px; }
-    .legend-hover-note { font-size: 9.5px; color: #888; font-style: italic; }
+    /* Group separators */
+    .sep-left { border-left: 3px solid #888 !important; }
 
     /* ── Sort ── */
-    .col-sort-label { cursor: pointer; user-select: none; }
+    .col-sort-label { cursor: pointer; user-select: none; display: inline-block; }
     .col-sort-label:hover { text-decoration: underline; }
-    .sort-icon { font-size: 8px; opacity: 0.5; margin-left: 2px; }
+    .sort-icon { font-size: 8px; opacity: 0.55; margin-left: 2px; }
     .sort-icon.asc::after  { content: '▲'; }
     .sort-icon.desc::after { content: '▼'; }
     .sort-icon.none::after { content: '▲▼'; }
 
     /* ── Floating tooltip ── */
     #float-tip {
-      display:none;
-      position:fixed;
-      background:#1E3A5F;
-      color:#fff;
-      padding:8px 12px;
-      border-radius:5px;
-      font-size:10.5px;
-      font-weight:400;
-      font-style:normal;
-      font-family:'Segoe UI',system-ui,sans-serif;
-      max-width:240px;
-      line-height:1.5;
-      z-index:99999;
-      pointer-events:none;
-      box-shadow:0 4px 16px rgba(0,0,0,0.3);
-      white-space:normal;
+      display: none;
+      position: fixed;
+      background: #1E3A5F;
+      color: #fff;
+      padding: 9px 13px;
+      border-radius: 6px;
+      font-size: 10.5px;
+      font-weight: 400;
+      font-style: normal;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      max-width: 250px;
+      line-height: 1.55;
+      z-index: 99999;
+      pointer-events: none;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.28);
+      white-space: normal;
     }
+
+    /* ── Legend ── */
+    .legend {
+      margin-top: 32px;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+    .leg-section {
+      padding: 16px 20px;
+      border-bottom: 1px solid #E8EAED;
+    }
+    .leg-section:last-child { border-bottom: none; }
+    .leg-h {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0E2841;
+      margin: 0 0 10px;
+    }
+    .leg-sh {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1A1A2E;
+      margin: 10px 0 3px;
+    }
+    .legend p {
+      font-size: 10.5px;
+      color: #555;
+      margin: 0 0 4px;
+      line-height: 1.5;
+    }
+    .legend ul {
+      margin: 2px 0 6px 16px;
+      padding: 0;
+    }
+    .legend li {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 2px;
+      line-height: 1.45;
+    }
+    .legend em { font-style: italic; color: #666; }
+    .legend strong { font-weight: 700; color: #1A1A2E; }
+    .leg-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 8px;
+      margin-top: 6px;
+    }
+    .leg-chip {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .leg-arrow { font-size: 9px; color: #999; align-self: center; }
+    .leg-dims-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px 24px;
+    }
+    .leg-dim-name { font-size: 10px; font-weight: 700; color: #333; margin-bottom: 3px; }
+    .leg-dim-desc { font-size: 9.5px; color: #666; line-height: 1.4; }
+    .leg-color-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 10px;
+      font-size: 10px;
+    }
+    .leg-color-label { font-weight: 700; color: #333; }
+    .leg-sep { color: #CCC; margin: 0 4px; }
+    .leg-note { font-size: 9.5px; color: #888; font-style: italic; margin-top: 8px; }
   </style>
 </head>
 <body>
@@ -229,459 +319,157 @@
   <div class="table-wrapper">
     <table id="main-table">
       <colgroup>
-        <col class="col-a" id="col-0" />
-        <col class="col-b" id="col-1" />
-        <col class="col-c" id="col-2" />
-        <col class="col-d" id="col-3" />
-        <col class="col-dim" id="col-4" />
-        <col class="col-dim" id="col-5" />
-        <col class="col-dim" id="col-6" />
-        <col class="col-dim" id="col-7" />
-        <col class="col-dim" id="col-8" />
-        <col class="col-dim" id="col-9" />
-        <col class="col-dim" id="col-10" />
-        <col class="col-dim" id="col-11" />
+        <col class="col-a" /><col class="col-b" /><col class="col-c" /><col class="col-d" />
+        <col class="col-dim" /><col class="col-dim" /><col class="col-dim" /><col class="col-dim" />
+        <col class="col-dim" /><col class="col-dim" /><col class="col-dim" /><col class="col-dim" />
       </colgroup>
-      <tbody>
-
-        <!-- ── Row 1: Header ── -->
-        <tr class="h21" id="header-row">
-          <td class="s1"><div class="col-header"><span class="col-label">Πρωτοβουλία AI</span><button class="col-toggle" onclick="toggleColumn(0)" title="Hide column">◀</button></div></td>
-          <td class="s2"><div class="col-header"><span class="col-label">Scope (Executive Description)</span><button class="col-toggle" onclick="toggleColumn(1)" title="Hide column">◀</button></div></td>
-          <td class="s8"><div class="col-header"><span class="col-label">Κατηγορία</span><button class="col-toggle" onclick="toggleColumn(2)" title="Hide column">◀</button></div></td>
-          <td class="s8"><div class="col-header"><span class="col-label">Ομάδες Επηρεάζει</span><button class="col-toggle" onclick="toggleColumn(3)" title="Hide column">◀</button></div></td>
-          <td class="s-cx sep-left"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(4)" title="Sort by level">Tech. Complexity <span class="sort-icon none" data-col="4"></span></span><button class="col-toggle" onclick="toggleColumn(4)" title="Hide column">◀</button></div></td>
-          <td class="s-cx"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(5)" title="Sort by level">Data Readiness <span class="sort-icon none" data-col="5"></span></span><button class="col-toggle" onclick="toggleColumn(5)" title="Hide column">◀</button></div></td>
-          <td class="s-cx"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(6)" title="Sort by level">Integration <span class="sort-icon none" data-col="6"></span></span><button class="col-toggle" onclick="toggleColumn(6)" title="Hide column">◀</button></div></td>
-          <td class="s-cx"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(7)" title="Sort by level">Org. Change <span class="sort-icon none" data-col="7"></span></span><button class="col-toggle" onclick="toggleColumn(7)" title="Hide column">◀</button></div></td>
-          <td class="s-cx"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(8)" title="Sort by level">Time to Value <span class="sort-icon none" data-col="8"></span></span><button class="col-toggle" onclick="toggleColumn(8)" title="Hide column">◀</button></div></td>
-          <td class="s-cx"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(9)" title="Sort by level">Dep. Risk <span class="sort-icon none" data-col="9"></span></span><button class="col-toggle" onclick="toggleColumn(9)" title="Hide column">◀</button></div></td>
-          <td class="s-bv sep-left"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(10)" title="Sort by level">Cost Impact <span class="sort-icon none" data-col="10"></span></span><button class="col-toggle" onclick="toggleColumn(10)" title="Hide column">◀</button></div></td>
-          <td class="s-bv"><div class="col-header"><span class="col-label col-sort-label" onclick="sortColumn(11)" title="Sort by level">Strategic Impact <span class="sort-icon none" data-col="11"></span></span><button class="col-toggle" onclick="toggleColumn(11)" title="Hide column">◀</button></div></td>
+      <thead>
+        <tr>
+          <th>Πρωτοβουλία AI</th>
+          <th class="s2">Scope (Executive Description)</th>
+          <th>Κατηγορία</th>
+          <th>Ομάδες Επηρεάζει</th>
+          <th class="s-cx sep-left"><span class="col-sort-label" onclick="sortColumn(4)" title="Sort by level">Tech. Complexity <span class="sort-icon none" data-col="4"></span></span></th><th class="s-cx"><span class="col-sort-label" onclick="sortColumn(5)" title="Sort by level">Data Readiness <span class="sort-icon none" data-col="5"></span></span></th><th class="s-cx"><span class="col-sort-label" onclick="sortColumn(6)" title="Sort by level">Integration <span class="sort-icon none" data-col="6"></span></span></th><th class="s-cx"><span class="col-sort-label" onclick="sortColumn(7)" title="Sort by level">Org. Change <span class="sort-icon none" data-col="7"></span></span></th><th class="s-cx"><span class="col-sort-label" onclick="sortColumn(8)" title="Sort by level">Time to Value <span class="sort-icon none" data-col="8"></span></span></th><th class="s-cx"><span class="col-sort-label" onclick="sortColumn(9)" title="Sort by level">Dep. Risk <span class="sort-icon none" data-col="9"></span></span></th><th class="s-bv sep-left"><span class="col-sort-label" onclick="sortColumn(10)" title="Sort by level">Cost Impact <span class="sort-icon none" data-col="10"></span></span></th><th class="s-bv"><span class="col-sort-label" onclick="sortColumn(11)" title="Sort by level">Strategic Impact <span class="sort-icon none" data-col="11"></span></span></th>
         </tr>
-
-        <!-- ── Row 2: Filters ── -->
         <tr class="filter-row">
-          <td></td>
-          <td></td>
+          <td></td><td></td>
           <td><input class="col-filter" type="text" placeholder="🔍 Filter…" oninput="applyFilters(2,this.value)" /></td>
           <td></td>
-          <td class="sep-left"><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(4,this.value)" /></td>
-          <td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(5,this.value)" /></td>
-          <td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(6,this.value)" /></td>
-          <td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(7,this.value)" /></td>
-          <td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(8,this.value)" /></td>
-          <td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(9,this.value)" /></td>
-          <td class="sep-left"><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(10,this.value)" /></td>
-          <td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(11,this.value)" /></td>
+          <td class="sep-left"><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(4,this.value)" /></td><td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(5,this.value)" /></td><td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(6,this.value)" /></td><td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(7,this.value)" /></td><td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(8,this.value)" /></td><td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(9,this.value)" /></td><td class="sep-left"><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(10,this.value)" /></td><td><input class="col-filter" type="text" placeholder="🔍" oninput="applyFilters(11,this.value)" /></td>
         </tr>
-
-        <!-- ── Row 3: Multi-Cloud FinOps ── -->
-        <tr class="h57">
-          <td class="s7">Multi&#8209;Cloud FinOps Optimization (AI)</td>
-          <td class="s3">AI εφαρμογή για <span class="bi">έλεγχο &amp; βελτιστοποίηση κόστους Multi-Cloud (optimal resource sizing &amp; usage), πρόβλεψη δαπανών και οικονομική διακυβέρνηση, με ενιαίο Cost Control πίνακα για Azure/GCP/AWS.</span></td>
-          <td class="cat cat-finops">FinOps &amp; Cost</td>
-          <td class="s10">RDNS, CCoE (Cloud &amp; Cost Gov.)</td>
-          <td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">ML-driven cost forecasting across Azure/GCP/AWS requires custom pipelines and anomaly detection models across three separate cloud APIs.</span></td>
-          <td class="dim-cell cx-2">Partial<span class="tip-text">Cloud billing data exists per provider but tagging is inconsistent; requires normalization into a unified multi-cloud cost schema.</span></td>
-          <td class="dim-cell cx-3">Heavy<span class="tip-text">Integrates Azure Cost Management, GCP Billing, AWS Cost Explorer, SNOW, and governance portals — 5+ distinct systems.</span></td>
-          <td class="dim-cell cx-2">Medium<span class="tip-text">CCoE and RDNS must adopt new cost governance workflows and dashboards; moderate team adoption and process change required.</span></td>
-          <td class="dim-cell cx-2">Medium<span class="tip-text">MVP cost dashboard achievable in 3–4 months; full ML optimization recommendations need additional model training cycles.</span></td>
-          <td class="dim-cell cx-2">Moderate<span class="tip-text">Relies on stable cloud provider billing APIs; pricing model changes by Azure/GCP/AWS may require logic updates over time.</span></td>
-          <td class="dim-cell bv-3 sep-left">Significant<span class="tip-text">Rightsizing and idle resource elimination typically yields 15–25% cloud spend reduction across all three cloud providers.</span></td>
-          <td class="dim-cell bv-3">Strategic<span class="tip-text">Multi-cloud cost governance is a C-level priority; positions IT as a financial accountability partner to all business units.</span></td>
-        </tr>
-
-        <!-- ── Row 4: Application & Identity Intelligence ── -->
-        <tr class="h57">
-          <td class="s1">Application &amp; Identity Intelligence (AII)</td>
-          <td class="s3">Συνδυαστική AI λύση <span class="bi">διαχείρισης δικαιωμάτων &amp; αδειών, που φτιάχνει πίνακα Role-Based Access από AD/SNOW/SAP, εντοπίζει υπερβολικές/ανενεργές άδειες και προτείνει καθαρισμό, με εξοικονόμηση ~30–40% κόστους λογισμικού.</span></td>
-          <td class="cat cat-finops">FinOps &amp; Cost</td>
-          <td class="s10">EUC (I&amp;AM, Licensing)</td>
-          <td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">Multi-source correlation across AD, SNOW, and SAP with ML-based permission scoring and overprivilege anomaly detection.</span></td>
-          <td class="dim-cell cx-3">Scattered<span class="tip-text">Access and license data spread across AD, SNOW, and SAP with inconsistent formats and no unified source of truth.</span></td>
-          <td class="dim-cell cx-3">Heavy<span class="tip-text">Deep integration with AD, SNOW, and SAP; each system requires custom connectors, data mapping, and reconciliation logic.</span></td>
-          <td class="dim-cell cx-3">High<span class="tip-text">License cleanup affects business units and requires approval workflows; may face resistance from license owners across teams.</span></td>
-          <td class="dim-cell cx-3">Long<span class="tip-text">6–9 months for full integration, analysis pipeline, and governance workflows; early quick wins on obvious overprovisioning cases.</span></td>
-          <td class="dim-cell cx-2">Moderate<span class="tip-text">Well-established enterprise systems; main risk is data quality and inconsistencies within AD/SAP rather than the technology itself.</span></td>
-          <td class="dim-cell bv-3 sep-left">Significant<span class="tip-text">Initiative targets 30–40% software license cost reduction through systematic permission rightsizing and structured cleanup.</span></td>
-          <td class="dim-cell bv-2">Tactical<span class="tip-text">Addresses license cost and compliance with measurable KPI impact across teams; limited broader strategic positioning.</span></td>
-        </tr>
-
-        <!-- ── Row 5: Multi-Cloud Management Portal ── -->
-        <tr class="h57">
-          <td class="s1">Multi&#8209;Cloud Management Portal <span class="b">(CloudOps Hub)</span></td>
-          <td class="s3">Portal <span class="bi">ενιαίας διαχείρισης multi-cloud (Azure/GCP/AWS) με ενιαία ορατότητα σε resources/cost. Εντάχθηκε στο πλάνο 2026 ως concept (P3) – μελλοντικά θα ενσωματώσει AIOps αυτοματισμούς σε multi-cloud περιβάλλον.</span></td>
-          <td class="cat cat-finops">FinOps &amp; Cost</td>
-          <td class="s10">CCoE, RDNS (Cloud Ops Gov.)</td>
-          <td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">Unified multi-cloud portal requires complex abstraction layers over three providers, plus future AIOps automation integration hooks.</span></td>
-          <td class="dim-cell cx-2">Partial<span class="tip-text">Cloud resource data available via APIs; requires an aggregation layer and real-time metadata synchronization across all clouds.</span></td>
-          <td class="dim-cell cx-4">Extensive<span class="tip-text">Full-stack integration across Azure, GCP, and AWS: resources, costs, IAM policies, and automation triggers — 8+ systems.</span></td>
-          <td class="dim-cell cx-2">Medium<span class="tip-text">New portal replaces existing per-cloud tooling workflows for CCoE and RDNS; moderate adoption effort across cloud teams.</span></td>
-          <td class="dim-cell cx-4">Extended<span class="tip-text">Listed as P3 concept for 2026; full delivery with AIOps integration realistically requires 12+ months of phased development.</span></td>
-          <td class="dim-cell cx-3">High<span class="tip-text">Long-term commitment to multi-cloud vendor APIs; roadmap changes by Azure/GCP/AWS create ongoing maintenance and adaptation risk.</span></td>
-          <td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Operational efficiency and tooling consolidation; not a direct cost reduction — savings are indirect through reduced tooling sprawl.</span></td>
-          <td class="dim-cell bv-3">Strategic<span class="tip-text">Single pane of glass for multi-cloud governance is a foundational capability for scalable, compliant cloud operations at scale.</span></td>
-        </tr>
-
-        <!-- ── Row 6: AI in Solution Design ── -->
-        <tr class="h57">
-          <td class="s7">AI in Solution Design <span class="b">(Idea-to-Terraform)</span></td>
-          <td class="s3">Πρόταση (Workshop 2025): AI agent που <span class="bi">μετατρέπει μια ιδέα σε cloud υλοποίηση (από requirements σε αρχική αρχιτεκτονική και κώδικα Infrastructure-as-Code), μειώνοντας τον χρόνο σχεδιασμού &amp; ανάπτυξης.</span></td>
-          <td class="cat cat-governance">Governance &amp; Delivery</td>
-          <td class="s10">CCoE, RDNS (Cloud Arch. Design)</td>
-          <td class="dim-cell cx-4 sep-left">Cutting-Edge<span class="tip-text">AI agent translating natural language to architecture diagrams and IaC code is at the current frontier of applied AI research.</span></td>
-          <td class="dim-cell cx-3">Scattered<span class="tip-text">Past architectural designs and Terraform templates are not systematically catalogued; training data is sparse and unstructured.</span></td>
-          <td class="dim-cell cx-2">Moderate<span class="tip-text">Connects to design tools, Terraform, and cloud provider APIs; fewer systems but the AI agent layer adds significant architectural complexity.</span></td>
-          <td class="dim-cell cx-3">High<span class="tip-text">Fundamentally changes how architects and engineers approach solution design; requires deep cultural shift and workflow adoption.</span></td>
-          <td class="dim-cell cx-3">Long<span class="tip-text">Workshop 2025 proposal; 6–9 months to a functional MVP; full reliability of generated IaC for production use takes considerably longer.</span></td>
-          <td class="dim-cell cx-3">High<span class="tip-text">Depends on advanced LLM maturity and prompt engineering; non-deterministic output quality is an inherent and ongoing challenge.</span></td>
-          <td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Reduces architecture design and IaC coding time significantly; real savings but difficult to quantify precisely upfront.</span></td>
-          <td class="dim-cell bv-3">Strategic<span class="tip-text">Accelerates cloud adoption velocity and removes design bottlenecks; strong competitive differentiator if proven reliable in practice.</span></td>
-        </tr>
-
-        <!-- ── Row 7: Conversational IT Assistant ── -->
-        <tr class="h43">
-          <td class="s1">Conversational IT Assistant (Virtual Agent)</td>
-          <td class="s3">Ψηφιακός <span class="bi">IT βοηθός (chatbot) στο MS Teams για αυτόματη επίλυση συχνών αιτημάτων υποστήριξης (MFA reset, VPN, κ.λπ.) εντός ~3′ με live εκτέλεση ενεργειών (Azure AD, SNOW API)</span></td>
-          <td class="cat cat-itops">IT Ops &amp; Service Mgmt</td>
-          <td class="s10">EUC (Service Desk Ops)</td>
-          <td class="dim-cell cx-2 sep-left">Moderate<span class="tip-text">Chatbot with NLP over known request types using mature frameworks (MS Bot Framework, Azure OpenAI) — well-proven technology stack.</span></td>
-          <td class="dim-cell cx-2">Partial<span class="tip-text">KB articles exist but need structuring for RAG; intent training data must be curated and labelled from historical ticket content.</span></td>
-          <td class="dim-cell cx-3">Heavy<span class="tip-text">MS Teams, Azure AD, SNOW API, VPN systems, and MFA tools; each action type requires dedicated API integration and end-to-end testing.</span></td>
-          <td class="dim-cell cx-2">Medium<span class="tip-text">Service desk workflow changes required; agents need retraining and end users must trust the bot for sensitive actions like MFA reset.</span></td>
-          <td class="dim-cell cx-1">Short<span class="tip-text">MVP covering top 5 request types (MFA reset, VPN) achievable in 2–3 months — one of the fastest paths to visible IT value.</span></td>
-          <td class="dim-cell cx-2">Moderate<span class="tip-text">MS Teams, Azure AD, and SNOW are stable enterprise platforms; technology risk is low and vendor ecosystem is well established.</span></td>
-          <td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Estimated 30–50% L1 ticket deflection; frees service desk agents to focus on higher-complexity and higher-value issues.</span></td>
-          <td class="dim-cell bv-2">Tactical<span class="tip-text">Measurable ticket deflection rate and faster resolution times provide a clear and visible IT value delivery story to management.</span></td>
-        </tr>
-
-        <!-- ── Row 8: AI Ticket Intelligence ── -->
-        <tr class="h57">
-          <td class="s1">AI Ticket Intelligence (Smart Triage &amp; RCA)</td>
-          <td class="s3">Ευφυής μηχανή <span class="bi">NLP &amp; ML που διαβάζει νέα tickets και τα ταξινομεί/αναθέτει αυτόματα σε σωστή ομάδα, αναγνωρίζει επαναλαμβανόμενα incidents (outbreaks) &amp; προτείνει πιθανή βασική αιτία (RCA).</span></td>
-          <td class="cat cat-itops">IT Ops &amp; Service Mgmt</td>
-          <td class="s10">EUC (Service Desk), NOC</td>
-          <td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">NLP classification and ML-based RCA pattern recognition require custom model training on historical SNOW ticket corpus.</span></td>
-          <td class="dim-cell cx-1">Ready<span class="tip-text">SNOW contains years of well-structured, labelled ticket history — an ideal and rich dataset for supervised ML model training.</span></td>
-          <td class="dim-cell cx-2">Moderate<span class="tip-text">Primarily SNOW integration for reading and updating tickets; routing rules and team configuration settings also needed.</span></td>
-          <td class="dim-cell cx-2">Medium<span class="tip-text">Changes how triage teams operate; some resistance expected from agents accustomed to manual review and assignment processes.</span></td>
-          <td class="dim-cell cx-2">Medium<span class="tip-text">3–5 months for an initial NLP classifier; RCA pattern detection needs additional data volume and iterative model tuning cycles.</span></td>
-          <td class="dim-cell cx-1">Low<span class="tip-text">SNOW data is stable and richly labelled; NLP classification is a proven and mature ML technique with many available off-the-shelf tools.</span></td>
-          <td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Faster routing reduces average resolution time; outbreak detection prevents repeat incident escalation and associated business costs.</span></td>
-          <td class="dim-cell bv-2">Tactical<span class="tip-text">MTTR reduction and service quality improvements are measurable operational KPIs with a clear and quantifiable IT performance story.</span></td>
-        </tr>
-
-        <!-- ── Row 9: AI Staff Skills Intelligence ── -->
-        <tr class="h57">
-          <td class="s1">AI Staff Skills Intelligence <span class="b">(Skills Gap Analysis)</span></td>
-          <td class="s3">AI ανάλυση ιστορικών tickets &amp; επιδόσεων, δημιουργία <span class="bi">προφίλ δεξιοτήτων ανά techncial agent, εντοπισμός κενών δεξιοτήτων &amp; μονοσήμαντων γνώσεων και σύσταση κατάλληλων trainings για ομάδες.</span></td>
-          <td class="cat cat-itops">IT Ops &amp; Service Mgmt</td>
-          <td class="s10">EUC (IT Support &amp; HR)</td>
-          <td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">Skill profiling from unstructured ticket text requires NLP and unsupervised ML clustering to extract meaningful competency signals.</span></td>
-          <td class="dim-cell cx-2">Partial<span class="tip-text">Ticket data is rich in SNOW; performance and HR data may be in separate systems with strict access restrictions and governance controls.</span></td>
-          <td class="dim-cell cx-2">Moderate<span class="tip-text">SNOW and HR/LMS system integration; sensitive data access requires governance approvals that may delay implementation timeline.</span></td>
-          <td class="dim-cell cx-3">High<span class="tip-text">Skill gap findings touch HR processes, training budgets, and performance management — requiring multi-stakeholder alignment and buy-in.</span></td>
-          <td class="dim-cell cx-3">Long<span class="tip-text">6–9 months for reliable skill profiles; actionable training recommendations require an additional validation and cross-team review cycle.</span></td>
-          <td class="dim-cell cx-2">Moderate<span class="tip-text">Depends on HR system integration access; organizational sensitivity around performance data can significantly slow project progress.</span></td>
-          <td class="dim-cell bv-1 sep-left">Marginal<span class="tip-text">Indirect savings through better training ROI and reduced skill-gap incidents; direct cost impact is difficult to quantify upfront.</span></td>
-          <td class="dim-cell bv-2">Tactical<span class="tip-text">Improves team capability and reduces single-point-of-knowledge risk; beneficial for team resilience and long-term staff retention.</span></td>
-        </tr>
-
-        <!-- ── Row 10: Incident Command & War Room ── -->
-        <tr class="h57">
-          <td class="s1">Incident Command &amp; War Room (Accenture)</td>
-          <td class="s3">Πρόταση Accenture: <span class="bi">Συντονισμός AI πρακτόρων για αυτόματη διαχείριση κρίσιμων συμβάντων (critical incidents) σε Cloud/Δίκτυο. AI agents συνεργάζονται για ταχεία επίλυση ενός major incident (ε&#x4ED3;Μειωμένος χρόνος impact σε κρίσεις).</span></td>
-          <td class="cat cat-itops">IT Ops &amp; Service Mgmt</td>
-          <td class="s10">CCoE, NCoE (IT Ops Teams)</td>
-          <td class="dim-cell cx-4 sep-left">Cutting-Edge<span class="tip-text">Multi-agent AI coordination for real-time critical incident management is at the frontier of applied AI and autonomous agent research.</span></td>
-          <td class="dim-cell cx-3">Scattered<span class="tip-text">Incident data spread across cloud monitoring platforms, network tools, SNOW, and communication logs — no unified real-time view exists.</span></td>
-          <td class="dim-cell cx-4">Extensive<span class="tip-text">Cloud platforms, network monitoring, SNOW, MS Teams, and runbook execution systems all required — 8+ system integrations minimum.</span></td>
-          <td class="dim-cell cx-4">Transformational<span class="tip-text">Transforms the entire incident response culture; requires organizational trust in AI making autonomous decisions during production crises.</span></td>
-          <td class="dim-cell cx-4">Extended<span class="tip-text">Multi-agent coordination at enterprise scale needs 12–18 months with Accenture support; architectural unknowns add significant risk.</span></td>
-          <td class="dim-cell cx-4">Critical<span class="tip-text">Accenture external proposal with cutting-edge multi-agent technology; many architectural unknowns and very high vendor dependency.</span></td>
-          <td class="dim-cell bv-3 sep-left">Significant<span class="tip-text">Faster resolution of major incidents translates directly to reduced business continuity costs and minimized outage business impact.</span></td>
-          <td class="dim-cell bv-3">Strategic<span class="tip-text">Business continuity and brand risk mitigation during major incidents are board-level concerns with very high executive visibility.</span></td>
-        </tr>
-
-        <!-- ── Row 11: AI Knowledge Base Intelligence ── -->
-        <tr class="h57">
-          <td class="s1">AI Knowledge Base Intelligence <span class="b">(Auto-KB Mgmt)</span></td>
-          <td class="s3">Αυτοματοποιεί τη <span class="bi">δημιουργία &amp; συντήρηση του IT Knowledge Base: παράγει άρθρα γνώσης από resolved tickets &amp; chatbot διαλόγους, κατηγοριοποιεί &amp; συγχωνεύει παρόμοια, αποσύρει ξεπερασμένα περιεχόμενα.</span></td>
-          <td class="cat cat-knowledge">Knowledge &amp; Assistants</td>
-          <td class="s10">EUC (Knowledge Mgmt)</td>
-          <td class="dim-cell cx-2 sep-left">Moderate<span class="tip-text">NLP for article generation and classification uses mature techniques (summarization, clustering) on well-structured SNOW ticket data.</span></td>
-          <td class="dim-cell cx-1">Ready<span class="tip-text">Resolved tickets and chatbot logs are available, well-structured, and contain rich content ideal for automatic KB article generation.</span></td>
-          <td class="dim-cell cx-1">Minimal<span class="tip-text">Primarily the SNOW KB module; chatbot log integration is straightforward — minimal overall system footprint and few dependencies.</span></td>
-          <td class="dim-cell cx-1">Low<span class="tip-text">IT-internal knowledge team workflow improvement with minimal impact on end users or other business teams outside IT.</span></td>
-          <td class="dim-cell cx-1">Short<span class="tip-text">MVP for automatic article drafting from resolved tickets achievable in 6–8 weeks — the fastest path to ROI in this initiative list.</span></td>
-          <td class="dim-cell cx-1">Low<span class="tip-text">SNOW data is stable and accessible; NLP summarization is a solved engineering problem with many proven off-the-shelf tooling options.</span></td>
-          <td class="dim-cell bv-1 sep-left">Marginal<span class="tip-text">Reduces manual KB authoring time for the knowledge team; efficiency gain is real but scoped entirely within IT operations.</span></td>
-          <td class="dim-cell bv-1">Operational<span class="tip-text">Better self-service KB content reduces repeat support tickets; a foundational enabler for chatbot accuracy but limited strategic reach.</span></td>
-        </tr>
-
-        <!-- ── Row 12: Knowledge & Document Intelligence ── -->
-        <tr class="h43">
-          <td class="s1">Knowledge &amp; Document Intelligence (Accenture)</td>
-          <td class="s3">Πρόταση Accenture: <span class="bi">AI υπηρεσία ανάκτησης γνώσης από εταιρικά έγγραφα (wiki, SharePoint) σε real-time: θρέφει R&amp;D και Service Desk με απαντήσεις μέσω AI (RAG) για τεχνικές απορίες/λύσεις.</span></td>
-          <td class="cat cat-knowledge">Knowledge &amp; Assistants</td>
-          <td class="s10">RDNS, EUC (R&amp;D, Service Desk)</td>
-          <td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">RAG system over heterogeneous enterprise documents with semantic search and answer synthesis — architecturally solid but operationally complex.</span></td>
-          <td class="dim-cell cx-3">Scattered<span class="tip-text">Documents span SharePoint, wiki, and email archives in varied formats, inconsistent quality, and complex access control policies.</span></td>
-          <td class="dim-cell cx-3">Heavy<span class="tip-text">SharePoint, Confluence/wiki, SNOW, and R&amp;D systems; document permissions and access control management adds considerable complexity.</span></td>
-          <td class="dim-cell cx-2">Medium<span class="tip-text">New query-based knowledge retrieval workflow for R&amp;D and service desk; adoption curve expected over 2–3 months post-launch.</span></td>
-          <td class="dim-cell cx-2">Medium<span class="tip-text">4–6 months for RAG MVP over key document sources; expanding to the full document corpus requires additional implementation sprints.</span></td>
-          <td class="dim-cell cx-3">High<span class="tip-text">Accenture proposal adds delivery risk; RAG infrastructure with vector databases introduces architectural complexity and potential vendor lock-in.</span></td>
-          <td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Faster knowledge retrieval measurably reduces research and troubleshooting time for R&amp;D teams and service desk agents.</span></td>
-          <td class="dim-cell bv-2">Tactical<span class="tip-text">R&amp;D and service desk efficiency gains are quantifiable; strong tactical KPI story with visible cross-team productivity impact.</span></td>
-        </tr>
-
-        <!-- ── Row 13: AI-Driven Network Operations ── -->
-        <tr class="h43">
-          <td class="s1">AI&#8209;Driven Network Operations (NetOps AIOps)</td>
-          <td class="s3">Εφαρμογή <span class="bi">AI/ML στη λειτουργία δικτύων: αυτόνομο NetOps (ανωμαλίες, predictive maintenance, RCA, βελτιστοποίηση επιδόσεων, noise reduction) με dashboards &amp; αυτοματισμούς</span></td>
-          <td class="cat cat-observ">Observability &amp; AIOps</td>
-          <td class="s10">NCoE, NOC, CCoE (Δίκτυα &amp; Cloud Ops)</td>
-          <td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">ML-based anomaly detection, predictive failure modeling, and autonomous RCA on high-volume real-time network telemetry streams.</span></td>
-          <td class="dim-cell cx-2">Partial<span class="tip-text">Network metrics exist in monitoring tools but require normalization, historical anomaly labelling, and a real-time streaming data pipeline.</span></td>
-          <td class="dim-cell cx-3">Heavy<span class="tip-text">Network monitoring platforms (SolarWinds/PRTG), NOC dashboards, alerting systems, and network automation tools all require integration.</span></td>
-          <td class="dim-cell cx-3">High<span class="tip-text">Shifts NOC from reactive to proactive operations; changes on-call procedures, alert handling culture, and team skill requirements significantly.</span></td>
-          <td class="dim-cell cx-3">Long<span class="tip-text">6–10 months for anomaly detection MVP; predictive maintenance models require longer training periods and careful accuracy validation.</span></td>
-          <td class="dim-cell cx-2">Moderate<span class="tip-text">Network monitoring vendors are stable; ML model accuracy is dependent on data labelling quality and historical incident coverage depth.</span></td>
-          <td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Reduces unplanned downtime costs through proactive intervention; maintenance scheduling efficiency also contributes meaningful savings.</span></td>
-          <td class="dim-cell bv-3">Strategic<span class="tip-text">Proactive network reliability positions IT as a strategic enabler; builds the AIOps foundation for broader organizational use cases.</span></td>
-        </tr>
-
-        <!-- ── Row 14: Enterprise Observability & AIOps ── -->
-        <tr class="h43">
-          <td class="s7">Enterprise Observability &amp; AIOps</td>
-          <td class="s3">Ενιαία πλατφόρμα <span class="bi">παρατηρησιμότητας E2E: συγκέντρωση metrics από όλα τα συστήματα (endpoint–cloud), για προδραστική ορατότητα και βάση για μελλοντική αυτόνομη λειτουργία (AIOps)</span></td>
-          <td class="cat cat-observ">Observability &amp; AIOps</td>
-          <td class="s10">CCoE, RDNS (Cloud/Infra)</td>
-          <td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">E2E observability with ML-powered correlation across endpoints, cloud, network, and application telemetry is a major engineering effort.</span></td>
-          <td class="dim-cell cx-2">Partial<span class="tip-text">Metrics exist across infrastructure silos (EUC, cloud, network) but unification requires significant data engineering and ETL work.</span></td>
-          <td class="dim-cell cx-4">Extensive<span class="tip-text">All infrastructure domains in scope: endpoints, Azure/GCP/AWS cloud, network, applications, databases — the widest integration surface of all initiatives.</span></td>
-          <td class="dim-cell cx-3">High<span class="tip-text">Requires cross-team alignment across CCoE, RDNS, and EUC on shared observability standards, tooling, and dashboard governance.</span></td>
-          <td class="dim-cell cx-4">Extended<span class="tip-text">Full E2E coverage requires 12–18 months; iterative domain-by-domain rollout provides partial value earlier in the delivery timeline.</span></td>
-          <td class="dim-cell cx-2">Moderate<span class="tip-text">Observability platforms (Datadog, Dynatrace) are mature and proven; multi-domain integration complexity is the primary delivery risk.</span></td>
-          <td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Proactive incident prevention reduces outage costs; exact savings are context-dependent and difficult to forecast with precision upfront.</span></td>
-          <td class="dim-cell bv-4">Game-Changing<span class="tip-text">Foundational platform enabling all future AIOps initiatives; transforms IT from reactive to predictive — a fundamental operating model shift.</span></td>
-        </tr>
-
-        <!-- ── Row 15: Platform Self-Healing & SRE ── -->
-        <tr class="h43">
-          <td class="s1">Platform Self-Healing &amp; SRE</td>
-          <td class="s3">Πρόταση Accenture: <span class="bi">AI αυτόματη επιδιόρθωση σφαλμάτων στη Cloud πλατφόρμα (SRE), χωρίς ανθρώπινη παρέμβαση: εκτέλεση αυτόνομων runbooks (Ansible, Azure Automation) για self-healing.</span></td>
-          <td class="cat cat-observ">Observability &amp; AIOps</td>
-          <td class="s10">CCoE (Cloud Ops &amp; SRE)</td>
-          <td class="dim-cell cx-4 sep-left">Cutting-Edge<span class="tip-text">Autonomous AI-driven runbook execution and self-healing without human intervention is leading-edge SRE and MLOps practice.</span></td>
-          <td class="dim-cell cx-2">Partial<span class="tip-text">Runbooks exist largely as manual documents; they must be codified, tested, and validated before they can be safely AI-triggered in production.</span></td>
-          <td class="dim-cell cx-3">Heavy<span class="tip-text">Ansible, Azure Automation, cloud platform APIs, incident management systems, and alerting pipelines all require deep integration.</span></td>
-          <td class="dim-cell cx-4">Transformational<span class="tip-text">Redefines the SRE role from manual responder to automation overseer; requires strong organizational trust in autonomous production actions.</span></td>
-          <td class="dim-cell cx-4">Extended<span class="tip-text">Depends on mature Enterprise Observability as a prerequisite; realistic minimum delivery is 12–18 months from today given current maturity.</span></td>
-          <td class="dim-cell cx-4">Critical<span class="tip-text">Accenture proposal with high operational risk; autonomous remediation in production requires extensive safety validation and robust fallback design.</span></td>
-          <td class="dim-cell bv-3 sep-left">Significant<span class="tip-text">Autonomous incident resolution dramatically reduces MTTR and on-call labor costs; high ROI once operational and organizationally trusted.</span></td>
-          <td class="dim-cell bv-4">Game-Changing<span class="tip-text">Autonomous cloud operations is the long-term IT vision; this initiative transforms the IT operating model at its most fundamental level.</span></td>
-        </tr>
-
-        <!-- ── Row 16: AI για EUC Security & Compliance ── -->
-        <tr class="h57">
-          <td class="s1">AI για EUC Security &amp; Compliance</td>
-          <td class="s3">AI agent για <span class="bi">real-time έλεγχο συμμόρφωσης στα endpoints: ανιχνεύει αυτόματα παραβάσεις πολιτικών ασφαλείας (π.χ. ρυθμίσεις PC) και ειδοποιεί ή αποτρέπει μη εγκεκριμένες ενέργειες στην πηγή.</span></td>
-          <td class="cat cat-security">Security &amp; Risk</td>
-          <td class="s10">EUC (Πολιτικές IT &amp; Security)</td>
-          <td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">Real-time policy compliance engine scanning endpoint configurations and autonomously blocking violations — proven approach but operationally complex.</span></td>
-          <td class="dim-cell cx-2">Partial<span class="tip-text">Endpoint telemetry available via MDM/Intune; compliance policy rules must be carefully encoded and kept continuously updated as policies evolve.</span></td>
-          <td class="dim-cell cx-2">Moderate<span class="tip-text">Endpoint management (Intune/SCCM), security policy engine, alerting, and reporting systems — a moderate and manageable integration footprint.</span></td>
-          <td class="dim-cell cx-3">High<span class="tip-text">Automated enforcement changes end-user experience significantly; requires a clear IT policy governance framework and proactive communication plan.</span></td>
-          <td class="dim-cell cx-2">Medium<span class="tip-text">3–5 months for MVP compliance scanning and alerting; autonomous blocking capability requires additional testing and phased validation.</span></td>
-          <td class="dim-cell cx-2">Moderate<span class="tip-text">Relies on MDM/Intune and established security tooling vendors; well-established but requires deep policy and compliance domain expertise.</span></td>
-          <td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Reduces compliance audit effort and violation remediation costs; helps avoid regulatory penalties in security-audited environments.</span></td>
-          <td class="dim-cell bv-3">Strategic<span class="tip-text">Regulatory compliance and security risk reduction align directly with legal, audit, and board-level risk management priorities.</span></td>
-        </tr>
-
-        <!-- ── Row 17: VIP Intelligence Suite ── -->
-        <tr class="h57">
-          <td class="s1">VIP Intelligence Suite <span class="b">(Προληπτική VIP Υποστ.)</span></td>
-          <td class="s4">*Σουίτα AI για <span class="b">VIP υποστήριξη: Risk Radar (προληπτικά alerts πριν κρίσιμα events), Digital Twin περιβάλλοντος VIP, </span><span class="bi">μετάφραση τεχνικών θεμάτων σε απλή γλώσσα, προληπτικά IT check-ins πριν από σημαντικά meetings.</span></td>
-          <td class="cat cat-security">Security &amp; Risk</td>
-          <td class="s10">EUC (VIP IT Support)</td>
-          <td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">Multi-component suite combining Risk Radar, Digital Twin, NLP translation, and proactive monitoring — high overall implementation complexity.</span></td>
-          <td class="dim-cell cx-2">Partial<span class="tip-text">VIP calendar and meeting data accessible; historical IT issue data specific to VIP users requires a dedicated and separate collection setup.</span></td>
-          <td class="dim-cell cx-3">Heavy<span class="tip-text">Calendar systems (O365/Exchange), IT monitoring platforms, MS Teams, communication tools, and VIP endpoint telemetry all require integration.</span></td>
-          <td class="dim-cell cx-2">Medium<span class="tip-text">VIP support team workflow changes meaningfully; stakeholder management with C-suite adds political sensitivity and approval complexity.</span></td>
-          <td class="dim-cell cx-3">Long<span class="tip-text">Full suite requires 6–10 months; individual components (Risk Radar first) can be delivered incrementally for earlier demonstrable value.</span></td>
-          <td class="dim-cell cx-3">High<span class="tip-text">Multi-component architecture with several integrations; C-suite involvement raises delivery stakes and increases visibility of any delays.</span></td>
-          <td class="dim-cell bv-1 sep-left">Marginal<span class="tip-text">VIP satisfaction and reputational benefit are hard to quantify in direct cost terms; goodwill with C-suite carries real but intangible value.</span></td>
-          <td class="dim-cell bv-3">Strategic<span class="tip-text">C-suite IT experience directly shapes executive perception of IT investment; high political visibility and significant organizational influence.</span></td>
-        </tr>
-
+      </thead>
+      <tbody>
+        <tr><td class="s7">Multi-Cloud FinOps Optimization (AI)</td><td class="s3">AI εφαρμογή για έλεγχο &amp; βελτιστοποίηση κόστους Multi-Cloud (optimal resource sizing &amp; usage), πρόβλεψη δαπανών και οικονομική διακυβέρνηση, με ενιαίο Cost Control πίνακα για Azure/GCP/AWS.</td><td class="cat cat-finops">FinOps &amp; Cost</td><td class="s10">RDNS, CCoE (Cloud &amp; Cost Gov.)</td><td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">ML-driven cost forecasting across Azure/GCP/AWS requires custom pipelines and anomaly detection models across three separate cloud APIs.</span></td><td class="dim-cell cx-2">Partial<span class="tip-text">Cloud billing data exists per provider but tagging is inconsistent; requires normalization into a unified multi-cloud cost schema.</span></td><td class="dim-cell cx-3">Heavy<span class="tip-text">Integrates Azure Cost Management, GCP Billing, AWS Cost Explorer, SNOW, and governance portals — 5+ distinct systems.</span></td><td class="dim-cell cx-2">Medium<span class="tip-text">CCoE and RDNS must adopt new cost governance workflows and dashboards; moderate team adoption and process change required.</span></td><td class="dim-cell cx-2">Medium<span class="tip-text">MVP cost dashboard achievable in 3–4 months; full ML optimization recommendations need additional model training cycles.</span></td><td class="dim-cell cx-2">Moderate<span class="tip-text">Relies on stable cloud provider billing APIs; pricing model changes by Azure/GCP/AWS may require logic updates over time.</span></td><td class="dim-cell bv-3 sep-left">Significant<span class="tip-text">Rightsizing and idle resource elimination typically yields 15–25% cloud spend reduction across all three cloud providers.</span></td><td class="dim-cell bv-3">Strategic<span class="tip-text">Multi-cloud cost governance is a C-level priority; positions IT as a financial accountability partner to all business units.</span></td></tr>
+        <tr><td class="s1">Application &amp; Identity Intelligence (AII)</td><td class="s3">Συνδυαστική AI λύση διαχείρισης δικαιωμάτων &amp; αδειών, που φτιάχνει πίνακα Role-Based Access από AD/SNOW/SAP, εντοπίζει υπερβολικές/ανενεργές άδειες και προτείνει καθαρισμό, με εξοικονόμηση ~30–40% κόστους λογισμικού.</td><td class="cat cat-finops">FinOps &amp; Cost</td><td class="s10">EUC (I&amp;M, Licensing)</td><td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">Multi-source correlation across AD, SNOW, and SAP with ML-based permission scoring and overprivilege anomaly detection.</span></td><td class="dim-cell cx-3">Scattered<span class="tip-text">Access and license data spread across AD, SNOW, and SAP with inconsistent formats and no unified source of truth.</span></td><td class="dim-cell cx-3">Heavy<span class="tip-text">Deep integration with AD, SNOW, and SAP; each system requires custom connectors, data mapping, and reconciliation logic.</span></td><td class="dim-cell cx-3">High<span class="tip-text">License cleanup affects business units and requires approval workflows; may face resistance from license owners across teams.</span></td><td class="dim-cell cx-3">Long<span class="tip-text">6–9 months for full integration, analysis pipeline, and governance workflows; early quick wins on obvious overprovisioning cases.</span></td><td class="dim-cell cx-2">Moderate<span class="tip-text">Well-established enterprise systems; main risk is data quality and inconsistencies within AD/SAP rather than the technology itself.</span></td><td class="dim-cell bv-3 sep-left">Significant<span class="tip-text">Initiative targets 30–40% software license cost reduction through systematic permission rightsizing and structured cleanup.</span></td><td class="dim-cell bv-2">Tactical<span class="tip-text">Addresses license cost and compliance with measurable KPI impact across teams; limited broader strategic positioning.</span></td></tr>
+        <tr><td class="s1">Multi-Cloud Management Portal <span class="b">(CloudOps Hub)</span></td><td class="s3">Portal ενιαίας διαχείρισης multi-cloud (Azure/GCP/AWS) με ενιαία ορατότητα σε resources/cost. Εντάχθηκε στο πλάνο 2026 ως concept (P3) – μελλοντικά θα ενσωματώσει AIOps αυτοματισμούς σε multi-cloud περιβάλλον.</td><td class="cat cat-finops">FinOps &amp; Cost</td><td class="s10">CCoE, RDNS (Cloud Ops Gov.)</td><td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">Unified multi-cloud portal requires complex abstraction layers over three providers, plus future AIOps automation integration hooks.</span></td><td class="dim-cell cx-2">Partial<span class="tip-text">Cloud resource data available via APIs; requires an aggregation layer and real-time metadata synchronization across all clouds.</span></td><td class="dim-cell cx-4">Extensive<span class="tip-text">Full-stack integration across Azure, GCP, and AWS: resources, costs, IAM policies, and automation triggers — 8+ systems.</span></td><td class="dim-cell cx-2">Medium<span class="tip-text">New portal replaces existing per-cloud tooling workflows for CCoE and RDNS; moderate adoption effort across cloud teams.</span></td><td class="dim-cell cx-4">Extended<span class="tip-text">Listed as P3 concept for 2026; full delivery with AIOps integration realistically requires 12+ months of phased development.</span></td><td class="dim-cell cx-3">High<span class="tip-text">Long-term commitment to multi-cloud vendor APIs; roadmap changes by Azure/GCP/AWS create ongoing maintenance and adaptation risk.</span></td><td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Operational efficiency and tooling consolidation; not a direct cost reduction — savings are indirect through reduced tooling sprawl.</span></td><td class="dim-cell bv-3">Strategic<span class="tip-text">Single pane of glass for multi-cloud governance is a foundational capability for scalable, compliant cloud operations at scale.</span></td></tr>
+        <tr><td class="s7">AI in Solution Design <span class="b">(Idea-to-Terraform)</span></td><td class="s3">Πρόταση (Workshop 2025): AI agent που μετατρέπει μια ιδέα σε cloud υλοποίηση (από requirements σε αρχική αρχιτεκτονική και κώδικα Infrastructure-as-Code), μειώνοντας τον χρόνο σχεδιασμού &amp; ανάπτυξης.</td><td class="cat cat-governance">Governance &amp; Delivery</td><td class="s10">CCoE, RDNS (Cloud Arch. Design)</td><td class="dim-cell cx-4 sep-left">Cutting-Edge<span class="tip-text">AI agent translating natural language to architecture diagrams and IaC code is at the current frontier of applied AI research.</span></td><td class="dim-cell cx-3">Scattered<span class="tip-text">Past architectural designs and Terraform templates are not systematically catalogued; training data is sparse and unstructured.</span></td><td class="dim-cell cx-2">Moderate<span class="tip-text">Connects to design tools, Terraform, and cloud provider APIs; fewer systems but the AI agent layer adds significant architectural complexity.</span></td><td class="dim-cell cx-3">High<span class="tip-text">Fundamentally changes how architects and engineers approach solution design; requires deep cultural shift and workflow adoption.</span></td><td class="dim-cell cx-3">Long<span class="tip-text">Workshop 2025 proposal; 6–9 months to a functional MVP; full reliability of generated IaC for production use takes considerably longer.</span></td><td class="dim-cell cx-3">High<span class="tip-text">Depends on advanced LLM maturity and prompt engineering; non-deterministic output quality is an inherent and ongoing challenge.</span></td><td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Reduces architecture design and IaC coding time significantly; real savings but difficult to quantify precisely upfront.</span></td><td class="dim-cell bv-3">Strategic<span class="tip-text">Accelerates cloud adoption velocity and removes design bottlenecks; strong competitive differentiator if proven reliable in practice.</span></td></tr>
+        <tr><td class="s1">Conversational IT Assistant (Virtual Agent)</td><td class="s3">Ψηφιακός IT βοηθός (chatbot) στο MS Teams για αυτόματη επίλυση συχνών αιτημάτων υποστήριξης (MFA reset, VPN, κ.λπ.) εντός ~3′ με live εκτέλεση ενεργειών (Azure AD, SNOW API).</td><td class="cat cat-itops">IT Ops &amp; Service Mgmt</td><td class="s10">EUC (Service Desk Ops)</td><td class="dim-cell cx-2 sep-left">Moderate<span class="tip-text">Chatbot with NLP over known request types using mature frameworks (MS Bot Framework, Azure OpenAI) — well-proven technology stack.</span></td><td class="dim-cell cx-2">Partial<span class="tip-text">KB articles exist but need structuring for RAG; intent training data must be curated and labelled from historical ticket content.</span></td><td class="dim-cell cx-3">Heavy<span class="tip-text">MS Teams, Azure AD, SNOW API, VPN systems, and MFA tools; each action type requires dedicated API integration and end-to-end testing.</span></td><td class="dim-cell cx-2">Medium<span class="tip-text">Service desk workflow changes required; agents need retraining and end users must trust the bot for sensitive actions like MFA reset.</span></td><td class="dim-cell cx-1">Short<span class="tip-text">MVP covering top 5 request types (MFA reset, VPN) achievable in 2–3 months — one of the fastest paths to visible IT value.</span></td><td class="dim-cell cx-2">Moderate<span class="tip-text">MS Teams, Azure AD, and SNOW are stable enterprise platforms; technology risk is low and vendor ecosystem is well established.</span></td><td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Estimated 30–50% L1 ticket deflection; frees service desk agents to focus on higher-complexity and higher-value issues.</span></td><td class="dim-cell bv-2">Tactical<span class="tip-text">Measurable ticket deflection rate and faster resolution times provide a clear and visible IT value delivery story to management.</span></td></tr>
+        <tr><td class="s1">AI Ticket Intelligence (Smart Triage &amp; RCA)</td><td class="s3">Ευφυής μηχανή NLP &amp; ML που διαβάζει νέα tickets και τα ταξινομεί/αναθέτει αυτόματα σε σωστή ομάδα, αναγνωρίζει επαναλαμβανόμενα incidents (outbreaks) &amp; προτείνει πιθανή βασική αιτία (RCA).</td><td class="cat cat-itops">IT Ops &amp; Service Mgmt</td><td class="s10">EUC (Service Desk), NOC</td><td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">NLP classification and ML-based RCA pattern recognition require custom model training on historical SNOW ticket corpus.</span></td><td class="dim-cell cx-1">Ready<span class="tip-text">SNOW contains years of well-structured, labelled ticket history — an ideal and rich dataset for supervised ML model training.</span></td><td class="dim-cell cx-2">Moderate<span class="tip-text">Primarily SNOW integration for reading and updating tickets; routing rules and team configuration settings also needed.</span></td><td class="dim-cell cx-2">Medium<span class="tip-text">Changes how triage teams operate; some resistance expected from agents accustomed to manual review and assignment processes.</span></td><td class="dim-cell cx-2">Medium<span class="tip-text">3–5 months for an initial NLP classifier; RCA pattern detection needs additional data volume and iterative model tuning cycles.</span></td><td class="dim-cell cx-1">Low<span class="tip-text">SNOW data is stable and richly labelled; NLP classification is a proven and mature ML technique with many available off-the-shelf tools.</span></td><td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Faster routing reduces average resolution time; outbreak detection prevents repeat incident escalation and associated business costs.</span></td><td class="dim-cell bv-2">Tactical<span class="tip-text">MTTR reduction and service quality improvements are measurable operational KPIs with a clear and quantifiable IT performance story.</span></td></tr>
+        <tr><td class="s1">AI Staff Skills Intelligence <span class="b">(Skills Gap Analysis)</span></td><td class="s3">AI ανάλυση ιστορικών tickets &amp; επιδόσεων, δημιουργία προφίλ δεξιοτήτων ανά technical agent, εντοπισμός κενών δεξιοτήτων &amp; μονοσήμαντων γνώσεων και σύσταση κατάλληλων trainings για ομάδες.</td><td class="cat cat-itops">IT Ops &amp; Service Mgmt</td><td class="s10">EUC (IT Support &amp; HR)</td><td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">Skill profiling from unstructured ticket text requires NLP and unsupervised ML clustering to extract meaningful competency signals.</span></td><td class="dim-cell cx-2">Partial<span class="tip-text">Ticket data is rich in SNOW; performance and HR data may be in separate systems with strict access restrictions and governance controls.</span></td><td class="dim-cell cx-2">Moderate<span class="tip-text">SNOW and HR/LMS system integration; sensitive data access requires governance approvals that may delay implementation timeline.</span></td><td class="dim-cell cx-3">High<span class="tip-text">Skill gap findings touch HR processes, training budgets, and performance management — requiring multi-stakeholder alignment and buy-in.</span></td><td class="dim-cell cx-3">Long<span class="tip-text">6–9 months for reliable skill profiles; actionable training recommendations require an additional validation and cross-team review cycle.</span></td><td class="dim-cell cx-2">Moderate<span class="tip-text">Depends on HR system integration access; organizational sensitivity around performance data can significantly slow project progress.</span></td><td class="dim-cell bv-1 sep-left">Marginal<span class="tip-text">Indirect savings through better training ROI and reduced skill-gap incidents; direct cost impact is difficult to quantify upfront.</span></td><td class="dim-cell bv-2">Tactical<span class="tip-text">Improves team capability and reduces single-point-of-knowledge risk; beneficial for team resilience and long-term staff retention.</span></td></tr>
+        <tr><td class="s1">Incident Command &amp; War Room (Accenture)</td><td class="s3">Πρόταση Accenture: Συντονισμός AI πρακτόρων για αυτόματη διαχείριση κρίσιμων συμβάντων (critical incidents) σε Cloud/Δίκτυο. AI agents συνεργάζονται για ταχεία επίλυση ενός major incident — μειωμένος χρόνος impact σε κρίσεις.</td><td class="cat cat-itops">IT Ops &amp; Service Mgmt</td><td class="s10">CCoE, NCoE (IT Ops Teams)</td><td class="dim-cell cx-4 sep-left">Cutting-Edge<span class="tip-text">Multi-agent AI coordination for real-time critical incident management is at the frontier of applied AI and autonomous agent research.</span></td><td class="dim-cell cx-3">Scattered<span class="tip-text">Incident data spread across cloud monitoring platforms, network tools, SNOW, and communication logs — no unified real-time view exists.</span></td><td class="dim-cell cx-4">Extensive<span class="tip-text">Cloud platforms, network monitoring, SNOW, MS Teams, and runbook execution systems all required — 8+ system integrations minimum.</span></td><td class="dim-cell cx-4">Transformational<span class="tip-text">Transforms the entire incident response culture; requires organizational trust in AI making autonomous decisions during production crises.</span></td><td class="dim-cell cx-4">Extended<span class="tip-text">Multi-agent coordination at enterprise scale needs 12–18 months with Accenture support; architectural unknowns add significant risk.</span></td><td class="dim-cell cx-4">Critical<span class="tip-text">Accenture external proposal with cutting-edge multi-agent technology; many architectural unknowns and very high vendor dependency.</span></td><td class="dim-cell bv-3 sep-left">Significant<span class="tip-text">Faster resolution of major incidents translates directly to reduced business continuity costs and minimized outage business impact.</span></td><td class="dim-cell bv-3">Strategic<span class="tip-text">Business continuity and brand risk mitigation during major incidents are board-level concerns with very high executive visibility.</span></td></tr>
+        <tr><td class="s1">AI Knowledge Base Intelligence <span class="b">(Auto-KB Mgmt)</span></td><td class="s3">Αυτοματοποιεί τη δημιουργία &amp; συντήρηση του IT Knowledge Base: παράγει άρθρα γνώσης από resolved tickets &amp; chatbot διαλόγους, κατηγοριοποιεί &amp; συγχωνεύει παρόμοια, αποσύρει ξεπερασμένα περιεχόμενα.</td><td class="cat cat-knowledge">Knowledge &amp; Assistants</td><td class="s10">EUC (Knowledge Mgmt)</td><td class="dim-cell cx-2 sep-left">Moderate<span class="tip-text">NLP for article generation and classification uses mature techniques (summarization, clustering) on well-structured SNOW ticket data.</span></td><td class="dim-cell cx-1">Ready<span class="tip-text">Resolved tickets and chatbot logs are available, well-structured, and contain rich content ideal for automatic KB article generation.</span></td><td class="dim-cell cx-1">Minimal<span class="tip-text">Primarily the SNOW KB module; chatbot log integration is straightforward — minimal overall system footprint and few dependencies.</span></td><td class="dim-cell cx-1">Low<span class="tip-text">IT-internal knowledge team workflow improvement with minimal impact on end users or other business teams outside IT.</span></td><td class="dim-cell cx-1">Short<span class="tip-text">MVP for automatic article drafting from resolved tickets achievable in 6–8 weeks — the fastest path to ROI in this initiative list.</span></td><td class="dim-cell cx-1">Low<span class="tip-text">SNOW data is stable and accessible; NLP summarization is a solved engineering problem with many proven off-the-shelf tooling options.</span></td><td class="dim-cell bv-1 sep-left">Marginal<span class="tip-text">Reduces manual KB authoring time for the knowledge team; efficiency gain is real but scoped entirely within IT operations.</span></td><td class="dim-cell bv-1">Operational<span class="tip-text">Better self-service KB content reduces repeat support tickets; a foundational enabler for chatbot accuracy but limited strategic reach.</span></td></tr>
+        <tr><td class="s1">Knowledge &amp; Document Intelligence (Accenture)</td><td class="s3">Πρόταση Accenture: AI υπηρεσία ανάκτησης γνώσης από εταιρικά έγγραφα (wiki, SharePoint) σε real-time: θρέφει R&amp;D και Service Desk με απαντήσεις μέσω AI (RAG) για τεχνικές απορίες/λύσεις.</td><td class="cat cat-knowledge">Knowledge &amp; Assistants</td><td class="s10">RDNS, EUC (R&amp;D, Service Desk)</td><td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">RAG system over heterogeneous enterprise documents with semantic search and answer synthesis — architecturally solid but operationally complex.</span></td><td class="dim-cell cx-3">Scattered<span class="tip-text">Documents span SharePoint, wiki, and email archives in varied formats, inconsistent quality, and complex access control policies.</span></td><td class="dim-cell cx-3">Heavy<span class="tip-text">SharePoint, Confluence/wiki, SNOW, and R&amp;D systems; document permissions and access control management adds considerable complexity.</span></td><td class="dim-cell cx-2">Medium<span class="tip-text">New query-based knowledge retrieval workflow for R&amp;D and service desk; adoption curve expected over 2–3 months post-launch.</span></td><td class="dim-cell cx-2">Medium<span class="tip-text">4–6 months for RAG MVP over key document sources; expanding to the full document corpus requires additional implementation sprints.</span></td><td class="dim-cell cx-3">High<span class="tip-text">Accenture proposal adds delivery risk; RAG infrastructure with vector databases introduces architectural complexity and potential vendor lock-in.</span></td><td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Faster knowledge retrieval measurably reduces research and troubleshooting time for R&amp;D teams and service desk agents.</span></td><td class="dim-cell bv-2">Tactical<span class="tip-text">R&amp;D and service desk efficiency gains are quantifiable; strong tactical KPI story with visible cross-team productivity impact.</span></td></tr>
+        <tr><td class="s1">AI-Driven Network Operations (NetOps AIOps)</td><td class="s3">Εφαρμογή AI/ML στη λειτουργία δικτύων: αυτόνομο NetOps (ανωμαλίες, predictive maintenance, RCA, βελτιστοποίηση επιδόσεων, noise reduction) με dashboards &amp; αυτοματισμούς.</td><td class="cat cat-observ">Observability &amp; AIOps</td><td class="s10">NCoE, NOC, CCoE (Δίκτυα &amp; Cloud Ops)</td><td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">ML-based anomaly detection, predictive failure modeling, and autonomous RCA on high-volume real-time network telemetry streams.</span></td><td class="dim-cell cx-2">Partial<span class="tip-text">Network metrics exist in monitoring tools but require normalization, historical anomaly labelling, and a real-time streaming data pipeline.</span></td><td class="dim-cell cx-3">Heavy<span class="tip-text">Network monitoring platforms (SolarWinds/PRTG), NOC dashboards, alerting systems, and network automation tools all require integration.</span></td><td class="dim-cell cx-3">High<span class="tip-text">Shifts NOC from reactive to proactive operations; changes on-call procedures, alert handling culture, and team skill requirements significantly.</span></td><td class="dim-cell cx-3">Long<span class="tip-text">6–10 months for anomaly detection MVP; predictive maintenance models require longer training periods and careful accuracy validation.</span></td><td class="dim-cell cx-2">Moderate<span class="tip-text">Network monitoring vendors are stable; ML model accuracy is dependent on data labelling quality and historical incident coverage depth.</span></td><td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Reduces unplanned downtime costs through proactive intervention; maintenance scheduling efficiency also contributes meaningful savings.</span></td><td class="dim-cell bv-3">Strategic<span class="tip-text">Proactive network reliability positions IT as a strategic enabler; builds the AIOps foundation for broader organizational use cases.</span></td></tr>
+        <tr><td class="s7">Enterprise Observability &amp; AIOps</td><td class="s3">Ενιαία πλατφόρμα παρατηρησιμότητας E2E: συγκέντρωση metrics από όλα τα συστήματα (endpoint–cloud), για προδραστική ορατότητα και βάση για μελλοντική αυτόνομη λειτουργία (AIOps).</td><td class="cat cat-observ">Observability &amp; AIOps</td><td class="s10">CCoE, RDNS (Cloud/Infra)</td><td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">E2E observability with ML-powered correlation across endpoints, cloud, network, and application telemetry is a major engineering effort.</span></td><td class="dim-cell cx-2">Partial<span class="tip-text">Metrics exist across infrastructure silos (EUC, cloud, network) but unification requires significant data engineering and ETL work.</span></td><td class="dim-cell cx-4">Extensive<span class="tip-text">All infrastructure domains in scope: endpoints, Azure/GCP/AWS cloud, network, applications, databases — the widest integration surface of all initiatives.</span></td><td class="dim-cell cx-3">High<span class="tip-text">Requires cross-team alignment across CCoE, RDNS, and EUC on shared observability standards, tooling, and dashboard governance.</span></td><td class="dim-cell cx-4">Extended<span class="tip-text">Full E2E coverage requires 12–18 months; iterative domain-by-domain rollout provides partial value earlier in the delivery timeline.</span></td><td class="dim-cell cx-2">Moderate<span class="tip-text">Observability platforms (Datadog, Dynatrace) are mature and proven; multi-domain integration complexity is the primary delivery risk.</span></td><td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Proactive incident prevention reduces outage costs; exact savings are context-dependent and difficult to forecast with precision upfront.</span></td><td class="dim-cell bv-4">Game-Changing<span class="tip-text">Foundational platform enabling all future AIOps initiatives; transforms IT from reactive to predictive — a fundamental operating model shift.</span></td></tr>
+        <tr><td class="s1">Platform Self-Healing &amp; SRE</td><td class="s3">Πρόταση Accenture: AI αυτόματη επιδιόρθωση σφαλμάτων στη Cloud πλατφόρμα (SRE), χωρίς ανθρώπινη παρέμβαση: εκτέλεση αυτόνομων runbooks (Ansible, Azure Automation) για self-healing.</td><td class="cat cat-observ">Observability &amp; AIOps</td><td class="s10">CCoE (Cloud Ops &amp; SRE)</td><td class="dim-cell cx-4 sep-left">Cutting-Edge<span class="tip-text">Autonomous AI-driven runbook execution and self-healing without human intervention is leading-edge SRE and MLOps practice.</span></td><td class="dim-cell cx-2">Partial<span class="tip-text">Runbooks exist largely as manual documents; they must be codified, tested, and validated before they can be safely AI-triggered in production.</span></td><td class="dim-cell cx-3">Heavy<span class="tip-text">Ansible, Azure Automation, cloud platform APIs, incident management systems, and alerting pipelines all require deep integration.</span></td><td class="dim-cell cx-4">Transformational<span class="tip-text">Redefines the SRE role from manual responder to automation overseer; requires strong organizational trust in autonomous production actions.</span></td><td class="dim-cell cx-4">Extended<span class="tip-text">Depends on mature Enterprise Observability as a prerequisite; realistic minimum delivery is 12–18 months from today given current maturity.</span></td><td class="dim-cell cx-4">Critical<span class="tip-text">Accenture proposal with high operational risk; autonomous remediation in production requires extensive safety validation and robust fallback design.</span></td><td class="dim-cell bv-3 sep-left">Significant<span class="tip-text">Autonomous incident resolution dramatically reduces MTTR and on-call labor costs; high ROI once operational and organizationally trusted.</span></td><td class="dim-cell bv-4">Game-Changing<span class="tip-text">Autonomous cloud operations is the long-term IT vision; this initiative transforms the IT operating model at its most fundamental level.</span></td></tr>
+        <tr><td class="s1">AI για EUC Security &amp; Compliance</td><td class="s3">AI agent για real-time έλεγχο συμμόρφωσης στα endpoints: ανιχνεύει αυτόματα παραβάσεις πολιτικών ασφαλείας (π.χ. ρυθμίσεις PC) και ειδοποιεί ή αποτρέπει μη εγκεκριμένες ενέργειες στην πηγή.</td><td class="cat cat-security">Security &amp; Risk</td><td class="s10">EUC (Πολιτικές IT &amp; Security)</td><td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">Real-time policy compliance engine scanning endpoint configurations and autonomously blocking violations — proven approach but operationally complex.</span></td><td class="dim-cell cx-2">Partial<span class="tip-text">Endpoint telemetry available via MDM/Intune; compliance policy rules must be carefully encoded and kept continuously updated as policies evolve.</span></td><td class="dim-cell cx-2">Moderate<span class="tip-text">Endpoint management (Intune/SCCM), security policy engine, alerting, and reporting systems — a moderate and manageable integration footprint.</span></td><td class="dim-cell cx-3">High<span class="tip-text">Automated enforcement changes end-user experience significantly; requires a clear IT policy governance framework and proactive communication plan.</span></td><td class="dim-cell cx-2">Medium<span class="tip-text">3–5 months for MVP compliance scanning and alerting; autonomous blocking capability requires additional testing and phased validation.</span></td><td class="dim-cell cx-2">Moderate<span class="tip-text">Relies on MDM/Intune and established security tooling vendors; well-established but requires deep policy and compliance domain expertise.</span></td><td class="dim-cell bv-2 sep-left">Moderate<span class="tip-text">Reduces compliance audit effort and violation remediation costs; helps avoid regulatory penalties in security-audited environments.</span></td><td class="dim-cell bv-3">Strategic<span class="tip-text">Regulatory compliance and security risk reduction align directly with legal, audit, and board-level risk management priorities.</span></td></tr>
+        <tr><td class="s1">VIP Intelligence Suite <span class="b">(Προληπτική VIP Υποστ.)</span></td><td class="s4">*Σουίτα AI για VIP υποστήριξη: Risk Radar (προληπτικά alerts πριν κρίσιμα events), Digital Twin περιβάλλοντος VIP, <span class="bi">μετάφραση τεχνικών θεμάτων σε απλή γλώσσα, προληπτικά IT check-ins πριν από σημαντικά meetings.</span></td><td class="cat cat-security">Security &amp; Risk</td><td class="s10">EUC (VIP IT Support)</td><td class="dim-cell cx-3 sep-left">Advanced<span class="tip-text">Multi-component suite combining Risk Radar, Digital Twin, NLP translation, and proactive monitoring — high overall implementation complexity.</span></td><td class="dim-cell cx-2">Partial<span class="tip-text">VIP calendar and meeting data accessible; historical IT issue data specific to VIP users requires a dedicated and separate collection setup.</span></td><td class="dim-cell cx-3">Heavy<span class="tip-text">Calendar systems (O365/Exchange), IT monitoring platforms, MS Teams, communication tools, and VIP endpoint telemetry all require integration.</span></td><td class="dim-cell cx-2">Medium<span class="tip-text">VIP support team workflow changes meaningfully; stakeholder management with C-suite adds political sensitivity and approval complexity.</span></td><td class="dim-cell cx-3">Long<span class="tip-text">Full suite requires 6–10 months; individual components (Risk Radar first) can be delivered incrementally for earlier demonstrable value.</span></td><td class="dim-cell cx-3">High<span class="tip-text">Multi-component architecture with several integrations; C-suite involvement raises delivery stakes and increases visibility of any delays.</span></td><td class="dim-cell bv-1 sep-left">Marginal<span class="tip-text">VIP satisfaction and reputational benefit are hard to quantify in direct cost terms; goodwill with C-suite carries real but intangible value.</span></td><td class="dim-cell bv-3">Strategic<span class="tip-text">C-suite IT experience directly shapes executive perception of IT investment; high political visibility and significant organizational influence.</span></td></tr>
       </tbody>
     </table>
   </div>
 
-  <div id="float-tip"></div>
-
-  <!-- ── Legend ── -->
+  <!-- Legend -->
   <div class="legend">
-
-    <div class="legend-section">
-      <div class="legend-title">Complexity Dimensions <span class="legend-subtitle">(purple headers — lower level = easier to deliver)</span></div>
-      <div class="legend-grid">
-
-        <div class="legend-dim">
-          <div class="legend-dim-name">Tech. Complexity</div>
-          <div class="legend-levels">
-            <span class="cx-1 legend-chip">Basic</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-2 legend-chip">Moderate</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-3 legend-chip">Advanced</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-4 legend-chip">Cutting-Edge</span>
-          </div>
-          <div class="legend-dim-desc">ML/AI sophistication, infrastructure required, algorithm maturity.</div>
-        </div>
-
-        <div class="legend-dim">
-          <div class="legend-dim-name">Data Readiness</div>
-          <div class="legend-levels">
-            <span class="cx-1 legend-chip">Ready</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-2 legend-chip">Partial</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-3 legend-chip">Scattered</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-4 legend-chip">Scarce</span>
-          </div>
-          <div class="legend-dim-desc">Availability, quality, and accessibility of required data sources.</div>
-        </div>
-
-        <div class="legend-dim">
-          <div class="legend-dim-name">Integration</div>
-          <div class="legend-levels">
-            <span class="cx-1 legend-chip">Minimal</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-2 legend-chip">Moderate</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-3 legend-chip">Heavy</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-4 legend-chip">Extensive</span>
-          </div>
-          <div class="legend-dim-desc">Number of systems and APIs to connect (1–2 → 3–4 → 5–7 → 8+ / enterprise-wide).</div>
-        </div>
-
-        <div class="legend-dim">
-          <div class="legend-dim-name">Org. Change</div>
-          <div class="legend-levels">
-            <span class="cx-1 legend-chip">Low</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-2 legend-chip">Medium</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-3 legend-chip">High</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-4 legend-chip">Transformational</span>
-          </div>
-          <div class="legend-dim-desc">Process disruption, stakeholder alignment, and user adoption effort required.</div>
-        </div>
-
-        <div class="legend-dim">
-          <div class="legend-dim-name">Time to Value</div>
-          <div class="legend-levels">
-            <span class="cx-1 legend-chip">Short</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-2 legend-chip">Medium</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-3 legend-chip">Long</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-4 legend-chip">Extended</span>
-          </div>
-          <div class="legend-dim-desc">Estimated delivery timeline to a working MVP (&lt;3 m → 3–6 m → 6–12 m → 12+ m).</div>
-        </div>
-
-        <div class="legend-dim">
-          <div class="legend-dim-name">Dep. Risk</div>
-          <div class="legend-levels">
-            <span class="cx-1 legend-chip">Low</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-2 legend-chip">Moderate</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-3 legend-chip">High</span>
-            <span class="legend-arrow">→</span>
-            <span class="cx-4 legend-chip">Critical</span>
-          </div>
-          <div class="legend-dim-desc">Reliance on external vendors, third-party proposals, or immature technologies.</div>
-        </div>
-
+    <div class="leg-section">
+      <h3 class="leg-h">Complexity Dimensions <em style="font-weight:400;font-size:10px;color:#888"> — lower level = easier to deliver</em></h3>
+      <div class="leg-dims-grid">
+        <div><div class="leg-dim-name">Tech. Complexity</div><div class="leg-chips"><span class="cx-1 leg-chip">Basic</span><span class="leg-arrow">→</span><span class="cx-2 leg-chip">Moderate</span><span class="leg-arrow">→</span><span class="cx-3 leg-chip">Advanced</span><span class="leg-arrow">→</span><span class="cx-4 leg-chip">Cutting-Edge</span></div></div><div><div class="leg-dim-name">Data Readiness</div><div class="leg-chips"><span class="cx-1 leg-chip">Ready</span><span class="leg-arrow">→</span><span class="cx-2 leg-chip">Partial</span><span class="leg-arrow">→</span><span class="cx-3 leg-chip">Scattered</span><span class="leg-arrow">→</span><span class="cx-4 leg-chip">Scarce</span></div></div><div><div class="leg-dim-name">Integration</div><div class="leg-chips"><span class="cx-1 leg-chip">Minimal</span><span class="leg-arrow">→</span><span class="cx-2 leg-chip">Moderate</span><span class="leg-arrow">→</span><span class="cx-3 leg-chip">Heavy</span><span class="leg-arrow">→</span><span class="cx-4 leg-chip">Extensive</span></div></div><div><div class="leg-dim-name">Org. Change</div><div class="leg-chips"><span class="cx-1 leg-chip">Low</span><span class="leg-arrow">→</span><span class="cx-2 leg-chip">Medium</span><span class="leg-arrow">→</span><span class="cx-3 leg-chip">High</span><span class="leg-arrow">→</span><span class="cx-4 leg-chip">Transformational</span></div></div><div><div class="leg-dim-name">Time to Value</div><div class="leg-chips"><span class="cx-1 leg-chip">Short</span><span class="leg-arrow">→</span><span class="cx-2 leg-chip">Medium</span><span class="leg-arrow">→</span><span class="cx-3 leg-chip">Long</span><span class="leg-arrow">→</span><span class="cx-4 leg-chip">Extended</span></div></div><div><div class="leg-dim-name">Dep. Risk</div><div class="leg-chips"><span class="cx-1 leg-chip">Low</span><span class="leg-arrow">→</span><span class="cx-2 leg-chip">Moderate</span><span class="leg-arrow">→</span><span class="cx-3 leg-chip">High</span><span class="leg-arrow">→</span><span class="cx-4 leg-chip">Critical</span></div></div>
       </div>
     </div>
-
-    <div class="legend-section">
-      <div class="legend-title">Business Value Dimensions <span class="legend-subtitle">(green headers — higher level = greater value delivered)</span></div>
-      <div class="legend-grid">
-
-        <div class="legend-dim">
-          <div class="legend-dim-name">Cost Impact</div>
-          <div class="legend-levels">
-            <span class="bv-1 legend-chip">Marginal</span>
-            <span class="legend-arrow">→</span>
-            <span class="bv-2 legend-chip">Moderate</span>
-            <span class="legend-arrow">→</span>
-            <span class="bv-3 legend-chip">Significant</span>
-            <span class="legend-arrow">→</span>
-            <span class="bv-4 legend-chip">Transformational</span>
-          </div>
-          <div class="legend-dim-desc">Direct cost savings or avoidance (&lt;5% → 5–15% → 15–30% → &gt;30% reduction).</div>
-        </div>
-
-        <div class="legend-dim">
-          <div class="legend-dim-name">Strategic Impact</div>
-          <div class="legend-levels">
-            <span class="bv-1 legend-chip">Operational</span>
-            <span class="legend-arrow">→</span>
-            <span class="bv-2 legend-chip">Tactical</span>
-            <span class="legend-arrow">→</span>
-            <span class="bv-3 legend-chip">Strategic</span>
-            <span class="legend-arrow">→</span>
-            <span class="bv-4 legend-chip">Game-Changing</span>
-          </div>
-          <div class="legend-dim-desc">Breadth of organizational impact — from IT-internal efficiency to fundamental operating model transformation.</div>
-        </div>
-
+    <div class="leg-section">
+      <h3 class="leg-h">Business Value Dimensions <em style="font-weight:400;font-size:10px;color:#888"> — higher level = greater value</em></h3>
+      <div class="leg-dims-grid">
+        <div><div class="leg-dim-name">Cost Impact</div><div class="leg-chips"><span class="bv-1 leg-chip">Marginal</span><span class="leg-arrow">→</span><span class="bv-2 leg-chip">Moderate</span><span class="leg-arrow">→</span><span class="bv-3 leg-chip">Significant</span><span class="leg-arrow">→</span><span class="bv-4 leg-chip">Transformational</span></div></div><div><div class="leg-dim-name">Strategic Impact</div><div class="leg-chips"><span class="bv-1 leg-chip">Operational</span><span class="leg-arrow">→</span><span class="bv-2 leg-chip">Tactical</span><span class="leg-arrow">→</span><span class="bv-3 leg-chip">Strategic</span><span class="leg-arrow">→</span><span class="bv-4 leg-chip">Game-Changing</span></div></div>
       </div>
     </div>
-
-    <div class="legend-section legend-color-note">
-      <div class="legend-title">Color Coding</div>
-      <div class="legend-color-row">
-        <span class="legend-color-label">Complexity</span>
-        <span class="cx-1 legend-chip">Level 1 — easiest</span>
-        <span class="cx-2 legend-chip">Level 2</span>
-        <span class="cx-3 legend-chip">Level 3</span>
-        <span class="cx-4 legend-chip">Level 4 — hardest</span>
-        <span class="legend-sep">|</span>
-        <span class="legend-color-label">Business Value</span>
-        <span class="bv-1 legend-chip">Level 1 — lowest</span>
-        <span class="bv-2 legend-chip">Level 2</span>
-        <span class="bv-3 legend-chip">Level 3</span>
-        <span class="bv-4 legend-chip">Level 4 — highest</span>
-      </div>
-      <div class="legend-hover-note">Hover over any dimension cell to read the rationale behind the assigned level.</div>
+    <div class="leg-section">
+      <h3 class="leg-h">Definitions</h3>
+      <h3 class="leg-h">Complexity Dimensions</h3>
+<p><em>Purple headers — lower level = easier to deliver.</em></p>
+<h4 class="leg-sh">Tech. Complexity</h4>
+<p>ML/AI sophistication, custom model requirements, infrastructure needed.</p>
+<ul>
+<li><strong>Basic</strong> — off-the-shelf tools, no custom ML</li>
+<li><strong>Moderate</strong> — standard ML frameworks, limited custom work</li>
+<li><strong>Advanced</strong> — custom ML models, complex data pipelines</li>
+<li><strong>Cutting-Edge</strong> — multi-agent systems, frontier AI research</li>
+</ul>
+<h4 class="leg-sh">Data Readiness</h4>
+<p>Availability, quality, and accessibility of the data the initiative depends on.</p>
+<ul>
+<li><strong>Ready</strong> — data exists, clean, immediately accessible</li>
+<li><strong>Partial</strong> — data exists but needs cleansing or consolidation</li>
+<li><strong>Scattered</strong> — data spread across silos, significant prep required</li>
+<li><strong>Scarce</strong> — key data not yet collected or very hard to access</li>
+</ul>
+<h4 class="leg-sh">Integration</h4>
+<p>Number of systems and APIs that need to be connected.</p>
+<ul>
+<li><strong>Minimal</strong> — 1–2 systems</li>
+<li><strong>Moderate</strong> — 3–4 systems</li>
+<li><strong>Heavy</strong> — 5–7 systems</li>
+<li><strong>Extensive</strong> — 8+ systems / enterprise-wide</li>
+</ul>
+<h4 class="leg-sh">Org. Change</h4>
+<p>Process disruption, stakeholder alignment, and user adoption effort required.</p>
+<ul>
+<li><strong>Low</strong> — IT-internal, minimal process change</li>
+<li><strong>Medium</strong> — some workflow changes, moderate stakeholder management</li>
+<li><strong>High</strong> — significant process redesign, broad adoption effort</li>
+<li><strong>Transformational</strong> — org-wide cultural and process transformation</li>
+</ul>
+<h4 class="leg-sh">Time to Value</h4>
+<p>Estimated delivery timeline to a working MVP.</p>
+<ul>
+<li><strong>Short</strong> — < 3 months</li>
+<li><strong>Medium</strong> — 3–6 months</li>
+<li><strong>Long</strong> — 6–12 months</li>
+<li><strong>Extended</strong> — 12+ months</li>
+</ul>
+<h4 class="leg-sh">Dep. Risk</h4>
+<p>Reliance on external vendors, third-party proposals, or immature technologies.</p>
+<ul>
+<li><strong>Low</strong> — internal capabilities, proven mature tech</li>
+<li><strong>Moderate</strong> — some vendor dependency, stable tools</li>
+<li><strong>High</strong> — significant vendor or external proposal dependency</li>
+<li><strong>Critical</strong> — immature tech, key external vendors, many unknowns</li>
+</ul>
+<h3 class="leg-h">Business Value Dimensions</h3>
+<p><em>Green headers — higher level = greater value delivered.</em></p>
+<h4 class="leg-sh">Cost Impact</h4>
+<p>Direct cost savings or avoidance expected from the initiative.</p>
+<ul>
+<li><strong>Marginal</strong> — < 5% cost reduction or hard to quantify</li>
+<li><strong>Moderate</strong> — 5–15% cost reduction or avoidance</li>
+<li><strong>Significant</strong> — 15–30% cost reduction</li>
+<li><strong>Transformational</strong> — > 30% cost reduction or major new efficiency</li>
+</ul>
+<h4 class="leg-sh">Strategic Impact</h4>
+<p>Breadth and depth of organizational impact beyond cost.</p>
+<ul>
+<li><strong>Operational</strong> — efficiency gains within IT only</li>
+<li><strong>Tactical</strong> — cross-team improvements, measurable KPI impact</li>
+<li><strong>Strategic</strong> — competitive advantage, executive visibility</li>
+<li><strong>Game-Changing</strong> — industry differentiation, fundamental operating model shift</li>
+</ul>
     </div>
-
+    <div class="leg-section">
+      <div class="leg-color-row">
+        <span class="leg-color-label">Complexity</span>
+        <span class="cx-1 leg-chip">1 — easiest</span>
+        <span class="cx-2 leg-chip">2</span>
+        <span class="cx-3 leg-chip">3</span>
+        <span class="cx-4 leg-chip">4 — hardest</span>
+        <span class="leg-sep">|</span>
+        <span class="leg-color-label">Business Value</span>
+        <span class="bv-1 leg-chip">1 — lowest</span>
+        <span class="bv-2 leg-chip">2</span>
+        <span class="bv-3 leg-chip">3</span>
+        <span class="bv-4 leg-chip">4 — highest</span>
+      </div>
+      <p class="leg-note">Hover over any dimension cell to read the rationale behind the assigned level. Click a dimension column header to sort by level.</p>
+    </div>
   </div>
+
+  <div id="float-tip"></div>
 
   <script>
     const COL_COUNT = 12;
-    const ORIGINAL_WIDTHS = [235, 408, 180, 229, 90, 90, 90, 90, 90, 90, 90, 90];
-    const COLLAPSED_WIDTH = 26;
-    const colCollapsed = Array(COL_COUNT).fill(false);
-    const filterValues  = Array(COL_COUNT).fill('');
+    const filterValues = Array(COL_COUNT).fill('');
 
-    /* ── Filters ── */
     function applyFilters(colIdx, value) {
       filterValues[colIdx] = value.toLowerCase().trim();
-      document.querySelectorAll('#main-table tbody tr:not(.filter-row):not(#header-row)').forEach(row => {
+      document.querySelectorAll('#main-table tbody tr').forEach(row => {
         let visible = true;
         for (let c = 0; c < COL_COUNT; c++) {
           const f = filterValues[c];
@@ -694,8 +482,7 @@
       });
     }
 
-    /* ── Sort ── */
-    let sortState = { col: -1, dir: 'none' }; // dir: 'none' | 'asc' | 'desc'
+    let sortState = { col: -1, dir: 'none' };
     let originalOrder = null;
 
     function getCellLevel(cell) {
@@ -706,9 +493,8 @@
 
     function sortColumn(colIdx) {
       const tbody = document.querySelector('#main-table tbody');
-      const dataRows = Array.from(tbody.querySelectorAll('tr:not(.filter-row):not(#header-row)'));
-
-      if (!originalOrder) originalOrder = [...dataRows];
+      const rows  = Array.from(tbody.querySelectorAll('tr'));
+      if (!originalOrder) originalOrder = [...rows];
 
       if (sortState.col === colIdx) {
         sortState.dir = sortState.dir === 'asc' ? 'desc' : sortState.dir === 'desc' ? 'none' : 'asc';
@@ -720,12 +506,11 @@
       if (sortState.dir === 'none') {
         originalOrder.forEach(r => tbody.appendChild(r));
       } else {
-        const sorted = [...dataRows].sort((a, b) => {
+        [...rows].sort((a, b) => {
           const la = getCellLevel(a.cells[colIdx]);
           const lb = getCellLevel(b.cells[colIdx]);
           return sortState.dir === 'asc' ? la - lb : lb - la;
-        });
-        sorted.forEach(r => tbody.appendChild(r));
+        }).forEach(r => tbody.appendChild(r));
       }
 
       document.querySelectorAll('.sort-icon').forEach(el => {
@@ -734,51 +519,14 @@
       });
     }
 
-    /* ── Column collapse ── */
-    function applyColState(colIdx, collapsed) {
-      colCollapsed[colIdx] = collapsed;
-      document.getElementById('col-' + colIdx).style.width =
-        collapsed ? COLLAPSED_WIDTH + 'px' : ORIGINAL_WIDTHS[colIdx] + 'px';
-
-      const headerCell = document.getElementById('header-row').cells[colIdx];
-      const btn = headerCell.querySelector('.col-toggle');
-      headerCell.classList.toggle('col-collapsed', collapsed);
-      btn.textContent = collapsed ? '▶' : '◀';
-      btn.title = collapsed ? 'Show column' : 'Hide column';
-
-      document.querySelector('#main-table .filter-row').cells[colIdx].style.display =
-        collapsed ? 'none' : '';
-
-      document.querySelectorAll('#main-table tbody tr:not(.filter-row):not(#header-row)').forEach(row => {
-        const cell = row.cells[colIdx];
-        if (cell) cell.style.display = collapsed ? 'none' : '';
-      });
-    }
-
-    function updateTableWidth() {
-      const total = ORIGINAL_WIDTHS.reduce((s, w, i) => s + (colCollapsed[i] ? COLLAPSED_WIDTH : w), 0);
-      document.getElementById('main-table').style.width = total + 'px';
-    }
-
-    function toggleColumn(colIdx) {
-      const willCollapse = !colCollapsed[colIdx];
-      for (let c = colIdx; c < COL_COUNT; c++) applyColState(c, willCollapse);
-      updateTableWidth();
-    }
-
-    /* ── Floating tooltip ── */
     const floatTip = document.getElementById('float-tip');
     document.querySelectorAll('.dim-cell').forEach(cell => {
       const tipSpan = cell.querySelector('.tip-text');
       if (!tipSpan) return;
-      cell.addEventListener('mouseenter', () => {
-        floatTip.textContent = tipSpan.textContent;
-        floatTip.style.display = 'block';
-      });
+      cell.addEventListener('mouseenter', () => { floatTip.textContent = tipSpan.textContent; floatTip.style.display = 'block'; });
       cell.addEventListener('mousemove', e => {
         let x = e.clientX + 14;
-        const tipW = 250;
-        if (x + tipW > window.innerWidth - 8) x = e.clientX - tipW - 14;
+        if (x + 260 > window.innerWidth - 8) x = e.clientX - 264;
         floatTip.style.left = x + 'px';
         floatTip.style.top  = (e.clientY - 12) + 'px';
       });
