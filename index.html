@@ -404,39 +404,45 @@
       });
     }
 
-    function toggleColumn(colIdx) {
+    function applyColState(colIdx, collapsed) {
       const table = document.getElementById('main-table');
-      colCollapsed[colIdx] = !colCollapsed[colIdx];
-      const collapsed = colCollapsed[colIdx];
+      colCollapsed[colIdx] = collapsed;
 
-      // Update col element width
-      const colEl = document.getElementById('col-' + colIdx);
-      colEl.style.width = collapsed ? COLLAPSED_WIDTH + 'px' : ORIGINAL_WIDTHS[colIdx] + 'px';
+      // col element width
+      document.getElementById('col-' + colIdx).style.width =
+        collapsed ? COLLAPSED_WIDTH + 'px' : ORIGINAL_WIDTHS[colIdx] + 'px';
 
-      // Update table total width
-      const totalWidth = ORIGINAL_WIDTHS.reduce((sum, w, i) =>
-        sum + (colCollapsed[i] ? COLLAPSED_WIDTH : w), 0);
-      table.style.width = totalWidth + 'px';
-
-      // Toggle header cell appearance
-      const headerRow = document.getElementById('header-row');
-      const headerCell = headerRow.cells[colIdx];
+      // header cell
+      const headerCell = document.getElementById('header-row').cells[colIdx];
       const btn = headerCell.querySelector('.col-toggle');
       headerCell.classList.toggle('col-collapsed', collapsed);
       btn.textContent = collapsed ? '▶' : '◀';
       btn.title = collapsed ? 'Show column' : 'Hide column';
 
-      // Toggle filter row cell
-      const filterRow = table.querySelector('.filter-row');
-      const filterCell = filterRow.cells[colIdx];
-      filterCell.style.display = collapsed ? 'none' : '';
+      // filter cell
+      table.querySelector('.filter-row').cells[colIdx].style.display =
+        collapsed ? 'none' : '';
 
-      // Toggle data cells
-      const dataRows = table.querySelectorAll('tbody tr:not(.filter-row):not(#header-row)');
-      dataRows.forEach(row => {
+      // data cells
+      table.querySelectorAll('tbody tr:not(.filter-row):not(#header-row)').forEach(row => {
         const cell = row.cells[colIdx];
         if (cell) cell.style.display = collapsed ? 'none' : '';
       });
+    }
+
+    function updateTableWidth() {
+      const totalWidth = ORIGINAL_WIDTHS.reduce((sum, w, i) =>
+        sum + (colCollapsed[i] ? COLLAPSED_WIDTH : w), 0);
+      document.getElementById('main-table').style.width = totalWidth + 'px';
+    }
+
+    function toggleColumn(colIdx) {
+      const willCollapse = !colCollapsed[colIdx];
+      // Cascade: hide this column and all to the right; expand this and all to the right
+      for (let c = colIdx; c < COL_COUNT; c++) {
+        applyColState(c, willCollapse);
+      }
+      updateTableWidth();
     }
   </script>
 </body>
