@@ -133,6 +133,68 @@
     /* Group separator */
     .sep-left { border-left:3px solid #999 !important; }
 
+    /* ── Legend ── */
+    .legend {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 920px;
+    }
+    .legend-section {
+      border: 1px solid #E0E0E0;
+      border-radius: 6px;
+      padding: 14px 16px;
+      background: #FAFAFA;
+    }
+    .legend-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #0E2841;
+      margin-bottom: 10px;
+    }
+    .legend-subtitle {
+      font-weight: 400;
+      color: #666;
+      font-size: 10px;
+    }
+    .legend-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 24px;
+    }
+    .legend-dim { display: flex; flex-direction: column; gap: 4px; }
+    .legend-dim-name {
+      font-size: 10px;
+      font-weight: 700;
+      color: #333;
+    }
+    .legend-levels {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 3px;
+    }
+    .legend-chip {
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .legend-arrow { font-size: 9px; color: #999; }
+    .legend-dim-desc { font-size: 9.5px; color: #666; line-height: 1.4; }
+    .legend-color-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+    .legend-color-label { font-size: 10px; font-weight: 700; color: #333; margin-right: 2px; }
+    .legend-sep { color: #CCC; margin: 0 6px; }
+    .legend-hover-note { font-size: 9.5px; color: #888; font-style: italic; }
+
     /* ── Floating tooltip ── */
     #float-tip {
       display:none;
@@ -451,6 +513,155 @@
   </div>
 
   <div id="float-tip"></div>
+
+  <!-- ── Legend ── -->
+  <div class="legend">
+
+    <div class="legend-section">
+      <div class="legend-title">Complexity Dimensions <span class="legend-subtitle">(purple headers — lower level = easier to deliver)</span></div>
+      <div class="legend-grid">
+
+        <div class="legend-dim">
+          <div class="legend-dim-name">Tech. Complexity</div>
+          <div class="legend-levels">
+            <span class="cx-1 legend-chip">Basic</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-2 legend-chip">Moderate</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-3 legend-chip">Advanced</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-4 legend-chip">Cutting-Edge</span>
+          </div>
+          <div class="legend-dim-desc">ML/AI sophistication, infrastructure required, algorithm maturity.</div>
+        </div>
+
+        <div class="legend-dim">
+          <div class="legend-dim-name">Data Readiness</div>
+          <div class="legend-levels">
+            <span class="cx-1 legend-chip">Ready</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-2 legend-chip">Partial</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-3 legend-chip">Scattered</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-4 legend-chip">Scarce</span>
+          </div>
+          <div class="legend-dim-desc">Availability, quality, and accessibility of required data sources.</div>
+        </div>
+
+        <div class="legend-dim">
+          <div class="legend-dim-name">Integration</div>
+          <div class="legend-levels">
+            <span class="cx-1 legend-chip">Minimal</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-2 legend-chip">Moderate</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-3 legend-chip">Heavy</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-4 legend-chip">Extensive</span>
+          </div>
+          <div class="legend-dim-desc">Number of systems and APIs to connect (1–2 → 3–4 → 5–7 → 8+ / enterprise-wide).</div>
+        </div>
+
+        <div class="legend-dim">
+          <div class="legend-dim-name">Org. Change</div>
+          <div class="legend-levels">
+            <span class="cx-1 legend-chip">Low</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-2 legend-chip">Medium</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-3 legend-chip">High</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-4 legend-chip">Transformational</span>
+          </div>
+          <div class="legend-dim-desc">Process disruption, stakeholder alignment, and user adoption effort required.</div>
+        </div>
+
+        <div class="legend-dim">
+          <div class="legend-dim-name">Time to Value</div>
+          <div class="legend-levels">
+            <span class="cx-1 legend-chip">Short</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-2 legend-chip">Medium</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-3 legend-chip">Long</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-4 legend-chip">Extended</span>
+          </div>
+          <div class="legend-dim-desc">Estimated delivery timeline to a working MVP (&lt;3 m → 3–6 m → 6–12 m → 12+ m).</div>
+        </div>
+
+        <div class="legend-dim">
+          <div class="legend-dim-name">Dep. Risk</div>
+          <div class="legend-levels">
+            <span class="cx-1 legend-chip">Low</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-2 legend-chip">Moderate</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-3 legend-chip">High</span>
+            <span class="legend-arrow">→</span>
+            <span class="cx-4 legend-chip">Critical</span>
+          </div>
+          <div class="legend-dim-desc">Reliance on external vendors, third-party proposals, or immature technologies.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="legend-section">
+      <div class="legend-title">Business Value Dimensions <span class="legend-subtitle">(green headers — higher level = greater value delivered)</span></div>
+      <div class="legend-grid">
+
+        <div class="legend-dim">
+          <div class="legend-dim-name">Cost Impact</div>
+          <div class="legend-levels">
+            <span class="bv-1 legend-chip">Marginal</span>
+            <span class="legend-arrow">→</span>
+            <span class="bv-2 legend-chip">Moderate</span>
+            <span class="legend-arrow">→</span>
+            <span class="bv-3 legend-chip">Significant</span>
+            <span class="legend-arrow">→</span>
+            <span class="bv-4 legend-chip">Transformational</span>
+          </div>
+          <div class="legend-dim-desc">Direct cost savings or avoidance (&lt;5% → 5–15% → 15–30% → &gt;30% reduction).</div>
+        </div>
+
+        <div class="legend-dim">
+          <div class="legend-dim-name">Strategic Impact</div>
+          <div class="legend-levels">
+            <span class="bv-1 legend-chip">Operational</span>
+            <span class="legend-arrow">→</span>
+            <span class="bv-2 legend-chip">Tactical</span>
+            <span class="legend-arrow">→</span>
+            <span class="bv-3 legend-chip">Strategic</span>
+            <span class="legend-arrow">→</span>
+            <span class="bv-4 legend-chip">Game-Changing</span>
+          </div>
+          <div class="legend-dim-desc">Breadth of organizational impact — from IT-internal efficiency to fundamental operating model transformation.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="legend-section legend-color-note">
+      <div class="legend-title">Color Coding</div>
+      <div class="legend-color-row">
+        <span class="legend-color-label">Complexity</span>
+        <span class="cx-1 legend-chip">Level 1 — easiest</span>
+        <span class="cx-2 legend-chip">Level 2</span>
+        <span class="cx-3 legend-chip">Level 3</span>
+        <span class="cx-4 legend-chip">Level 4 — hardest</span>
+        <span class="legend-sep">|</span>
+        <span class="legend-color-label">Business Value</span>
+        <span class="bv-1 legend-chip">Level 1 — lowest</span>
+        <span class="bv-2 legend-chip">Level 2</span>
+        <span class="bv-3 legend-chip">Level 3</span>
+        <span class="bv-4 legend-chip">Level 4 — highest</span>
+      </div>
+      <div class="legend-hover-note">Hover over any dimension cell to read the rationale behind the assigned level.</div>
+    </div>
+
+  </div>
 
   <script>
     const COL_COUNT = 12;
