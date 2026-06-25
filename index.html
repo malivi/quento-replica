@@ -115,12 +115,12 @@
       border-right:  2px solid #E6E6E6;
       border-bottom: 2px solid #E6E6E6;
     }
-    .cat-finops      { background: #FAF9D7; } /* FinOps & Cost          */
-    .cat-governance  { background: #D0D0D0; } /* Governance & Delivery  */
-    .cat-itops       { background: #60CBF3; } /* IT Ops & Service Mgmt  */
-    .cat-knowledge   { background: #E49EDD; } /* Knowledge & Assistants */
-    .cat-observ      { background: #84E291; } /* Observability & AIOps  */
-    .cat-security    { background: #F6C6AD; } /* Security & Risk        */
+    .cat-finops      { background: #FAF9D7; }
+    .cat-governance  { background: #D0D0D0; }
+    .cat-itops       { background: #60CBF3; }
+    .cat-knowledge   { background: #E49EDD; }
+    .cat-observ      { background: #84E291; }
+    .cat-security    { background: #F6C6AD; }
 
     /* ── Style 10: Col-D data (white, regular, center, right+bot) ── */
     .s10 {
@@ -135,29 +135,123 @@
     .bi { font-weight: 700; font-style: italic; }
     .b  { font-weight: 700; font-style: normal; }
     .n  { font-weight: 400; font-style: normal; }
+
+    /* ── Column header with toggle button ── */
+    .col-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+    }
+    .col-label { flex: 1; min-width: 0; }
+
+    .col-toggle {
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(0,0,0,0.18);
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 9px;
+      padding: 1px 5px;
+      line-height: 1.4;
+      color: #333;
+      transition: background 0.15s;
+    }
+    .col-toggle:hover { background: rgba(255,255,255,0.7); }
+
+    /* ── Collapsed column header cell ── */
+    td.col-collapsed {
+      overflow: hidden;
+      padding: 2px !important;
+      vertical-align: middle;
+    }
+    td.col-collapsed .col-label { display: none; }
+    td.col-collapsed .col-header { justify-content: center; }
+    td.col-collapsed .col-toggle {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      padding: 4px 2px;
+      font-size: 9px;
+    }
+
+    /* ── Filter row ── */
+    tr.filter-row td {
+      background: #FAFAFA;
+      border-right: 2px solid #E6E6E6;
+      border-bottom: 2px solid #E6E6E6;
+      padding: 3px 4px;
+    }
+    .col-filter {
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 10px;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      padding: 3px 5px;
+      border: 1px solid #CCC;
+      border-radius: 3px;
+      color: #242424;
+      background: #fff;
+    }
+    .col-filter:focus {
+      outline: none;
+      border-color: #0E2841;
+      box-shadow: 0 0 0 2px rgba(14,40,65,0.12);
+    }
+    .col-filter::placeholder { color: #AAA; }
+
+    /* ── No-results message ── */
+    .no-results { display: none; font-size: 11px; color: #888; padding: 8px 6px; }
   </style>
 </head>
 <body>
   <div class="sheet-title">AI Initiatives 2026</div>
   <div class="table-wrapper">
-    <table>
+    <table id="main-table">
       <colgroup>
-        <col class="col-a" />
-        <col class="col-b" />
-        <col class="col-c" />
-        <col class="col-d" />
+        <col class="col-a" id="col-0" />
+        <col class="col-b" id="col-1" />
+        <col class="col-c" id="col-2" />
+        <col class="col-d" id="col-3" />
       </colgroup>
       <tbody>
 
-        <!-- ── Row 1: Header (15.75 pt = 21 px) ── -->
-        <tr class="h21">
-          <td class="s1">Πρωτοβουλία AI</td>
-          <td class="s2">Scope (Executive Description)</td>
-          <td class="s8">Κατηγορία</td>
-          <td class="s8">Ομάδες Επηρεάζει</td>
+        <!-- ── Row 1: Header ── -->
+        <tr class="h21" id="header-row">
+          <td class="s1">
+            <div class="col-header">
+              <span class="col-label">Πρωτοβουλία AI</span>
+              <button class="col-toggle" onclick="toggleColumn(0)" title="Hide column">◀</button>
+            </div>
+          </td>
+          <td class="s2">
+            <div class="col-header">
+              <span class="col-label">Scope (Executive Description)</span>
+              <button class="col-toggle" onclick="toggleColumn(1)" title="Hide column">◀</button>
+            </div>
+          </td>
+          <td class="s8">
+            <div class="col-header">
+              <span class="col-label">Κατηγορία</span>
+              <button class="col-toggle" onclick="toggleColumn(2)" title="Hide column">◀</button>
+            </div>
+          </td>
+          <td class="s8">
+            <div class="col-header">
+              <span class="col-label">Ομάδες Επηρεάζει</span>
+              <button class="col-toggle" onclick="toggleColumn(3)" title="Hide column">◀</button>
+            </div>
+          </td>
         </tr>
 
-        <!-- ── Row 2: Multi-Cloud FinOps (42.75 pt = 57 px) ── -->
+        <!-- ── Row 2: Filters ── -->
+        <tr class="filter-row">
+          <td><input class="col-filter" type="text" placeholder="🔍 Filter…" oninput="applyFilters(0, this.value)" /></td>
+          <td><input class="col-filter" type="text" placeholder="🔍 Filter…" oninput="applyFilters(1, this.value)" /></td>
+          <td><input class="col-filter" type="text" placeholder="🔍 Filter…" oninput="applyFilters(2, this.value)" /></td>
+          <td><input class="col-filter" type="text" placeholder="🔍 Filter…" oninput="applyFilters(3, this.value)" /></td>
+        </tr>
+
+        <!-- ── Row 3: Multi-Cloud FinOps ── -->
         <tr class="h57">
           <td class="s7">Multi&#8209;Cloud FinOps Optimization (AI)</td>
           <td class="s3">AI εφαρμογή για <span class="bi">έλεγχο &amp; βελτιστοποίηση κόστους Multi-Cloud (optimal resource sizing &amp; usage), πρόβλεψη δαπανών και οικονομική διακυβέρνηση, με ενιαίο Cost Control πίνακα για Azure/GCP/AWS.</span></td>
@@ -165,7 +259,7 @@
           <td class="s10">RDNS, CCoE (Cloud &amp; Cost Gov.)</td>
         </tr>
 
-        <!-- ── Row 3: Application & Identity Intelligence (42.75 pt = 57 px) ── -->
+        <!-- ── Row 4: Application & Identity Intelligence ── -->
         <tr class="h57">
           <td class="s1">Application &amp; Identity Intelligence (AII)</td>
           <td class="s3">Συνδυαστική AI λύση <span class="bi">διαχείρισης δικαιωμάτων &amp; αδειών, που φτιάχνει πίνακα Role-Based Access από AD/SNOW/SAP, εντοπίζει υπερβολικές/ανενεργές άδειες και προτείνει καθαρισμό, με εξοικονόμηση ~30–40% κόστους λογισμικού.</span></td>
@@ -173,7 +267,7 @@
           <td class="s10">EUC (I&amp;AM, Licensing)</td>
         </tr>
 
-        <!-- ── Row 4: Multi-Cloud Management Portal (42.75 pt = 57 px) ── -->
+        <!-- ── Row 5: Multi-Cloud Management Portal ── -->
         <tr class="h57">
           <td class="s1">Multi&#8209;Cloud Management Portal <span class="b">(CloudOps Hub)</span></td>
           <td class="s3">Portal <span class="bi">ενιαίας διαχείρισης multi-cloud (Azure/GCP/AWS) με ενιαία ορατότητα σε resources/cost. Εντάχθηκε στο πλάνο 2026 ως concept (P3) – μελλοντικά θα ενσωματώσει AIOps αυτοματισμούς σε multi-cloud περιβάλλον.</span></td>
@@ -181,7 +275,7 @@
           <td class="s10">CCoE, RDNS (Cloud Ops Gov.)</td>
         </tr>
 
-        <!-- ── Row 5: AI in Solution Design (42.75 pt = 57 px) ── -->
+        <!-- ── Row 6: AI in Solution Design ── -->
         <tr class="h57">
           <td class="s7">AI in Solution Design <span class="b">(Idea-to-Terraform)</span></td>
           <td class="s3">Πρόταση (Workshop 2025): AI agent που <span class="bi">μετατρέπει μια ιδέα σε cloud υλοποίηση (από requirements σε αρχική αρχιτεκτονική και κώδικα Infrastructure-as-Code), μειώνοντας τον χρόνο σχεδιασμού &amp; ανάπτυξης.</span></td>
@@ -189,7 +283,7 @@
           <td class="s10">CCoE, RDNS (Cloud Arch. Design)</td>
         </tr>
 
-        <!-- ── Row 6: Conversational IT Assistant (32.25 pt = 43 px) ── -->
+        <!-- ── Row 7: Conversational IT Assistant ── -->
         <tr class="h43">
           <td class="s1">Conversational IT Assistant (Virtual Agent)</td>
           <td class="s3">Ψηφιακός <span class="bi">IT βοηθός (chatbot) στο MS Teams για αυτόματη επίλυση συχνών αιτημάτων υποστήριξης (MFA reset, VPN, κ.λπ.) εντός ~3′ με live εκτέλεση ενεργειών (Azure AD, SNOW API)</span></td>
@@ -197,7 +291,7 @@
           <td class="s10">EUC (Service Desk Ops)</td>
         </tr>
 
-        <!-- ── Row 7: AI Ticket Intelligence (42.75 pt = 57 px) ── -->
+        <!-- ── Row 8: AI Ticket Intelligence ── -->
         <tr class="h57">
           <td class="s1">AI Ticket Intelligence (Smart Triage &amp; RCA)</td>
           <td class="s3">Ευφυής μηχανή <span class="bi">NLP &amp; ML που διαβάζει νέα tickets και τα ταξινομεί/αναθέτει αυτόματα σε σωστή ομάδα, αναγνωρίζει επαναλαμβανόμενα incidents (outbreaks) &amp; προτείνει πιθανή βασική αιτία (RCA).</span></td>
@@ -205,7 +299,7 @@
           <td class="s10">EUC (Service Desk), NOC</td>
         </tr>
 
-        <!-- ── Row 8: AI Staff Skills Intelligence (42.75 pt = 57 px) ── -->
+        <!-- ── Row 9: AI Staff Skills Intelligence ── -->
         <tr class="h57">
           <td class="s1">AI Staff Skills Intelligence <span class="b">(Skills Gap Analysis)</span></td>
           <td class="s3">AI ανάλυση ιστορικών tickets &amp; επιδόσεων, δημιουργία <span class="bi">προφίλ δεξιοτήτων ανά techncial agent, εντοπισμός κενών δεξιοτήτων &amp; μονοσήμαντων γνώσεων και σύσταση κατάλληλων trainings για ομάδες.</span></td>
@@ -213,7 +307,7 @@
           <td class="s10">EUC (IT Support &amp; HR)</td>
         </tr>
 
-        <!-- ── Row 9: Incident Command & War Room (42.75 pt = 57 px) ── -->
+        <!-- ── Row 10: Incident Command & War Room ── -->
         <tr class="h57">
           <td class="s1">Incident Command &amp; War Room (Accenture)</td>
           <td class="s3">Πρόταση Accenture: <span class="bi">Συντονισμός AI πρακτόρων για αυτόματη διαχείριση κρίσιμων συμβάντων (critical incidents) σε Cloud/Δίκτυο. AI agents συνεργάζονται για ταχεία επίλυση ενός major incident (ε&#x4ED3;Μειωμένος χρόνος impact σε κρίσεις).</span></td>
@@ -221,7 +315,7 @@
           <td class="s10">CCoE, NCoE (IT Ops Teams)</td>
         </tr>
 
-        <!-- ── Row 10: AI Knowledge Base Intelligence (42.75 pt = 57 px) ── -->
+        <!-- ── Row 11: AI Knowledge Base Intelligence ── -->
         <tr class="h57">
           <td class="s1">AI Knowledge Base Intelligence <span class="b">(Auto-KB Mgmt)</span></td>
           <td class="s3">Αυτοματοποιεί τη <span class="bi">δημιουργία &amp; συντήρηση του IT Knowledge Base: παράγει άρθρα γνώσης από resolved tickets &amp; chatbot διαλόγους, κατηγοριοποιεί &amp; συγχωνεύει παρόμοια, αποσύρει ξεπερασμένα περιεχόμενα.</span></td>
@@ -229,7 +323,7 @@
           <td class="s10">EUC (Knowledge Mgmt)</td>
         </tr>
 
-        <!-- ── Row 11: Knowledge & Document Intelligence (32.25 pt = 43 px) ── -->
+        <!-- ── Row 12: Knowledge & Document Intelligence ── -->
         <tr class="h43">
           <td class="s1">Knowledge &amp; Document Intelligence (Accenture)</td>
           <td class="s3">Πρόταση Accenture: <span class="bi">AI υπηρεσία ανάκτησης γνώσης από εταιρικά έγγραφα (wiki, SharePoint) σε real-time: θρέφει R&amp;D και Service Desk με απαντήσεις μέσω AI (RAG) για τεχνικές απορίες/λύσεις.</span></td>
@@ -237,7 +331,7 @@
           <td class="s10">RDNS, EUC (R&amp;D, Service Desk)</td>
         </tr>
 
-        <!-- ── Row 12: AI-Driven Network Operations (32.25 pt = 43 px) ── -->
+        <!-- ── Row 13: AI-Driven Network Operations ── -->
         <tr class="h43">
           <td class="s1">AI&#8209;Driven Network Operations (NetOps AIOps)</td>
           <td class="s3">Εφαρμογή <span class="bi">AI/ML στη λειτουργία δικτύων: αυτόνομο NetOps (ανωμαλίες, predictive maintenance, RCA, βελτιστοποίηση επιδόσεων, noise reduction) με dashboards &amp; αυτοματισμούς</span></td>
@@ -245,7 +339,7 @@
           <td class="s10">NCoE, NOC, CCoE (Δίκτυα &amp; Cloud Ops)</td>
         </tr>
 
-        <!-- ── Row 13: Enterprise Observability & AIOps (32.25 pt = 43 px) ── -->
+        <!-- ── Row 14: Enterprise Observability & AIOps ── -->
         <tr class="h43">
           <td class="s7">Enterprise Observability &amp; AIOps</td>
           <td class="s3">Ενιαία πλατφόρμα <span class="bi">παρατηρησιμότητας E2E: συγκέντρωση metrics από όλα τα συστήματα (endpoint–cloud), για προδραστική ορατότητα και βάση για μελλοντική αυτόνομη λειτουργία (AIOps)</span></td>
@@ -253,7 +347,7 @@
           <td class="s10">CCoE, RDNS (Cloud/Infra)</td>
         </tr>
 
-        <!-- ── Row 14: Platform Self-Healing & SRE (32.25 pt = 43 px) ── -->
+        <!-- ── Row 15: Platform Self-Healing & SRE ── -->
         <tr class="h43">
           <td class="s1">Platform Self-Healing &amp; SRE</td>
           <td class="s3">Πρόταση Accenture: <span class="bi">AI αυτόματη επιδιόρθωση σφαλμάτων στη Cloud πλατφόρμα (SRE), χωρίς ανθρώπινη παρέμβαση: εκτέλεση αυτόνομων runbooks (Ansible, Azure Automation) για self-healing.</span></td>
@@ -261,7 +355,7 @@
           <td class="s10">CCoE (Cloud Ops &amp; SRE)</td>
         </tr>
 
-        <!-- ── Row 15: AI για EUC Security & Compliance (42.75 pt = 57 px) ── -->
+        <!-- ── Row 16: AI για EUC Security & Compliance ── -->
         <tr class="h57">
           <td class="s1">AI για EUC Security &amp; Compliance</td>
           <td class="s3">AI agent για <span class="bi">real-time έλεγχο συμμόρφωσης στα endpoints: ανιχνεύει αυτόματα παραβάσεις πολιτικών ασφαλείας (π.χ. ρυθμίσεις PC) και ειδοποιεί ή αποτρέπει μη εγκεκριμένες ενέργειες στην πηγή.</span></td>
@@ -269,7 +363,7 @@
           <td class="s10">EUC (Πολιτικές IT &amp; Security)</td>
         </tr>
 
-        <!-- ── Row 16: VIP Intelligence Suite (42.75 pt = 57 px) ── -->
+        <!-- ── Row 17: VIP Intelligence Suite ── -->
         <tr class="h57">
           <td class="s1">VIP Intelligence Suite <span class="b">(Προληπτική VIP Υποστ.)</span></td>
           <td class="s4">*Σουίτα AI για <span class="b">VIP υποστήριξη: Risk Radar (προληπτικά alerts πριν κρίσιμα events), Digital Twin περιβάλλοντος VIP, </span><span class="bi">μετάφραση τεχνικών θεμάτων σε απλή γλώσσα, προληπτικά IT check-ins πριν από σημαντικά meetings.</span></td>
@@ -280,5 +374,70 @@
       </tbody>
     </table>
   </div>
+
+  <script>
+    const COL_COUNT = 4;
+    const ORIGINAL_WIDTHS = [235, 408, 180, 229];
+    const COLLAPSED_WIDTH = 26;
+
+    const colCollapsed = Array(COL_COUNT).fill(false);
+    const filterValues = Array(COL_COUNT).fill('');
+
+    function applyFilters(colIdx, value) {
+      filterValues[colIdx] = value.toLowerCase().trim();
+      const table = document.getElementById('main-table');
+      const rows = table.querySelectorAll('tbody tr:not(.filter-row):not(#header-row)');
+
+      rows.forEach(row => {
+        let visible = true;
+        for (let c = 0; c < COL_COUNT; c++) {
+          const f = filterValues[c];
+          if (!f) continue;
+          const cell = row.cells[c];
+          if (!cell) continue;
+          if (!cell.textContent.toLowerCase().includes(f)) {
+            visible = false;
+            break;
+          }
+        }
+        row.style.display = visible ? '' : 'none';
+      });
+    }
+
+    function toggleColumn(colIdx) {
+      const table = document.getElementById('main-table');
+      colCollapsed[colIdx] = !colCollapsed[colIdx];
+      const collapsed = colCollapsed[colIdx];
+
+      // Update col element width
+      const colEl = document.getElementById('col-' + colIdx);
+      colEl.style.width = collapsed ? COLLAPSED_WIDTH + 'px' : ORIGINAL_WIDTHS[colIdx] + 'px';
+
+      // Update table total width
+      const totalWidth = ORIGINAL_WIDTHS.reduce((sum, w, i) =>
+        sum + (colCollapsed[i] ? COLLAPSED_WIDTH : w), 0);
+      table.style.width = totalWidth + 'px';
+
+      // Toggle header cell appearance
+      const headerRow = document.getElementById('header-row');
+      const headerCell = headerRow.cells[colIdx];
+      const btn = headerCell.querySelector('.col-toggle');
+      headerCell.classList.toggle('col-collapsed', collapsed);
+      btn.textContent = collapsed ? '▶' : '◀';
+      btn.title = collapsed ? 'Show column' : 'Hide column';
+
+      // Toggle filter row cell
+      const filterRow = table.querySelector('.filter-row');
+      const filterCell = filterRow.cells[colIdx];
+      filterCell.style.display = collapsed ? 'none' : '';
+
+      // Toggle data cells
+      const dataRows = table.querySelectorAll('tbody tr:not(.filter-row):not(#header-row)');
+      dataRows.forEach(row => {
+        const cell = row.cells[colIdx];
+        if (cell) cell.style.display = collapsed ? 'none' : '';
+      });
+    }
+  </script>
 </body>
 </html>
