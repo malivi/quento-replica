@@ -1,169 +1,68 @@
-# AI Initiatives 2026
+# Ontology Studio
 
-Interactive table visualising AI initiatives, their complexity dimensions, and business value — published as a static GitHub Pages site.
+A static, local-first ontology editor for GitHub Pages.
 
----
+**Website:** https://malivi.github.io/quento-replica/
 
-## Files
+## Use the app
 
-| File | Purpose |
-|---|---|
-| `content.md` | **Single source of truth** — all table data and legend text |
-| `build.js` | Reads `content.md` and writes `index.html` |
-| `index.html` | Generated output — do not edit by hand |
-| `AI Initiatives 2026.xlsx` | Original source spreadsheet |
+1. Create a concept, import an existing JSON ontology, or explicitly load the fictional example.
+2. Add parent concepts to build a hierarchy. Multiple parents are supported; cycles are rejected.
+3. Create instances and assign each to at least one concept.
+4. Define relationship types with allowed source and target kinds, then connect entities with assertions.
+5. Explore the list, hierarchy, or graph. Search definitions and aliases, filter by tags or relationship, and inspect an entity's details.
+6. Validate the document and resolve warnings. Use Undo/Redo to reverse changes during the current session.
+7. Export JSON regularly to back up or share your work.
 
----
+Changes are saved **only in this browser**, not in GitHub. Clearing site data removes the saved document. Exported files are the portable backup. There are no accounts, telemetry, remote ontology requests, or runtime dependencies.
 
-## How to edit content
+The app pauses saving if another tab changes the saved document. Export the stale tab's work or reload the latest saved version. Corrupt saved content can be downloaded before explicitly resetting storage. If storage is unavailable or full, the in-memory document remains editable and exportable.
 
-### 1. Open `content.md`
+The hierarchy shows a multi-parent concept under each parent. Graph edges point from parent to child, from instance to concept for membership, and from assertion source to target. The list and detail panels provide an alternative to graph interaction. Large lists are paginated; graphs show at most 60 entities and hierarchies at most 500 visible entries. Search and neighborhood selection narrow the graph.
 
-The file has two parts:
+## JSON format
 
-```
-# AI Initiatives 2026
-... intro text ...
+The root object contains `schemaVersion: 1`, `id`, `title`, UTC ISO 8601 `createdAt` and `updatedAt` timestamps, and four arrays:
 
-```json          ← structured data (initiatives + dimension levels)
-{ ... }
-```              ← end of JSON block
+- `concepts`: `{ id, label, parentIds, description?, aliases?, tags? }`
+- `instances`: `{ id, label, conceptIds, description?, aliases?, tags? }`
+- `relationshipTypes`: `{ id, label, sourceKind, targetKind, description? }`
+- `assertions`: `{ id, typeId, sourceId, targetId, description? }`
 
-## Complexity Dimensions   ← legend text in plain markdown
-...
-```
+Optional document fields are `description`, `namespace`, `ontologyVersion`, and `language`. Endpoint kinds are `concept`, `instance`, or `either`. IDs are globally unique within the document, including the document ID. References use IDs, not labels. Unknown fields and unsupported versions are rejected instead of silently lost. Import/export preserves the original content, including omitted optional fields; editing uses empty strings/arrays as defaults.
 
----
+An import is validated before confirmation to replace the current document. Failed imports leave the current document untouched. The file limit is 10 MiB. This format is application-specific JSON, not RDF/OWL, and the app performs no formal reasoning.
 
-### 2. Edit an initiative
+See [spec.md](spec.md) for the full requirements and [VALIDATION.md](VALIDATION.md) for verification results and limitations.
 
-Each initiative is an object inside the `"initiatives"` array in the JSON block.
+## Run locally
 
-```json
-{
-  "name": "My Initiative **(Short Label)**",
-  "featured": false,
-  "scopeStyle": "s3",
-  "scope": "Plain text description of the initiative. Use **bold** for emphasis.",
-  "category": "FinOps & Cost",
-  "categoryClass": "cat-finops",
-  "teams": "CCoE, RDNS",
-  "dimensions": {
-    "tech":        { "level": 3, "tip": "Reason this level was chosen." },
-    "data":        { "level": 2, "tip": "Reason this level was chosen." },
-    "integration": { "level": 3, "tip": "Reason this level was chosen." },
-    "org":         { "level": 2, "tip": "Reason this level was chosen." },
-    "time":        { "level": 2, "tip": "Reason this level was chosen." },
-    "dep":         { "level": 2, "tip": "Reason this level was chosen." },
-    "cost":        { "level": 3, "tip": "Reason this level was chosen." },
-    "strategic":   { "level": 3, "tip": "Reason this level was chosen." }
-  }
-}
+Use Node.js 20 or newer for tests, and Python 3 for a local static server:
+
+```sh
+npm start
 ```
 
-**Field reference:**
+Open http://localhost:4173. Use an HTTP server rather than opening `index.html` directly, because the application uses ES modules.
 
-| Field | Values | Notes |
-|---|---|---|
-| `name` | string | Use `**text**` for bold (non-italic) parts |
-| `featured` | `true` / `false` | `true` = green highlighted row |
-| `scopeStyle` | `"s3"` / `"s4"` | `s3` = bold+italic, `s4` = bold only |
-| `scope` | string | `**text**` = bold; `_text_` = italic (s4 rows only) |
-| `category` | string | Display text for the category cell |
-| `categoryClass` | see below | Controls the category colour |
-| `teams` | string | Teams/groups affected |
-| `dimensions.*.level` | `1` – `4` | 1 = lowest complexity / lowest value |
-| `dimensions.*.tip` | string | Text shown on hover |
-
-**Category classes:**
-
-| Class | Colour | Category |
-|---|---|---|
-| `cat-finops` | Yellow | FinOps & Cost |
-| `cat-governance` | Gray | Governance & Delivery |
-| `cat-itops` | Blue | IT Ops & Service Mgmt |
-| `cat-knowledge` | Purple | Knowledge & Assistants |
-| `cat-observ` | Green | Observability & AIOps |
-| `cat-security` | Orange | Security & Risk |
-
----
-
-### 3. Change dimension level names
-
-Edit the `"dimensionLevels"` object at the top of the JSON block. Each key maps to an array of 4 labels (level 1 → level 4):
-
-```json
-"dimensionLevels": {
-  "tech":        ["Basic", "Moderate", "Advanced", "Cutting-Edge"],
-  "data":        ["Ready", "Partial", "Scattered", "Scarce"],
-  "integration": ["Minimal", "Moderate", "Heavy", "Extensive"],
-  "org":         ["Low", "Medium", "High", "Transformational"],
-  "time":        ["Short", "Medium", "Long", "Extended"],
-  "dep":         ["Low", "Moderate", "High", "Critical"],
-  "cost":        ["Marginal", "Moderate", "Significant", "Transformational"],
-  "strategic":   ["Operational", "Tactical", "Strategic", "Game-Changing"]
-}
+```sh
+npm ci
+npm test
+npm run test:browser
 ```
 
----
+Browser tests expect the local server and an installed Chrome browser. Set `BROWSER_CHANNEL=msedge` to exercise installed Edge. Test screenshots are written to ignored `test-results/`. Playwright and axe are development-only dependencies; no npm build or package installation is needed on the host.
 
-### 4. Edit legend / explanation text
+## Publish on GitHub Pages
 
-Everything below the closing ` ``` ` of the JSON block is plain markdown. Edit it freely — headings, bullet lists, bold, italic, and inline `code` are all supported.
+Publish the **main branch**, **/ (root)** under repository **Settings → Pages → Deploy from a branch**. This repository already uses root static publishing. Push changes to `main` to update the site. `.nojekyll` disables Jekyll processing. All asset paths are relative, so the same files work at the root or `/quento-replica/`.
 
----
+Runtime files: `index.html`, `styles.css`, `app.js`, `model.js`, `storage.js`, and `favicon.svg`. No server-side code, credentials, or build step is required.
 
-### 5. Regenerate the site
+## Architecture
 
-After any edit to `content.md`, run:
-
-```bash
-node build.js
-```
-
-This overwrites `index.html`. No dependencies — plain Node.js only.
-
----
-
-## Publish to GitHub Pages
-
-```bash
-git add content.md index.html
-git commit -m "Update initiatives"
-git push origin main
-```
-
-GitHub Pages serves `index.html` from the `main` branch root automatically.
-
----
-
-## Table features
-
-| Feature | How to use |
-|---|---|
-| **Filter by category** | Type in the Κατηγορία filter box |
-| **Filter by dimension level** | Type a level name (e.g. `Advanced`) in any dimension filter box |
-| **Sort by dimension** | Click a dimension column header label — cycles ▲ (1→4) / ▼ (4→1) / original order |
-| **Hover tooltip** | Hover over any colour-coded dimension cell to read the rationale |
-
----
-
-## Dimension colour coding
-
-### Complexity (purple headers) — lower = easier
-
-| Level | Label examples | Colour |
-|---|---|---|
-| 1 | Basic / Ready / Minimal / Low / Short | Green |
-| 2 | Moderate / Partial / Medium | Yellow |
-| 3 | Advanced / Scattered / Heavy / High / Long | Orange |
-| 4 | Cutting-Edge / Scarce / Extensive / Critical / Extended | Red |
-
-### Business Value (green headers) — higher = better
-
-| Level | Label examples | Colour |
-|---|---|---|
-| 1 | Marginal / Operational | Gray |
-| 2 | Moderate / Tactical | Light blue |
-| 3 | Significant / Strategic | Medium blue |
-| 4 | Transformational / Game-Changing | Green |
+- `model.js`: versioned data model, validation, deletion rules, transaction history, and fictional example.
+- `storage.js`: local persistence, recovery, and optimistic revision checking.
+- `app.js`: interface, forms, navigation, graph, import/export, and cooperative cross-tab write locking.
+- `styles.css`: responsive styling, focus states, and reduced-motion behavior.
+- `tests/`: domain, persistence, performance, and browser workflow checks.
