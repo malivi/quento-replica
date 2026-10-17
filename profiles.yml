@@ -1,0 +1,11 @@
+telco_reconciliation:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: 'telco_reconciliation.duckdb'
+      threads: 4
+    ci:
+      type: duckdb
+      path: ':memory:'
+      threads: 4

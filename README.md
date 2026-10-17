@@ -1,68 +1,130 @@
-# Ontology Studio
+# Telecom CDR & Billing Reconciliation (dbt + DuckDB)
 
-A static, local-first ontology editor for GitHub Pages.
+An end-to-end **Revenue Assurance & Billing Reconciliation** example [dbt](https://www.getdbt.com/) project for a telecommunications operator. Built on **DuckDB** (`dbt-duckdb`), it runs locally out of the box using included CSV seed data with zero external infrastructure required.
 
-**Website:** https://malivi.github.io/quento-replica/
+---
 
-## Use the app
+## Business Problem & Reconciliation Scenarios
 
-1. Create a concept, import an existing JSON ontology, or explicitly load the fictional example.
-2. Add parent concepts to build a hierarchy. Multiple parents are supported; cycles are rejected.
-3. Create instances and assign each to at least one concept.
-4. Define relationship types with allowed source and target kinds, then connect entities with assertions.
-5. Explore the list, hierarchy, or graph. Search definitions and aliases, filter by tags or relationship, and inspect an entity's details.
-6. Validate the document and resolve warnings. Use Undo/Redo to reverse changes during the current session.
-7. Export JSON regularly to back up or share your work.
+Telecom operators process millions of network signaling events across Mobile Switching Centers (MSC), Packet Data Network Gateways (PGW), and SMS Centers (SMSC). Between network mediation, Online Charging Systems (OCS), postpaid billing engines, and wholesale roaming settlement (GSMA TAP3), discrepancies cause **revenue leakage**, **customer overbilling**, and **wholesale settlement disputes**.
 
-Changes are saved **only in this browser**, not in GitHub. Clearing site data removes the saved document. Exported files are the portable backup. There are no accounts, telemetry, remote ontology requests, or runtime dependencies.
+This dbt project models and detects four core Revenue Assurance scenarios:
 
-The app pauses saving if another tab changes the saved document. Export the stale tab's work or reload the latest saved version. Corrupt saved content can be downloaded before explicitly resetting storage. If storage is unavailable or full, the in-memory document remains editable and exportable.
+1. **Unbilled Usage Detection (`UNBILLED_CDR` & `PHANTOM_BILLING`)**
+   - Identifies billable Call Detail Records (CDRs) captured on network switches that were dropped during mediation or failed to reach the billing invoice (`UNBILLED_CDR`).
+   - Detects billed usage lines on customer invoices that have no originating network switch CDR (`PHANTOM_BILLING`).
+   - Filters out non-billable signaling events (e.g., rejected call setups with zero duration) and deduplicates raw switch records in staging.
 
-The hierarchy shows a multi-parent concept under each parent. Graph edges point from parent to child, from instance to concept for membership, and from assertion source to target. The list and detail panels provide an alternative to graph interaction. Large lists are paginated; graphs show at most 60 entities and hierarchies at most 500 visible entries. Search and neighborhood selection narrow the graph.
+2. **Overbilling & Rating Discrepancies (`VOLUME_DISCREPANCY` & `RATE_DISCREPANCY`)**
+   - Independently re-rates network CDRs against commercial tariff schedules (`rate_plans`) and compares expected vs. billed unit rates and durations/volumes.
+   - Flags tariff misconfigurations (`RATE_DISCREPANCY`) and switch-to-billing duration/volume mismatches (`VOLUME_DISCREPANCY`).
 
-## JSON format
+3. **Subscriber Plan & Bundle Allowance Validation (`BUNDLE_ALLOWANCE_ERROR`)**
+   - Tracks cumulative monthly domestic usage per subscriber across **Voice (minutes)**, **Data (MB)**, and **SMS** using chronological window functions.
+   - Splits each event into **in-bundle units** vs. **chargeable overage units** and detects OCS quota synchronization bugs (e.g., charging overage while a subscriber still has included allowance, or granting free usage after bundle exhaustion).
 
-The root object contains `schemaVersion: 1`, `id`, `title`, UTC ISO 8601 `createdAt` and `updatedAt` timestamps, and four arrays:
+4. **Roaming & Interconnect Wholesale Settlement (`fct_roaming_tap_reconciliation`)**
+   - Reconciles outbound roaming CDRs recorded on the home network switch against incoming **GSMA TAP3** files from visited partner operators (`PARTNER_VOD_UK`, `PARTNER_DT_DE`, `PARTNER_ORG_FR`).
+   - Flags partner volume/rate overcharges (`TAP_OVERCHARGE`), unverified partner claims missing from the home switch (`MISSING_IN_HOME_SWITCH`), and unbilled wholesale accruals (`MISSING_TAP_RECORD`).
 
-- `concepts`: `{ id, label, parentIds, description?, aliases?, tags? }`
-- `instances`: `{ id, label, conceptIds, description?, aliases?, tags? }`
-- `relationshipTypes`: `{ id, label, sourceKind, targetKind, description? }`
-- `assertions`: `{ id, typeId, sourceId, targetId, description? }`
+---
 
-Optional document fields are `description`, `namespace`, `ontologyVersion`, and `language`. Endpoint kinds are `concept`, `instance`, or `either`. IDs are globally unique within the document, including the document ID. References use IDs, not labels. Unknown fields and unsupported versions are rejected instead of silently lost. Import/export preserves the original content, including omitted optional fields; editing uses empty strings/arrays as defaults.
+## Project Architecture & Lineage
 
-An import is validated before confirmation to replace the current document. Failed imports leave the current document untouched. The file limit is 10 MiB. This format is application-specific JSON, not RDF/OWL, and the app performs no formal reasoning.
+```text
+seeds/ (raw_seed)
+├── subscribers.csv               # Subscriber directory (MSISDN, IMSI, rate plan)
+├── rate_plans.csv                # Monthly fees, bundle allowances, overage & roaming tariffs
+├── roaming_partners.csv          # Visited network operators & bilateral TAP3 wholesale rates
+├── raw_network_cdrs.csv          # Raw switch CDRs/UDRs (MSC, PGW, SMSC)
+├── raw_billing_records.csv       # Rated & billed postpaid invoice usage lines
+└── raw_partner_tap_records.csv   # Incoming wholesale TAP3 settlement records
 
-See [spec.md](spec.md) for the full requirements and [VALIDATION.md](VALIDATION.md) for verification results and limitations.
-
-## Run locally
-
-Use Node.js 20 or newer for tests, and Python 3 for a local static server:
-
-```sh
-npm start
+models/
+├── staging/ (views)
+│   ├── stg_subscribers.sql
+│   ├── stg_rate_plans.sql
+│   ├── stg_roaming_partners.sql
+│   ├── stg_network_cdrs.sql      # Switch CDR deduplication & billable event classification
+│   ├── stg_billing_records.sql
+│   └── stg_partner_tap_records.sql
+│
+├── intermediate/ (views)
+│   ├── int_cdr_rated_usage.sql         # Cumulative bundle tracking & independent CDR rating
+│   ├── int_cdr_to_billing_matched.sql  # Full outer join aligning switch CDRs & billed records
+│   └── int_roaming_tap_matched.sql     # Full outer join aligning roaming CDRs & partner TAP3 files
+│
+└── marts/reconciliation/ (tables)
+    ├── fct_cdr_billing_reconciliation.sql       # Event-level retail discrepancy classification
+    ├── fct_subscriber_bundle_reconciliation.sql # Subscriber monthly quota & invoice reconciliation
+    ├── fct_roaming_tap_reconciliation.sql       # Wholesale roaming TAP3 settlement reconciliation
+    └── mart_revenue_assurance_summary.sql       # Executive KPI summary (leakage, overbilling, TAP disputes)
 ```
 
-Open http://localhost:4173. Use an HTTP server rather than opening `index.html` directly, because the application uses ES modules.
+---
 
-```sh
-npm ci
-npm test
-npm run test:browser
+## Quickstart
+
+### 1. Install Dependencies
+
+Using `uv` (or standard `venv` + `pip`):
+
+```bash
+uv venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
 ```
 
-Browser tests expect the local server and an installed Chrome browser. Set `BROWSER_CHANNEL=msedge` to exercise installed Edge. Test screenshots are written to ignored `test-results/`. Playwright and axe are development-only dependencies; no npm build or package installation is needed on the host.
+### 2. Run `dbt build` (Seeds + Models + Tests)
 
-## Publish on GitHub Pages
+The repository includes a pre-configured `profiles.yml` pointing to a local DuckDB database (`telco_reconciliation.duckdb`):
 
-Publish the **main branch**, **/ (root)** under repository **Settings → Pages → Deploy from a branch**. This repository already uses root static publishing. Push changes to `main` to update the site. `.nojekyll` disables Jekyll processing. All asset paths are relative, so the same files work at the root or `/quento-replica/`.
+```bash
+dbt build --profiles-dir .
+```
 
-Runtime files: `index.html`, `styles.css`, `app.js`, `model.js`, `storage.js`, and `favicon.svg`. No server-side code, credentials, or build step is required.
+Or run each step individually:
 
-## Architecture
+```bash
+dbt seed --profiles-dir .
+dbt run --profiles-dir .
+dbt test --profiles-dir .
+```
 
-- `model.js`: versioned data model, validation, deletion rules, transaction history, and fictional example.
-- `storage.js`: local persistence, recovery, and optimistic revision checking.
-- `app.js`: interface, forms, navigation, graph, import/export, and cooperative cross-tab write locking.
-- `styles.css`: responsive styling, focus states, and reduced-motion behavior.
-- `tests/`: domain, persistence, performance, and browser workflow checks.
+### 3. Inspect Reconciliation Results
+
+You can query the generated DuckDB database directly via Python or the DuckDB CLI:
+
+```sql
+-- Executive Revenue Assurance Summary
+SELECT * FROM main_marts.mart_revenue_assurance_summary;
+
+-- Event-level CDR vs. Billing Discrepancies
+SELECT
+    cdr_id,
+    subscriber_id,
+    service_type,
+    reconciliation_status,
+    expected_billed_amount,
+    actual_billed_amount,
+    revenue_leakage_amount,
+    overbilling_exposure_amount,
+    root_cause_hint
+FROM main_marts.fct_cdr_billing_reconciliation
+WHERE has_discrepancy = true
+ORDER BY cdr_id;
+
+-- Wholesale Roaming TAP3 Discrepancies
+SELECT
+    cdr_id,
+    tap_record_id,
+    partner_name,
+    service_type,
+    tap_reconciliation_status,
+    expected_wholesale_amount,
+    tap_charged_amount,
+    wholesale_dispute_amount,
+    unsettled_accrual_amount
+FROM main_marts.fct_roaming_tap_reconciliation
+WHERE has_tap_discrepancy = true;
+```

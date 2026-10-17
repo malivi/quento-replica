@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: int_cdr_rated_usage
+    description: "Re-rates billable network CDRs against subscriber rate plans and cumulative monthly bundle consumption."
+    columns:
+      - name: cdr_id
+        tests:
+          - unique
+          - not_null
+      - name: expected_billed_amount
+        tests:
+          - not_null
+
+  - name: int_cdr_to_billing_matched
+    description: "Full outer join between re-rated network CDRs and OCS/postpaid billing records to surface volume, rate, and bundle variances."
+    columns:
+      - name: cdr_id
+        tests:
+          - unique
+          - not_null
+      - name: billing_amount_variance
+        tests:
+          - not_null
+
+  - name: int_roaming_tap_matched
+    description: "Full outer join between home network roaming CDRs and visited operator TAP3 files with contracted wholesale tariff calculations."
+    columns:
+      - name: cdr_id
+        tests:
+          - unique
+          - not_null
+      - name: wholesale_amount_variance
+        tests:
+          - not_null

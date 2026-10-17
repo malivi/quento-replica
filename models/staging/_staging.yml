@@ -1,0 +1,79 @@
+version: 2
+
+models:
+  - name: stg_subscribers
+    description: "Cleaned subscriber dimension with rate plan assignments and account statuses."
+    columns:
+      - name: subscriber_id
+        tests:
+          - unique
+          - not_null
+      - name: plan_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_rate_plans')
+                field: plan_id
+
+  - name: stg_rate_plans
+    description: "Cleaned rate plan catalog with domestic bundle allowances and overage/roaming unit rates."
+    columns:
+      - name: plan_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_roaming_partners
+    description: "Cleaned wholesale roaming partner catalog with TAP codes and contracted wholesale rates."
+    columns:
+      - name: partner_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_network_cdrs
+    description: "Deduplicated network switch CDRs/UDRs enriched with billable duration in minutes and billability flags."
+    columns:
+      - name: cdr_id
+        description: "Deduplicated primary key of the network CDR."
+        tests:
+          - unique
+          - not_null
+      - name: subscriber_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_subscribers')
+                field: subscriber_id
+      - name: is_billable_event
+        tests:
+          - not_null
+
+  - name: stg_billing_records
+    description: "Standardized billing usage records from the OCS/postpaid billing system."
+    columns:
+      - name: billing_record_id
+        tests:
+          - unique
+          - not_null
+      - name: cdr_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_partner_tap_records
+    description: "Standardized incoming wholesale roaming TAP3 records from visited network operators."
+    columns:
+      - name: tap_record_id
+        tests:
+          - unique
+          - not_null
+      - name: partner_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_roaming_partners')
+                field: partner_id

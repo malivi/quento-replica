@@ -1,3 +1,20 @@
-node_modules/
+# dbt artifacts
+target/
+dbt_packages/
+logs/
+.user.yml
+
+# DuckDB database files
+*.duckdb
+*.duckdb.wal
+
+# Python / virtual environments
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# OS / IDE files
 .DS_Store
-test-results/
+.idea/
+.vscode/
