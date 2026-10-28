@@ -1,4 +1,0 @@
-partner_id,partner_name,tap_code,country_iso,agreement_type,wholesale_voice_rate_per_min,wholesale_data_rate_per_mb,wholesale_sms_rate_per_msg
-PARTNER_VOD_UK,Vodafone UK,GBRVO,GB,BILATERAL_TAP3,0.3500,0.0600,0.0800
-PARTNER_DT_DE,Telekom Deutschland,DEUD1,DE,BILATERAL_TAP3,0.3000,0.0500,0.0700
-PARTNER_ORG_FR,Orange France,FRAOR,FR,HUB_TAP3,0.3200,0.0500,0.0700
